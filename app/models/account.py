@@ -1,6 +1,6 @@
 from app import db 
 
-class Account(db.model):
+class Account(db.Model):
     __tablename__ = "accounts"
     id            = db.Column(db.Integer,primary_key=True)
     account_name  = db.Column(db.String(50),nullable=False)

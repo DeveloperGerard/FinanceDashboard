@@ -1,6 +1,6 @@
 from app import db 
 
-class Loan(db.model):
+class Loan(db.Model):
     __tablename__   = "loans"
     id              = db.Column(db.Integer,primary_key=True)
     loan_name       = db.Column(db.String(50),nullable=False)
