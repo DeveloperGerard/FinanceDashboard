@@ -7,3 +7,4 @@ class Account(db.model):
     type          = db.Column(db.String(50),nullable=False)
     user_id       = db.Column(db.Integer,db.ForeignKey("users.id",ondelete="CASCADE"))
     user          = db.relationship("User",back_populates="accounts")
+    accounts      = db.relationship("Loan",back_populates="account")
