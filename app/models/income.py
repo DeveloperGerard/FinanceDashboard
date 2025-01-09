@@ -6,5 +6,5 @@ class Income(db.Model):
     income_name   = db.Column(db.String(50),nullable=False)
     date          = db.Column(db.DateTime(),nullable=False)
     amount        = db.Column(db.Integer,nullable=False)
-    user_id       = db.Column(db.Integer,db.ForeignKey("users.id"))
+    user_id       = db.Column(db.Integer,db.ForeignKey("users.id",ondelete="CASCADE"))
     user          = db.relationship("User",back_populates="incomes")
