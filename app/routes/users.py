@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template,redirect,request
 from flask_login import login_required ,LoginManager,current_user
-from ..forms.form import FormularioInicio,FormularioRegistro
+from ..forms.form_user import FormularioInicio,FormularioRegistro
 main= Blueprint('main', __name__) 
 
 @main.route('/') 
