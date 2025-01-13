@@ -16,3 +16,11 @@ def inicio_sesion():
     login = FormularioInicio()
     if request.method =="GET":
         return render_template("login.html",login=login)
+    
+@main.route('/registro',methods=["GET","POST"])
+def registro():
+    registro =   FormularioRegistro()
+    if request.method =="GET":
+        return render_template("register.html",registro=registro)  
+        
+    

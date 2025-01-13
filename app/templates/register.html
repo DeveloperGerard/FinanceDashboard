@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p>Registrarse</p>
+    <form action="" method="POST">
+        {{registro.hidden_tag()}}
+        {{registro.nombre.label()}}
+        {{registro.nombre()}}
+        {{registro.email.label()}}
+        {{registro.email()}}
+        {{registro.clave.label()}}
+        {{registro.clave()}}
+        {{registro.confirmar_clave.label()}}
+        {{registro.confirmar_clave()}}
+        {{registro.submit()}}
+
+    </form>
+</body>
+</html>
