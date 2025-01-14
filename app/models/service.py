@@ -2,6 +2,7 @@ from app import db
 
 class Service(db.Model):
     __tablename__   = "services"
+
     #columnas
     id              = db.Column(db.Integer,primary_key=True)
     service_name    = db.Column(db.String(50),nullable=False)
@@ -11,6 +12,7 @@ class Service(db.Model):
     price           = db.Column(db.Integer,nullable=False)
     reamining_price = db.Column(db.Integer,nullable=False)
     user_id         = db.Column(db.Integer,db.ForeignKey("users.id",ondelete="CASCADE"))
+    
     #relaciones
     user            = db.relationship("User",back_populates="services")
 
