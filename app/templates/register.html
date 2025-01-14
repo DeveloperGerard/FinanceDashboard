@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Registro{% endblock %}
+
+{% block head %}
+<!-- Estilos específicos para la página de registro -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+<script src="{{ url_for('static', filename='js/ojo.js') }}" defer></script>
+{% endblock %}
+
+{% block content %}
+<div class="rectangle-2">
+    <h1 class="paragraph-1-copy-2">Registrarse</h1>
+    
+    <form method="POST" action="/register">
+        <!-- Campo de nombre -->
+        <label class="correo-electronico" for="name">Nombre Completo</label>
+        <div style="position: relative;">
+            <input type="text" id="name" name="name" class="text-input-2" required>
+        </div>
+
+        <!-- Campo de correo electrónico -->
+        <label class="correo-electronico" for="email">Correo Electrónico</label>
+        <div style="position: relative;">
+            <input type="email" id="email" name="email" class="text-input-2" required>
+        </div>
+        
+        <!-- Campo de contraseña -->
+        <label class="contrase-a" for="password">Contraseña</label>
+        <div style="position: relative;">
+            <input type="password" id="password" name="password" class="text-input-3" required>
+            <img src="{{ url_for('static', filename='icons/eye-icon.svg') }}" class="eye-icon" alt="Mostrar/Ocultar contraseña">
+        </div>
+
+        <!-- Campo de confirmación de contraseña -->
+        <label class="contrase-a" for="confirm_password">Confirmar Contraseña</label>
+        <div style="position: relative;">
+            <input type="password" id="confirm_password" name="confirm_password" class="text-input-3" required>
+            <img src="{{ url_for('static', filename='icons/eye-icon.svg') }}" class="eye-icon" alt="Mostrar/Ocultar contraseña">
+        </div>
+        
+        <!-- Botón de registro -->
+        <button type="submit" class="button-14">Registrarse</button>
+    </form>
+    
+    <!-- Enlace para ir a login -->
+    <p class="-no-tienes-cuenta-registrate-aqui-">
+        ¿Ya tienes cuenta? <a href="/login">Inicia sesión aquí</a>
+    </p>
+</div>
+{% endblock %}
