@@ -34,4 +34,11 @@ class Service(db.Model):
             if service.category==category:
                 all_services_list.append(service)
         return all_services_list
+    @staticmethod
+    def get_full_amount():
+        all_service = db.session.execute(db.select(Service)).scalars()
+        amount = 0
+        for service in all_service:
+            amount += service.price
+        return amount
 
