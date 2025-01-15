@@ -43,5 +43,9 @@ class User(UserMixin, db.Model):
     def get_by_email(email):
         user = User.query.filter_by(email=email).first()
         return user
+    @staticmethod 
+    def get_by_name(username):
+        user = User.query.filter_by(username=username).first()
+        return user
         
         
