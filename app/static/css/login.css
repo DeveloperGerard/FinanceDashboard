@@ -20,7 +20,7 @@ body {
 }
 
 .login-title {
-    color: #444444;
+    color: #1a252f;
     font-family: "Montserrat", sans-serif;
     font-weight: 800;
     font-size: 24px;
@@ -32,9 +32,9 @@ body {
     width: 300px;
     height: 48px;
     padding: 0 10px;
-    background: #444444;
+    background: #1a252f;
     color: #FFFFFF;
-    border: 1px solid #444444;
+    border: 1px solid #1a252f;
     border-radius: 4px;
     font-family: "Source Sans 3", sans-serif;
     font-weight: 600;
@@ -68,7 +68,7 @@ body {
     height: 48px;
     padding: 0px 10px 0px 40px;
     background: #FFFFFF;
-    color: #444444;
+    color: #1a252f;
     border: 2px solid #D6D6D6;
     border-radius: 4px;
     font-family: "Source Sans 3", sans-serif;
@@ -100,7 +100,6 @@ body {
     z-index: 2;
 }
 
-
 .icon-email {
     margin-left: 30px;
 }
@@ -108,7 +107,6 @@ body {
 .icon-password {
     left: 30px;
 }
-
 
 .register-link {
     color: #7A7A7A;

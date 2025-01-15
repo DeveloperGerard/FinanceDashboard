@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template, redirect, url_for
+from flask import Blueprint, render_template, redirect, request, url_for
 from flask_login import login_required, current_user, logout_user
+from ..forms.form_user import FormularioInicio,FormularioRegistro
 
 # Crear el Blueprint
 main = Blueprint('main', __name__)
@@ -8,19 +9,21 @@ main = Blueprint('main', __name__)
 @main.route('/')
 @main.route('/index')
 def index():
-    # Redirigir al dashboard si el usuario está autenticado
-    if current_user.is_authenticated:
-        return redirect(url_for('main.dashboard'))
-    return redirect(url_for('main.login'))  # Redirigir al login si no está autenticado
+    return render_template('bienvenida.html')
 
 # Ruta para la página de inicio de sesión
-@main.route('/login')
-def login():
-    return render_template('login.html')
-
-@main.route('/register')
-def register():
-    return render_template('register.html')
+@main.route('/iniciar',methods=["GET","POST"])
+def inicio_sesion():
+    login = FormularioInicio()
+    if request.method =="GET":
+        return render_template("login.html",login=login)
+    
+# Ruta para la página de registro
+@main.route('/register',methods=["GET","POST"])
+def registro():
+    register =   FormularioRegistro()
+    if request.method =="GET":
+        return render_template("register.html",register=register)  
 
 # Ruta para el dashboard, solo accesible para usuarios autenticados
 @main.route('/dashboard')

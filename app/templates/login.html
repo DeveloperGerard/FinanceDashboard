@@ -7,14 +7,14 @@
 <script src="{{ url_for('static', filename='js/ojo.js') }}" defer></script>
 {% endblock %}
 
-
 {% block content %}
 <div class="login-container">
     <h1 class="login-title">Iniciar Sesión</h1>
 
-    <form method="POST" action="/login">
+    <form action="" method="POST">
+        {{ login.hidden_tag() }}
+
         <!-- Campo de correo electrónico -->
-        <label class="input-label" for="email">Correo Electrónico</label>
         <div style="position: relative;">
             <span class="input-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#7A7A7A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -22,21 +22,20 @@
                     <polyline points="22,6 12,13 2,6"></polyline>
                 </svg>
             </span>
-            <input type="email" id="email" name="email" class="input-field" required>
+            {{ login.email.label(class_="input-label") }}
+            {{ login.email(class_="input-field") }}
         </div>
 
         <!-- Campo de contraseña -->
-        <label class="input-label" for="password">Contraseña</label>
         <div style="position: relative;">
-            <!-- Ícono de contraseña -->
             <img src="{{ url_for('static', filename='icons/password-icon.svg') }}" class="input-icon" alt="Icono de contraseña">
-            <input type="password" id="password" name="password" class="input-field" required>
-            <!-- Ícono de ojo -->
+            {{ login.clave.label(class_="input-label") }}
+            {{ login.clave(class_="input-field") }}
             <img src="{{ url_for('static', filename='icons/eye-icon.svg') }}" class="eye-icon" alt="Mostrar/Ocultar contraseña">
         </div>
 
         <!-- Botón de inicio de sesión -->
-        <button type="submit" class="login-button">Iniciar Sesión</button>
+        {{ login.submit(class_="login-button") }}
     </form>
 
     <!-- Enlace para registrarse -->
