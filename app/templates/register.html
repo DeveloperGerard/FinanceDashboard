@@ -8,16 +8,23 @@
 <body>
     <p>Registrarse</p>
     <form action="" method="POST">
-        {{registro.hidden_tag()}}
-        {{registro.nombre.label()}}
-        {{registro.nombre()}}
-        {{registro.email.label()}}
-        {{registro.email()}}
-        {{registro.clave.label()}}
-        {{registro.clave()}}
-        {{registro.confirmar_clave.label()}}
-        {{registro.confirmar_clave()}}
-        {{registro.submit()}}
+        {{ registro.hidden_tag() }}
+
+        {{ registro.nombre.label(class="form-label") }}
+        {{ registro.nombre(class="form-control") }}
+
+        {{ registro.email.label(class="form-label") }}
+        {{ registro.email(class="form-control") }}
+
+        {{ registro.clave.label(class="form-label") }}
+        {{ registro.clave(class="form-control") }}
+        
+        {% for error in registro.clave.errors %}
+            <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+        {{ registro.confirmar_clave.label(class="form-label") }}
+        {{ registro.confirmar_clave(class="form-control") }}
+        {{ registro.submit() }}
 
     </form>
 </body>
