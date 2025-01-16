@@ -2,11 +2,8 @@ from app import db
 
 class Service(db.Model):
     __tablename__   = "services"
-<<<<<<< HEAD
-=======
 
     #columnas
->>>>>>> origin/ramaprueba
     id              = db.Column(db.Integer,primary_key=True)
     service_name    = db.Column(db.String(50),nullable=False)
     description     = db.Column(db.String(100),nullable=True)
@@ -15,9 +12,6 @@ class Service(db.Model):
     price           = db.Column(db.Integer,nullable=False)
     reamining_price = db.Column(db.Integer,nullable=False)
     user_id         = db.Column(db.Integer,db.ForeignKey("users.id",ondelete="CASCADE"))
-<<<<<<< HEAD
-    user            = db.relationship("User",back_populates="services")
-=======
     
     #relaciones
     user            = db.relationship("User",back_populates="services")
@@ -50,4 +44,3 @@ class Service(db.Model):
             amount += service.price
         return amount
 
->>>>>>> origin/ramaprueba
