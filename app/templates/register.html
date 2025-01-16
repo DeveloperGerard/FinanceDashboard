@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "base.html" %}
 
 {% block title %}Registro{% endblock %}
@@ -51,3 +52,36 @@
     </p>
 </div>
 {% endblock %}
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p>Registrarse</p>
+    <form action="" method="POST">
+        {{ registro.hidden_tag() }}
+
+        {{ registro.nombre.label(class="form-label") }}
+        {{ registro.nombre(class="form-control") }}
+
+        {{ registro.email.label(class="form-label") }}
+        {{ registro.email(class="form-control") }}
+
+        {{ registro.clave.label(class="form-label") }}
+        {{ registro.clave(class="form-control") }}
+        
+        {% for error in registro.clave.errors %}
+            <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+        {{ registro.confirmar_clave.label(class="form-label") }}
+        {{ registro.confirmar_clave(class="form-control") }}
+        {{ registro.submit() }}
+
+    </form>
+</body>
+</html>
+>>>>>>> origin/ramaprueba

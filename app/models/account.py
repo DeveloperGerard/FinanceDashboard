@@ -8,3 +8,10 @@ class Account(db.Model):
     user_id       = db.Column(db.Integer,db.ForeignKey("users.id",ondelete="CASCADE"))
     user          = db.relationship("User",back_populates="accounts")
     accounts      = db.relationship("Loan",back_populates="account")
+    @staticmethod 
+    def get_all():
+        all_accounts = db.session.execute(db.select(Account)).scalars()
+        all_accounts_list = []
+        for account in all_accounts:
+            all_accounts_list.append(account)
+        return(all_accounts_list)
