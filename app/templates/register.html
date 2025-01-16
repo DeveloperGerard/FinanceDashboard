@@ -13,36 +13,36 @@
     <h1 class="paragraph-1-copy-2">Registrarse</h1>
     
     <form method="POST" action="">
-        {{ register.hidden_tag() }}
+        {{ registro.hidden_tag() }}
 
         <!-- Campo de nombre -->
         <div style="position: relative;">
-            {{ register.nombre.label(class_="correo-electronico") }}
-            {{ register.nombre(class_="text-input-2") }}
+            {{ registro.nombre.label(class_="correo-electronico") }}
+            {{ registro.nombre(class_="text-input-2") }}
         </div>
 
         <!-- Campo de correo electrónico -->
         <div style="position: relative;">
-            {{ register.email.label(class_="correo-electronico") }}
-            {{ register.email(class_="text-input-2") }}
+            {{ registro.email.label(class_="correo-electronico") }}
+            {{ registro.email(class_="text-input-2") }}
         </div>
         
         <!-- Campo de contraseña -->
         <div style="position: relative;">
-            {{ register.clave.label(class_="contrase-a") }}
-            {{ register.clave(class_="text-input-3") }}
+            {{ registro.clave.label(class_="contrase-a") }}
+            {{ registro.clave(class_="text-input-3") }}
             <img src="{{ url_for('static', filename='icons/eye-icon.svg') }}" class="eye-icon" alt="Mostrar/Ocultar contraseña" tabindex="0">
         </div>
 
         <!-- Campo de confirmación de contraseña -->
         <div style="position: relative;">
-            {{ register.confirmar_clave.label(class_="contrase-a") }}
-            {{ register.confirmar_clave(class_="text-input-3") }}
+            {{ registro.confirmar_clave.label(class_="contrase-a") }}
+            {{ registro.confirmar_clave(class_="text-input-3") }}
             <img src="{{ url_for('static', filename='icons/eye-icon.svg') }}" class="eye-icon" alt="Mostrar/Ocultar contraseña">
         </div>
         
         <!-- Botón de registro -->
-        {{ register.submit(class_="button-14") }}
+        {{ registro.submit(class_="button-14") }}
     </form>
     
     <!-- Enlace para ir a login -->
