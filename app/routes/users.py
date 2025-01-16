@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template,redirect,request
-from flask_login import login_required ,LoginManager,current_user,login_user
+from flask_login import login_required ,LoginManager,current_user,login_user,logout_user
 from ..forms.form_user import FormularioInicio,FormularioRegistro
 from ..models.user import User
 from ..controllers.user_controller import UserController
@@ -57,4 +57,9 @@ def saludo():
     user = User().get_by_id(current_user.id)
     print(current_user.username)
     return render_template("prueba.html",user=user)
+@login_required
+@main.route("/cerrar")
+def cerrar():
+    logout_user()
+    return redirect("/")
     
