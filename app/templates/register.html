@@ -1,3 +1,58 @@
+<<<<<<< HEAD
+{% extends "base.html" %}
+
+{% block title %}Registro{% endblock %}
+
+{% block head %}
+<!-- Estilos específicos para la página de registro -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+<script src="{{ url_for('static', filename='js/ojo.js') }}" defer></script>
+{% endblock %}
+
+{% block content %}
+<div class="rectangle-2">
+    <h1 class="paragraph-1-copy-2">Registrarse</h1>
+    
+    <form method="POST" action="">
+        {{ register.hidden_tag() }}
+
+        <!-- Campo de nombre -->
+        <div style="position: relative;">
+            {{ register.nombre.label(class_="correo-electronico") }}
+            {{ register.nombre(class_="text-input-2") }}
+        </div>
+
+        <!-- Campo de correo electrónico -->
+        <div style="position: relative;">
+            {{ register.email.label(class_="correo-electronico") }}
+            {{ register.email(class_="text-input-2") }}
+        </div>
+        
+        <!-- Campo de contraseña -->
+        <div style="position: relative;">
+            {{ register.clave.label(class_="contrase-a") }}
+            {{ register.clave(class_="text-input-3") }}
+            <img src="{{ url_for('static', filename='icons/eye-icon.svg') }}" class="eye-icon" alt="Mostrar/Ocultar contraseña" tabindex="0">
+        </div>
+
+        <!-- Campo de confirmación de contraseña -->
+        <div style="position: relative;">
+            {{ register.confirmar_clave.label(class_="contrase-a") }}
+            {{ register.confirmar_clave(class_="text-input-3") }}
+            <img src="{{ url_for('static', filename='icons/eye-icon.svg') }}" class="eye-icon" alt="Mostrar/Ocultar contraseña">
+        </div>
+        
+        <!-- Botón de registro -->
+        {{ register.submit(class_="button-14") }}
+    </form>
+    
+    <!-- Enlace para ir a login -->
+    <p class="-no-tienes-cuenta-registrate-aqui-">
+        ¿Ya tienes cuenta? <a href="/iniciar">Inicia sesión aquí</a>
+    </p>
+</div>
+{% endblock %}
+=======
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,3 +84,4 @@
     </form>
 </body>
 </html>
+>>>>>>> origin/ramaprueba
