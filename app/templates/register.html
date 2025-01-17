@@ -20,5 +20,8 @@
         {{registro.submit()}}
 
     </form>
+    {% for mesg in get_flashed_messages() %}
+    <h2 style="color:red;">{{ mesg }}</h2>
+    {% endfor %}
 </body>
 </html>

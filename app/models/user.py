@@ -9,7 +9,7 @@ class User(UserMixin, db.Model):
     id             = db.Column(db.Integer, primary_key=True) 
     username       = db.Column(db.String(64), unique=True, nullable=False) 
     email          = db.Column(db.String(120), unique=True, nullable=False) 
-    password_hash  = db.Column(db.String(128)) 
+    password_hash  = db.Column(db.String(255)) 
     balance        = db.Column(db.Integer)
     
     #relaciones
@@ -42,6 +42,10 @@ class User(UserMixin, db.Model):
     @staticmethod 
     def get_by_email(email):
         user = User.query.filter_by(email=email).first()
+        return user
+    @staticmethod 
+    def get_by_name(username):
+        user = User.query.filter_by(username=username).first()
         return user
         
         

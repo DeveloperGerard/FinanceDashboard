@@ -9,13 +9,23 @@
     <p>Inicia sesion</p>
     <form action="" method="POST">
         {{login.hidden_tag()}}
-        {{login.email.label()}}
-        {{login.email()}}
-        {{login.clave.label()}}
-        {{login.clave()}}
+        {{login.email.label(class="form-label")}}
+        {{login.email(class="form-control")}}
+        {% for error in login.email.errors %}
+            <span class="text-danger">{{ error }}</span>
+        {% endfor %}
+        
+        {{login.clave.label(class="form-label")}}
+        {{login.clave(class="form-control")}}
+        {% for error in login.clave.errors %}
+            <span class="text-danger">{{ error }}</span>
+        {% endfor %}
         {{login.submit()}}
     </form>
     <p>No tienes cuenta registrate <a href="/registro">aqui</a></p>
+    {% for mesg in get_flashed_messages() %}
+    <h2 style="color:red;">{{ mesg }}</h2>
+    {% endfor %}
 
 </body>
 </html>
