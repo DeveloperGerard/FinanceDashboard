@@ -51,6 +51,8 @@ def registro():
         
 @main.route('/iniciar',methods=["GET","POST"])
 def inicio_sesion():
+    if current_user.is_authenticated:
+        redirect ("/home")
     if request.method =="GET":
         login = FormularioInicio()
         return render_template("login.html",login=login)
@@ -62,22 +64,10 @@ def inicio_sesion():
             if user is None:
                 return "usuario no existe"
             else:
-                print("--------------------------------------------------")
-                print(user.username)
-                print(user.password_hash)
-                print(user.email)
-                print(login_e.clave.data)
-                print(user.check_password("12345678"))
-                print(check_password_hash(user.password_hash,"12345678"))
-                print("--------------------------------------------------")
                 if user.check_password(login_e.clave.data):
                     login_user(user)
-                    print("contraseña buena")
                     return redirect("/home") 
-                else:
-                    print(user.password_hash)
-                    print(login_e.clave.data)
-                    print("contraseña mala")    
+                else:  
                     return render_template("login.html",login=login_e)   
                 
 @login_required
