@@ -12,3 +12,13 @@ class Service_payment(db.Model):
 
     #relaciones
     service     = db.relationship("Service",back_populates="service_payments")
+
+    #Funciones para obtener datos del model 'pago de servicios'
+    @staticmethod 
+    def get_all_by_serviceid(id:int):
+        all_servicepayments = db.session.execute(db.select(Service_payment)).scalars()
+        all_servicepayments_list =[]
+        for payment in all_servicepayments:
+            if payment.loan_id == id:
+                all_servicepayments_list.append(payment)
+        return all_servicepayments_list

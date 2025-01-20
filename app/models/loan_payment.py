@@ -12,3 +12,17 @@ class Loan_payment(db.Model):
     
     #relaciones
     loan        = db.relationship("Loan",back_populates="loan_payments")
+    
+    #Funciones para obtener datos del model 'pago de prestamos'
+    @staticmethod 
+    def get_all_by_loanid(id:int):
+        all_loanpayments = db.session.execute(db.select(Loan_payment)).scalars()
+        all_loanpayments_list =[]
+        for payment in all_loanpayments:
+            if payment.loan_id == id:
+                all_loanpayments_list.append(payment)
+        return all_loanpayments_list
+    
+
+    
+
