@@ -3,22 +3,23 @@ from app import db
 
 class IncomeController:
     @staticmethod
-    def create_Income(name,type):
-        cuenta              = Income()
-        cuenta.Income_name = name
-        cuenta.type         = type
-        db.session.add(Income)
+    def create_income(name,date,amount):
+        ingreso             = Income()
+        ingreso.income_name = name
+        ingreso.date        = date
+        ingreso.amount      = amount
+        db.session.add(ingreso)
         db.session.commit()
-        return cuenta
+        return ingreso
     
     @staticmethod
-    def delete_Income(income:object):
+    def delete_income(income:object):
         db.session.delete(income)
         db.session.commit()
         return  income
     
     @staticmethod
-    def update_Income(income:object):
+    def update_income(income:object):
         db.session.add(income)
         db.session.commit()
 
