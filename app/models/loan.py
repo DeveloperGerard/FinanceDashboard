@@ -14,8 +14,9 @@ class Loan(db.Model):
     reamining_price = db.Column(db.Integer,nullable=False)
     user_id         = db.Column(db.Integer,db.ForeignKey("users.id",ondelete="CASCADE"))
     account_id      = db.Column(db.Integer,db.ForeignKey("accounts.id",ondelete="CASCADE"))
-
+    
     #relaciones
+    loan_payments   = db.relationship("Loan_payment",back_populates="loan") 
     user            = db.relationship("User",back_populates="loans")     
     account         = db.relationship("Account",back_populates="accounts")            
 
