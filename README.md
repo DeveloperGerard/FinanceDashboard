@@ -1,7 +1,7 @@
 # Finance Dashboard 
 
 ## PREVIO A INSTALACION
-1. Debes tener instalado xamp para el servido web local.
+1. Debes tener instalado xampp para el servido web local.
 2. Instalar visual studio code(editor de codigo).
 
 ## Instalación 
@@ -14,4 +14,8 @@
    - Windows: `venv\Scripts\activate` 
    - Unix: `source venv/bin/activate` 
 7. Instalar dependencias: `pip install -r requirements.txt`
-8. Ejecutar `server.py`
+8. Dirigete a xampp y prende apache para el servidor y mysql para base de datos
+9. Despues has click en `admin de mysql`
+10. Crea una nueva base de datos llamada finance
+11. Dirigete a la terminal de visual studio code y ejecuta estos comandos en este orden con el entorno vitual prendido `flask db init,flask db migrate ,flask db upgrade`
+12. Ejecutar `server.py`
