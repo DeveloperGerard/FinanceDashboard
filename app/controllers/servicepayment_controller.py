@@ -4,14 +4,14 @@ from app import db
 class ServicePaymentController:
     @staticmethod
     def create_service_payment(amount,date,description,service_id):
-        servicio_pagado              = Service_payment()
-        servicio_pagado.amount       = amount
-        servicio_pagado.date         = date
-        servicio_pagado.description  = description
-        servicio_pagado.service_id   = service_id
-        db.session.add(servicio_pagado)
+        service_payment              = Service_payment()
+        service_payment.amount       = amount
+        service_payment.date         = date
+        service_payment.description  = description
+        service_payment.service_id   = service_id
+        db.session.add(service_payment)
         db.session.commit()
-        return servicio_pagado
+        return service_payment
     
     @staticmethod
     def delete_service_payment(service_payment:object):

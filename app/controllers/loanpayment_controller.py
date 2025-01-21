@@ -4,14 +4,14 @@ from app import db
 class LoanPaymentController:
     @staticmethod
     def create_loan_payment(amount,date,description,loan_id):
-        prestamo_pagado              = Loan_payment()
-        prestamo_pagado.amount       = amount
-        prestamo_pagado.date         = date
-        prestamo_pagado.description  = description
-        prestamo_pagado.loan_id      = loan_id
-        db.session.add(prestamo_pagado)
+        loan_payment              = Loan_payment()
+        loan_payment.amount       = amount
+        loan_payment.date         = date
+        loan_payment.description  = description
+        loan_payment.loan_id      = loan_id
+        db.session.add(loan_payment)
         db.session.commit()
-        return prestamo_pagado
+        return loan_payment
     
     @staticmethod
     def delete_loan_payment(loan_payment:object):

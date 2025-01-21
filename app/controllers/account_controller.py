@@ -3,17 +3,18 @@ from app import db
 
 class AccountController:
     @staticmethod
-    def create_account(name,card):
-        cuenta              = Account()
-        cuenta.account_name = name
-        cuenta.card         = card
-        db.session.add(Account)
+    def create_account(name,card,user_id):
+        account              = Account()
+        account.account_name = name
+        account.card         = card
+        account.user_id      = user_id
+        db.session.add(account)
         db.session.commit()
-        return cuenta
+        return account
     
     @staticmethod
     def delete_account(account:object):
-        db.session.delete(Account)
+        db.session.delete(account)
         db.session.commit()
         return  account
     

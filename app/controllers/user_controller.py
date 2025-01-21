@@ -4,24 +4,24 @@ from app import db
 class UserController:
     @staticmethod
     def create_user(username,email,password):
-        usuario = User()
-        usuario.username = username
-        usuario.email = email
-        usuario.set_password(password)
-        usuario.balance = 0
-        db.session.add(usuario)
+        user = User()
+        user.username = username
+        user.email = email
+        user.set_password(password)
+        user.balance = 0
+        db.session.add(user)
         db.session.commit()
-        return usuario
+        return user
     
     @staticmethod
-    def delete_user(usuario:object):
-        db.session.delete(usuario)
+    def delete_user(user:object):
+        db.session.delete(user)
         db.session.commit()
-        return usuario
+        return user
     
     @staticmethod
-    def update_user(usuario:object):
-        db.session.add(usuario)
+    def update_user(user:object):
+        db.session.add(user)
         db.session.commit()
 
         

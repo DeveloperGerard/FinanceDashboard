@@ -4,17 +4,17 @@ from app import db
 class ServiceController:
     @staticmethod
     def create_service(name,description,date,category,user_id,price,reamingin_price):
-        servicio                 = Service()
-        servicio.name            = name
-        servicio.description     = description
-        servicio.date            = date
-        servicio.category        = category
-        servicio.user_id         = user_id
-        servicio.reamining_price = reamingin_price
-        servicio.price           = price 
-        db.session.add(servicio)
+        service                 = Service()
+        service.service_name    = name
+        service.description     = description
+        service.date            = date
+        service.category        = category
+        service.user_id         = user_id
+        service.reamining_price = reamingin_price
+        service.price           = price 
+        db.session.add(service)
         db.session.commit()
-        return servicio
+        return service
     
     @staticmethod
     def delete_service(service:object):
