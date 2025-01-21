@@ -4,14 +4,14 @@ from wtforms.validators import DataRequired, Email,Length,EqualTo
 
 class FormularioCrearPagoServicio(FlaskForm):
     monto       = IntegerField("Monto",validators=[DataRequired()])
-    fecha       = DateTimeField("Fecha",validators=[DataRequired()])
-    description = TextAreaField("Descripcion",Length(0,200))
+    fecha       = DateField("Fecha",validators=[DataRequired()])
+    descripcion = TextAreaField("Descripcion",Length(0,200))
     submit      = SubmitField("Ingresar pago de servicio")
 
 
 class FormularioActualizarPagoServicio(FlaskForm):
     monto       = IntegerField("Monto",validators=[DataRequired()])
-    fecha       = DateTimeField("Fecha",validators=[DataRequired()])
-    description = TextAreaField("Descripcion",Length(0,200))
+    fecha       = DateField("Fecha",validators=[DataRequired()])
+    descripcion = TextAreaField("Descripcion",Length(0,200))
     submit      = SubmitField("Actualizar pago de servicio")
     
