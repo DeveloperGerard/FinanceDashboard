@@ -3,10 +3,10 @@ from app import db
 
 class AccountController:
     @staticmethod
-    def create_account(name,type):
+    def create_account(name,card):
         cuenta              = Account()
         cuenta.account_name = name
-        cuenta.type         = type
+        cuenta.card         = card
         db.session.add(Account)
         db.session.commit()
         return cuenta
