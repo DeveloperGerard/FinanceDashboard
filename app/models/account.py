@@ -9,9 +9,10 @@ class Account(db.Model):
     user          = db.relationship("User",back_populates="accounts")
     accounts      = db.relationship("Loan",back_populates="account")
     @staticmethod 
-    def get_all():
-        all_accounts = db.session.execute(db.select(Account)).scalars()
-        all_accounts_list = []
-        for account in all_accounts:
-            all_accounts_list.append(account)
-        return(all_accounts_list)
+    def get_all_by_userid(id:int):
+        all_account = db.session.execute(db.select(Account)).scalars()
+        all_account_list =[]
+        for account in all_account:
+            if account.user_id ==id:
+                all_account_list.append(account)
+        return all_account_list

@@ -6,6 +6,9 @@
     <title>Document</title>
 </head>
 <body>
-    {{user.username}}
+    {% for account in accounts %}
+        <h1>{{account.account_name}}</h1>
+        <p>{{account.card}}</p>
+    {% endfor %}  
 </body>
 </html>
