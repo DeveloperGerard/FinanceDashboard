@@ -6,8 +6,9 @@
     <title>Document</title>
 </head>
 <body>
-    {{user.username}}
-    <a href="/crearcuenta">Crear cuenta</a>
-    <a href="/vercuentas">Ver cuenta</a>
+    {% for account in accounts %}
+        <h1>{{account.account_name}}</h1>
+        <p>{{account.card}}</p>
+    {% endfor %}  
 </body>
 </html>
