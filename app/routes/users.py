@@ -23,7 +23,7 @@ def index():
 def saludo():
     user = User().get_by_id(current_user.id)
     print(current_user.username)
-    return render_template("prueba.html",user=user)
+    return render_template("users/prueba.html",user=user)
 @login_required
 @user.route("/cerrar_sesion")
 def cerrar():

@@ -16,7 +16,7 @@ def registro():
     registro =   FormularioRegistro()
 
     if request.method =="GET":
-        return render_template("register.html",registro=registro)  
+        return render_template("public/register.html",registro=registro)  
     
     elif request.method =="POST":
         registro = FormularioRegistro()
@@ -50,7 +50,7 @@ def registro():
 def inicio_sesion():
     if request.method =="GET":
         login = FormularioInicio()
-        return render_template("login.html",login=login)
+        return render_template("public/login.html",login=login)
     elif request.method=="POST":
         login_e = FormularioInicio()
         email = login_e.email.data
