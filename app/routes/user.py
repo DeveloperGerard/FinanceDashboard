@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template,redirect,request,flash
 from flask_login import login_required ,LoginManager,current_user,login_user,logout_user
 from ..forms.form_user import FormularioInicio,FormularioRegistro
-from ..models.user import User
+from app.models.importaciones import Income,Service,User,Account
 
 user= Blueprint('user', __name__) 
 
@@ -23,9 +23,28 @@ def index():
 def saludo():
     user = User().get_by_id(current_user.id)
     print(current_user.username)
-    return render_template("users/prueba.html",user=user)
+    return render_template("user/prueba.html",user=user)
 @login_required
 @user.route("/cerrar_sesion")
 def cerrar():
     logout_user()
     return redirect("/")
+
+@login_required 
+@user.route("/vercuentas")
+def ver_cuentas():
+    accounts = Account().get_all_by_userid(current_user.id)
+    return render_template("user/vercuentas.html",accounts=accounts)
+
+
+@login_required 
+@user.route("/veringresos")
+def ver_ingresos():
+    incomes = Income().get_all_by_userid(current_user.id)
+    return render_template("user/veringresos.html",incomes=incomes)
+
+@login_required
+@user.route("/verservicios")
+def ver_servicios():
+    services = Service().get_all_by_userid(current_user.id)
+    return render_template("user/verservicios.html",services=services)
