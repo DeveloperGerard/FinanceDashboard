@@ -3,8 +3,10 @@ from flask_login import current_user,login_required
 from app.forms.form_income import FormularioCrearIngreso
 from app.forms.form_account import FormularioActualizarCuenta,FormularioCrearCuenta
 from app.forms.form_service import FormularioCrearServicio
-from app.controllers.importaciones import AccountController,IncomeController,UserController,ServiceController
-from app.models.importaciones import Income,Account,User,Service
+from app.forms.form_loanpayments import FormularioCrearPagoPrestamo
+from app.forms.form_loan import FormularioCrearPrestamos
+from app.controllers.importaciones import AccountController,IncomeController,UserController,ServiceController,LoanController,LoanPaymentController
+from app.models.importaciones import Income,Account,User,Service,Loan
 user_functions = Blueprint('user_functions',__name__)
 
 """
@@ -65,3 +67,50 @@ def crear_servicio():
             user_id     = current_user.id
             ServiceController().create_service(nombre,descripcion,fecha,categoria,user_id,precio,precio)
             return redirect("/index")
+
+@login_required
+@user_functions.route("/crearprestamo",methods=["GET","POST"])
+def crear_prestamo():
+    if request.method == "GET":
+        form = FormularioCrearPrestamos()
+        accounts = Account().get_all_by_userid(current_user.id)
+        return render_template("user_functions/crear_prestamo.html",form=form,accounts=accounts)
+    if request.method == "POST":
+        form = FormularioCrearPrestamos()
+        if form.validate_on_submit():
+            nombre   = form.nombre.data
+            titular  = form.titular.data 
+            precio   = form.precio.data
+            cuota    = form.cuota.data
+            user_id  = current_user.id
+            tea      = form.tea.data
+            tea_mora = form.tea_mora.data
+            cuenta   = int(request.form.get("cuenta"))
+            LoanController().create_loan(nombre,titular,precio,cuota,user_id,cuenta,precio,tea,tea_mora)
+            return redirect("/index")
+        else:
+           
+            return "error"
+
+@login_required
+@user_functions.route("/pagoprestamo",methods=["GET","POST"])
+def pago_prestamo():
+    if request.method =="GET":
+        form = FormularioCrearPagoPrestamo()
+        loans = Loan().get_all_by_userid(current_user.id)
+        return render_template("user_functions/crear_pago_prestamo.html",form=form,loans=loans)
+    if request.method =="POST":
+        form = FormularioCrearPagoPrestamo()
+        if form.validate_on_submit:
+            monto    = form.monto.data
+            fecha    = form.fecha.data
+            descrip  = form.descripcion.data
+            prestamo = int(request.form.get("prestamo"))
+            LoanPaymentController().create_loan_payment(monto,fecha,descrip,prestamo)
+            prestamo = Loan().get_by_id(prestamo)
+            prestamo.reamining_price = prestamo.price-monto
+            LoanController().update_loan(prestamo)
+            return redirect("/index")
+            
+
+    

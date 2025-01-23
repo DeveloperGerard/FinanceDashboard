@@ -7,8 +7,8 @@ class FormularioCrearPrestamos(FlaskForm):
     titular  = StringField('Titular',validators=[DataRequired(),Length(min=4,max=50)])
     precio   = IntegerField('Precio',validators=[DataRequired()])
     cuota    = IntegerField('Cuota',validators=[DataRequired()])
-    tea      = IntegerField('Tea')
-    tea_mora = IntegerField('Tea mora')
+    tea      = IntegerField('Tea',validators=[DataRequired()])
+    tea_mora = IntegerField('Tea mora',validators=[DataRequired()])
     submit   = SubmitField('Crear prestamo')
 
 class FormularioActualizarPrestamos(FlaskForm):
@@ -16,6 +16,6 @@ class FormularioActualizarPrestamos(FlaskForm):
     titular  = StringField('Titular',validators=[DataRequired(),Length(min=4,max=50)])
     precio   = IntegerField('Precio',validators=[DataRequired()])
     cuota    = IntegerField('Cuota',validators=[DataRequired()])
-    tea      = IntegerField('Tea')
-    tea_mora = IntegerField('Tea mora')
+    tea      = IntegerField('Tea',validators=[DataRequired()])
+    tea_mora = IntegerField('Tea mora',validators=[DataRequired()])
     submit   = SubmitField('Actualizar prestamo')

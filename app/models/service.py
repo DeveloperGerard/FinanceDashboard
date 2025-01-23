@@ -44,4 +44,9 @@ class Service(db.Model):
         for service in all_service:
             amount += service.price
         return amount
+    @staticmethod
+    def get_by_id(id):
+        service = Service.query.filter_by(id=id).first()
+        return service
+    
 

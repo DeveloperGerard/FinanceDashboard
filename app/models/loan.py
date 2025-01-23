@@ -44,4 +44,9 @@ class Loan(db.Model):
         for loan in all_loans:
             amount += loan.reamining_price
         return amount
+    @staticmethod
+    def get_by_id(id):
+        loan =Loan.query.filter_by(id=id).first()
+        return loan
+    
     
