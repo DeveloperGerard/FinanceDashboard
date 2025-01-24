@@ -89,8 +89,14 @@ def crear_prestamo():
             LoanController().create_loan(nombre,titular,precio,cuota,user_id,cuenta,precio,tea,tea_mora)
             return redirect("/index")
         else:
-           
-            return "error"
+            return render_template("user_functions/crear_prestamo.html",form=form)
+        
+"""
+    ESTO DA ERROR = Nombre:Montar una biblioteca de manga,Titular=Laios,Precio= 3000000,Cuota=12,Tea=0,Tea_mora=0 Banco fallabela
+    Esto no me dio error Nombre=Montar un laboratorio robotico,Titular=Gerard,Precio=5000000,quota=12,tea=0,tea_mora=0,
+    user id y el msimo
+    ahora provaremos    
+"""
 
 @login_required
 @user_functions.route("/pagoprestamo",methods=["GET","POST"])
@@ -108,7 +114,7 @@ def pago_prestamo():
             prestamo = int(request.form.get("prestamo"))
             LoanPaymentController().create_loan_payment(monto,fecha,descrip,prestamo)
             prestamo = Loan().get_by_id(prestamo)
-            prestamo.reamining_price = prestamo.price-monto
+            prestamo.reamining_price = prestamo.reamining_price -monto
             LoanController().update_loan(prestamo)
             return redirect("/index")
             
