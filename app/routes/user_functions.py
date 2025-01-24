@@ -4,8 +4,9 @@ from app.forms.form_income import FormularioCrearIngreso
 from app.forms.form_account import FormularioActualizarCuenta,FormularioCrearCuenta
 from app.forms.form_service import FormularioCrearServicio
 from app.forms.form_loanpayments import FormularioCrearPagoPrestamo
+from app.forms.form_servicepayments import FormularioCrearPagoServicio
 from app.forms.form_loan import FormularioCrearPrestamos
-from app.controllers.importaciones import AccountController,IncomeController,UserController,ServiceController,LoanController,LoanPaymentController
+from app.controllers.importaciones import AccountController,IncomeController,UserController,ServiceController,LoanController,LoanPaymentController,ServicePaymentController
 from app.models.importaciones import Income,Account,User,Service,Loan
 user_functions = Blueprint('user_functions',__name__)
 
@@ -108,15 +109,33 @@ def pago_prestamo():
     if request.method =="POST":
         form = FormularioCrearPagoPrestamo()
         if form.validate_on_submit:
-            monto    = form.monto.data
-            fecha    = form.fecha.data
-            descrip  = form.descripcion.data
-            prestamo = int(request.form.get("prestamo"))
-            LoanPaymentController().create_loan_payment(monto,fecha,descrip,prestamo)
-            prestamo = Loan().get_by_id(prestamo)
+            monto       = form.monto.data
+            fecha       = form.fecha.data
+            descrip     = form.descripcion.data
+            prestamo_id = int(request.form.get("prestamo"))
+            LoanPaymentController().create_loan_payment(monto,fecha,descrip,prestamo_id)
+            prestamo = Loan().get_by_id(prestamo_id)
             prestamo.reamining_price = prestamo.reamining_price -monto
             LoanController().update_loan(prestamo)
             return redirect("/index")
             
 
-    
+@login_required
+@user_functions.route("/pagoservicio",methods=["GET","POST"])
+def pago_servicio():
+    if request.method == "GET":
+        form  = FormularioCrearPagoServicio()
+        services = Service().get_all_by_userid(current_user.id)
+        return render_template("user_functions/crear_pago_servicio.html",form=form,services=services)
+    if request.method == "POST":
+        form = FormularioCrearPagoServicio()
+        monto          = form.monto.data
+        fecha          = form.fecha.data
+        descripcion    = form.descripcion.data
+        servicio_id    = int(request.form.get("servicio"))
+        ServicePaymentController().create_service_payment(monto,fecha,descripcion,servicio_id)
+        servicio = Service().get_by_id(servicio_id)
+        servicio.reamining_price = servicio.reamining_price-monto
+        ServiceController().update_service(servicio)
+        return redirect("/index")
+
