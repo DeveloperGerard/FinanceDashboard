@@ -20,6 +20,9 @@
         {{form.descripcion.label()}}
         {{form.descripcion()}}
         {{form.submit()}}
+        {% for mesg in get_flashed_messages() %}
+            <h2 style="color:red;">{{ mesg }}</h2>
+        {% endfor %}
     </form>
 </body>
 </html>

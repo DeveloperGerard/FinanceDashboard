@@ -7,11 +7,11 @@
 </head>
 <body>
     {% for service in services %}
-    <h1>{{service.service_name}}</h1>
-    <p>{{service.description}}</p>
-    <p>{{service.price}}</p>
-    <p>{{service.category}}</p> 
-    <p>{{service.reamining_price}}</p>   
+    <h1>Nombre:{{service.service_name}}</h1>
+    <p>Descripcion:{{service.description}}</p>
+    <p>Precio:{{service.price}}</p>
+    <p>Categoria:{{service.category}}</p> 
+    <p>Precio restante:{{service.reamining_price}}</p>   
     {% endfor %}
 </body>
 </html>

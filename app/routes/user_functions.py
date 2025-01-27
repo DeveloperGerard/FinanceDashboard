@@ -129,13 +129,24 @@ def pago_servicio():
         return render_template("user_functions/crear_pago_servicio.html",form=form,services=services)
     if request.method == "POST":
         form = FormularioCrearPagoServicio()
-        monto          = form.monto.data
-        fecha          = form.fecha.data
-        descripcion    = form.descripcion.data
-        servicio_id    = int(request.form.get("servicio"))
-        ServicePaymentController().create_service_payment(monto,fecha,descripcion,servicio_id)
-        servicio = Service().get_by_id(servicio_id)
-        servicio.reamining_price = servicio.reamining_price-monto
-        ServiceController().update_service(servicio)
-        return redirect("/index")
+        if form.validate_on_submit():
+            user = User().get_by_id(current_user.id)
+            if user.balance < form.monto.data:
+                flash("Monto insuficiente","error")
+                return redirect("/pagoservicio")
+            else:
+                monto          = form.monto.data
+                fecha          = form.fecha.data
+                descripcion    = form.descripcion.data
+                servicio_id    = int(request.form.get("servicio"))
+                ServicePaymentController().create_service_payment(monto,fecha,descripcion,servicio_id)
+                servicio = Service().get_by_id(servicio_id)
+                servicio.reamining_price = servicio.reamining_price-monto
+                ServiceController().update_service(servicio)
+                user = User().get_by_id(current_user.id)
+                user.balance = user.balance -monto
+                UserController().update_user(user)
+                return redirect("/index")
+        else:
+            return "error"
 
