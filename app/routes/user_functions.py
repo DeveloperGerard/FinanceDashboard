@@ -109,16 +109,25 @@ def pago_prestamo():
     if request.method =="POST":
         form = FormularioCrearPagoPrestamo()
         if form.validate_on_submit:
-            monto       = form.monto.data
-            fecha       = form.fecha.data
-            descrip     = form.descripcion.data
-            prestamo_id = int(request.form.get("prestamo"))
-            LoanPaymentController().create_loan_payment(monto,fecha,descrip,prestamo_id)
-            prestamo = Loan().get_by_id(prestamo_id)
-            prestamo.reamining_price = prestamo.reamining_price -monto
-            LoanController().update_loan(prestamo)
-            return redirect("/index")
-            
+            user = User().get_by_id(current_user.id)
+            if user.balance < form.monto.data:
+                flash("Monto insuficiente","error")
+                return redirect("/pagoprestamo")
+            else:
+                monto       = form.monto.data
+                fecha       = form.fecha.data
+                descrip     = form.descripcion.data
+                prestamo_id = int(request.form.get("prestamo"))
+                LoanPaymentController().create_loan_payment(monto,fecha,descrip,prestamo_id)
+                prestamo = Loan().get_by_id(prestamo_id)
+                prestamo.reamining_price = prestamo.reamining_price -monto
+                LoanController().update_loan(prestamo)
+                user = User().get_by_id(current_user.id)
+                user.balance = user.balance -monto
+                UserController().update_user(user)
+                return redirect("/index")
+        else:
+            return "error"
 
 @login_required
 @user_functions.route("/pagoservicio",methods=["GET","POST"])

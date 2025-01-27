@@ -19,6 +19,9 @@
                 <option value="{{loan.id}}">{{loan.loan_name}}</option>
             {% endfor %}
         </select>
+        {% for mesg in get_flashed_messages() %}
+            <h2 style="color:red;">{{ mesg }}</h2>
+        {% endfor %}
         {{form.submit()}}
     </form>
 </body>
