@@ -121,15 +121,22 @@ def pago_prestamo():
                 flash("Monto insuficiente","error")
                 return redirect("/pagoprestamo")
             else:
-                #creamos el objeto prestamo_pagado para bd
+                prestamo_id = int(request.form.get("prestamo"))
                 monto       = form.monto.data
+                prestamo = Loan().get_by_id(prestamo_id)
+                
+                #Evaluamos si el usuario pago mas de lo que cuesta 
+                if monto > prestamo.reamining_price:
+                    monto = prestamo.reamining_price
+                else:
+                    monto  = form.monto.data
+
                 fecha       = form.fecha.data
                 descrip     = form.descripcion.data
-                prestamo_id = int(request.form.get("prestamo"))
+                #creamos el objeto prestamo_pagado para bd
                 LoanPaymentController().create_loan_payment(monto,fecha,descrip,prestamo_id)
 
                 #actualizamos el monto restante para pagar el prestamo
-                prestamo = Loan().get_by_id(prestamo_id)
                 prestamo.reamining_price = prestamo.reamining_price -monto
                 LoanController().update_loan(prestamo)
                 #actualizamos el saldo de la cuenta de usuario
@@ -158,15 +165,21 @@ def pago_servicio():
                 flash("Monto insuficiente","error")
                 return redirect("/pagoservicio")
             else:
-                #creamos el objeto servicio_pagado para bd
+                servicio_id    = int(request.form.get("servicio"))
                 monto          = form.monto.data
+                servicio = Service().get_by_id(servicio_id)
+
+                #Evaluamos si el usuario pago mas de lo que cuesta 
+                if monto > servicio.reamining_price:
+                    monto = servicio.reamining_price
+                else:
+                    monto  = form.monto.data
                 fecha          = form.fecha.data
                 descripcion    = form.descripcion.data
-                servicio_id    = int(request.form.get("servicio"))
+                #creamos el objeto servicio_pagado para bd
                 ServicePaymentController().create_service_payment(monto,fecha,descripcion,servicio_id)
 
                 #actualizamos el monto restante para pagar el servicio
-                servicio = Service().get_by_id(servicio_id)
                 servicio.reamining_price = servicio.reamining_price-monto
                 ServiceController().update_service(servicio)
 
@@ -177,4 +190,4 @@ def pago_servicio():
                 return redirect("/index")
         else:
             return "error"
-
+        
