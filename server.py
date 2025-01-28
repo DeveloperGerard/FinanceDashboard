@@ -2,7 +2,7 @@
 Archivo despliegue
 """
 from app import create_app
-from app.routes.users import user
+from app.routes.user import user
 from app.routes.user_functions import user_functions
 from app.routes.public import public
 

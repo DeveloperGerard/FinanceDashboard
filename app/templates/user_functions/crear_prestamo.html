@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="" method="POST">
+        {{form.hidden_tag()}}
+        {{form.nombre.label()}}
+        {{form.nombre()}}
+        {{form.titular.label()}}
+        {{form.titular()}}  
+        {{form.precio.label()}}
+        {{form.precio()}} 
+        {{form.cuota.label()}}
+        {{form.cuota()}}      
+        {{form.tea.label()}}
+        {{form.tea()}}   
+        {{form.tea_mora.label()}}
+        {{form.tea_mora()}} 
+        <select name="cuenta">
+            {% for account in accounts %}
+                <option value="{{account.id}}">{{account.account_name}}</option>
+            {% endfor %}
+        </select>
+        {% if accounts %}
+            {{form.submit()}}
+        {% else %}
+            <p>Para crear una prestamo necesitas una cuenta</p>
+        {% endif %}
+    </form>
+</body>
+</html>

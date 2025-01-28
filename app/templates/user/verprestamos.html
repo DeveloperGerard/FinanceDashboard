@@ -6,8 +6,11 @@
     <title>Document</title>
 </head>
 <body>
-    {{user.username}}
-    <a href="/crearcuenta">Crear cuenta</a>
-    <a href="/vercuentas">Ver cuenta</a>
+    {% for loan in loans %}
+        <h1>{{loan.loan_name}}</h1>
+        <h3>{{loan.holder}}</h3>
+        <p>{{loan.price}}</p>
+        <p>{{loan.reamining_price}}</p>
+    {% endfor %}  
 </body>
 </html>
