@@ -14,14 +14,16 @@
         {{form.fecha()}}
         <select name="servicio" id="">
             {% for service in services %}
-                {% if service.reamining_price>0 %}
-                    <option value="{{service.id}}">{{service.service_name}}</option>
-                {% endif %}
+                <option value="{{service.id}}">{{service.service_name}}</option>
             {% endfor %}
         </select>
         {{form.descripcion.label()}}
         {{form.descripcion()}}
-        {{form.submit()}}
+        {% if services %}
+            {{form.submit()}}
+        {% else %}
+            <p>Tus servicios estan pagados</p>
+        {% endif %}
         {% for mesg in get_flashed_messages() %}
             <h2 style="color:red;">{{ mesg }}</h2>
         {% endfor %}

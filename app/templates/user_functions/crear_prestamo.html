@@ -10,64 +10,26 @@
         {{form.hidden_tag()}}
         {{form.nombre.label()}}
         {{form.nombre()}}
-        {% if form.nombre.errors %}
-            <ul class="errors">
-                {% for error in form.nombre.errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
         {{form.titular.label()}}
-        {{form.titular()}}
-        {% if form.titular.errors %}
-            <ul class="errors">
-                {% for error in form.titular.errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+        {{form.titular()}}  
         {{form.precio.label()}}
-        {{form.precio()}}
-        {% if form.precio.errors %}
-            <ul class="errors">
-                {% for error in form.precio.errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+        {{form.precio()}} 
         {{form.cuota.label()}}
-        {{form.cuota()}}
-        {% if form.cuota.errors %}
-            <ul class="errors">
-                {% for error in form.cuota.errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+        {{form.cuota()}}      
         {{form.tea.label()}}
-        {{form.tea()}}
-        {% if form.tea.errors %}
-            <ul class="errors">
-                {% for error in form.tea.errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+        {{form.tea()}}   
         {{form.tea_mora.label()}}
-        {{form.tea_mora()}}
-        {% if form.tea_mora.errors %}
-            <ul class="errors">
-                {% for error in form.tea_mora.errors %}
-                    <li>{{ error }}</li>
-                {% endfor %}
-            </ul>
-        {% endif %}
+        {{form.tea_mora()}} 
         <select name="cuenta">
             {% for account in accounts %}
                 <option value="{{account.id}}">{{account.account_name}}</option>
             {% endfor %}
         </select>
-        {{form.submit()}}
+        {% if accounts %}
+            {{form.submit()}}
+        {% else %}
+            <p>Para crear una prestamo necesitas una cuenta</p>
+        {% endif %}
     </form>
 </body>
 </html>

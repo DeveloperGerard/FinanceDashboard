@@ -15,16 +15,18 @@
         {{form.descripcion.label()}}
         {{form.descripcion()}}
         <select name="prestamo" id="">
-            {% for loan in loans %}
-                {% if loan.reamining_price>0 %}
-                    <option value="{{loan.id}}">{{loan.loan_name}}</option>
-                {% endif %}
+            {% for loan in loans %}      
+                <option value="{{loan.id}}">{{loan.loan_name}}</option>     
             {% endfor %}
         </select>
+        {% if loans %}
+            {{form.submit()}}
+        {% else %}
+            <p>Tus prestamos estan pagados</p>
+        {% endif %}
         {% for mesg in get_flashed_messages() %}
             <h2 style="color:red;">{{ mesg }}</h2>
         {% endfor %}
-        {{form.submit()}}
     </form>
 </body>
 </html>

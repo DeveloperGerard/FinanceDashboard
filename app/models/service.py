@@ -27,6 +27,14 @@ class Service(db.Model):
             if service.user_id == id:
                 all_services_list.append(service)
         return all_services_list
+    @staticmethod
+    def get_all_for_payment(id:int):
+        all_services =db.session.execute(db.select(Service)).scalars()
+        all_services_list =[]
+        for service in all_services:
+            if service.user_id == id and service.reamining_price>0:
+                all_services_list.append(service)
+        return all_services_list
     
     @staticmethod
     def get_all_by_category(category:str):

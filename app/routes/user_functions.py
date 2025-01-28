@@ -109,7 +109,7 @@ def crear_prestamo():
 def pago_prestamo():
     if request.method =="GET":
         form  = FormularioCrearPagoPrestamo()
-        loans = Loan().get_all_by_userid(current_user.id)#es para la relacion una a muchos entre(prestamos y prestamos pagados)
+        loans = Loan().get_all_for_payment(current_user.id)#es para la relacion una a muchos entre(prestamos y prestamos pagados)
         return render_template("user_functions/crear_pago_prestamo.html",form=form,loans=loans)
     
     if request.method =="POST":
@@ -153,7 +153,7 @@ def pago_prestamo():
 def pago_servicio():
     if request.method == "GET":
         form     = FormularioCrearPagoServicio()
-        services = Service().get_all_by_userid(current_user.id)#es para la relacion una a muchos entre(Servicio y pago de servicios)
+        services = Service().get_all_for_payment(current_user.id)#es para la relacion una a muchos entre(Servicio y pago de servicios)
         return render_template("user_functions/crear_pago_servicio.html",form=form,services=services)
     
     if request.method == "POST":
