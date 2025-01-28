@@ -16,7 +16,9 @@
         {{form.descripcion()}}
         <select name="prestamo" id="">
             {% for loan in loans %}
-                <option value="{{loan.id}}">{{loan.loan_name}}</option>
+                {% if loan.reamining_price>0 %}
+                    <option value="{{loan.id}}">{{loan.loan_name}}</option>
+                {% endif %}
             {% endfor %}
         </select>
         {% for mesg in get_flashed_messages() %}
