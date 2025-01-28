@@ -30,6 +30,14 @@ class Loan(db.Model):
             if loan.user_id ==id:
                 all_loans_list.append(loan)
         return all_loans_list
+    @staticmethod
+    def get_all_for_payment(id:int):
+        all_loans =db.session.execute(db.select(Loan)).scalars()
+        all_loans_list =[]
+        for loan in all_loans:
+            if loan.user_id == id and loan.reamining_price>0:
+                all_loans_list.append(loan)
+        return all_loans_list
     @staticmethod 
     def get_full_amount():
         all_loans = db.session.execute(db.select(Loan)).scalars()
@@ -44,4 +52,9 @@ class Loan(db.Model):
         for loan in all_loans:
             amount += loan.reamining_price
         return amount
+    @staticmethod
+    def get_by_id(id):
+        loan =Loan.query.filter_by(id=id).first()
+        return loan
+    
     
