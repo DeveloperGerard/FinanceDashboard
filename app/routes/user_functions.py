@@ -8,14 +8,14 @@ from app.forms.form_servicepayments import FormularioCrearPagoServicio
 from app.forms.form_loan            import FormularioCrearPrestamos
 from app.controllers.importaciones  import AccountController,IncomeController,UserController,ServiceController,LoanController,LoanPaymentController,ServicePaymentController
 from app.models.importaciones       import Income,Account,User,Service,Loan
-
 user_functions = Blueprint('user_functions',__name__)
-
 """
 Aqui van a estar las rutas relacionadas con las funciones que 
 puede realizar el usuario como crear prestamos,servicios,etc.
 
 """
+
+
 
 @login_required
 @user_functions.route("/crearcuenta",methods=["GET","POST"])

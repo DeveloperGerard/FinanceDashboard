@@ -1,9 +1,11 @@
 from flask import Blueprint, render_template,redirect,request,flash
-from flask_login import login_user
+from flask_login import login_user,current_user
 from ..forms.form_user import FormularioInicio,FormularioRegistro
 from ..controllers.user_controller import UserController
 from ..models.user import User
-from flask_mail import Message
+from .notification_funct import send_gmail
+from flask_apscheduler import APScheduler
+
 public= Blueprint('public', __name__) 
 
 """
@@ -42,7 +44,7 @@ def registro():
                 UserController().create_user(nombre,email,clave)
                 user = User().get_by_email(email)
                 login_user(user)
-                send_gmail("Registro exitoso","Gracias por registrarte",email)
+                send_gmail(email)
                 return redirect("/index")
         else:
             return redirect("/registro")
@@ -67,10 +69,22 @@ def inicio_sesion():
                 else:  
                     flash(f"Contraseña incorrecta","error")
                     return redirect("/iniciar")
-                
-def send_gmail(msg,msg_body,recipient):
-    from server import mail
-    message = Message(msg,sender="dashboardfinance1@gmail.com",recipients=[recipient])
-    message.body = msg_body
-    mail.send(message)
-    return "Enviado"
+
+
+scheduler = APScheduler()
+def tarea():
+    from server import app
+    with app.app_context():
+        from server import mail,Message
+        users = User().get_all()
+        message = Message(sender="dashboardfinance1@gmail.com",recipients=[user.email for user in users])
+        title = f"Acuerdate de pagar tus prestamos😊" 
+        body  = """
+            Un préstamo es una transacción financiera en la que una parte, denominada prestamista, proporciona una cantidad
+            específica de dinero o recursos a otra parte, 
+            conocida como prestatario, con la expectativa de que se devuelva en el futuro, generalmente con intereses.
+        """
+        message.html = render_template("public/mail.html",title=title,body=body)
+        mail.send(message)
+scheduler.add_job(id="hola",func=tarea,trigger="cron",hour=16,minute=3)
+scheduler.start()
