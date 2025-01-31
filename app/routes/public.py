@@ -70,21 +70,3 @@ def inicio_sesion():
                     flash(f"Contraseña incorrecta","error")
                     return redirect("/iniciar")
 
-
-scheduler = APScheduler()
-def tarea():
-    from server import app
-    with app.app_context():
-        from server import mail,Message
-        users = User().get_all()
-        message = Message(sender="dashboardfinance1@gmail.com",recipients=[user.email for user in users])
-        title = f"Acuerdate de pagar tus prestamos😊" 
-        body  = """
-            Un préstamo es una transacción financiera en la que una parte, denominada prestamista, proporciona una cantidad
-            específica de dinero o recursos a otra parte, 
-            conocida como prestatario, con la expectativa de que se devuelva en el futuro, generalmente con intereses.
-        """
-        message.html = render_template("public/mail.html",title=title,body=body)
-        mail.send(message)
-scheduler.add_job(id="hola",func=tarea,trigger="cron",hour=16,minute=3)
-scheduler.start()
