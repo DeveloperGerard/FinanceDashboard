@@ -3,10 +3,18 @@ from flask import render_template
 from flask_mail import Message
 from app.models.importaciones import User
 from flask_apscheduler import APScheduler
+scheduler = APScheduler()
 
-
-
-
+def send_gmail_form():
+    from server import mail
+    user    = User().get_by_id(current_user.id)
+    message = Message(sender="dashboardfinance1@gmail.com",recipients=[current_user.email])
+    username = user.username
+    title = f"Confirma tu correo{username}" 
+    message.html = render_template("public/mailform.html",title=title)
+    mail.send(message)
+    return "Enviado"
+  
 def send_gmail(recipient):
     from server import mail
     message = Message(sender="dashboardfinance1@gmail.com",recipients=[recipient])
@@ -21,8 +29,6 @@ def send_gmail(recipient):
     mail.send(message)
     return "Enviado"
 
-
-scheduler = APScheduler()
 def tarea():
     from server import app
     with app.app_context():

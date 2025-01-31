@@ -11,6 +11,7 @@ class User(UserMixin, db.Model):
     email          = db.Column(db.String(120), unique=True, nullable=False) 
     password_hash  = db.Column(db.String(255)) 
     balance        = db.Column(db.Integer)
+    email_conf     = db.Column(db.Boolean())
     
     #relaciones
     incomes        = db.relationship("Income",back_populates="user")
