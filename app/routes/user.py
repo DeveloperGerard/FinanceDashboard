@@ -14,7 +14,10 @@ podra visualizar su informacion financiera
 @user.route('/index') 
 def index(): 
     if current_user.is_authenticated:
-        return redirect('/home')
+        if current_user.email_conf:
+            return redirect('/home')
+        else:
+            return redirect('/conf_email')
     else:
         return redirect("/iniciar")
                                        

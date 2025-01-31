@@ -13,3 +13,4 @@ class Config:
     MAIL_PASSWORD = 'vtow xsqo qico odwj'
     MAIL_USE_TLS = False
     MAIL_USE_SSL = True
+
