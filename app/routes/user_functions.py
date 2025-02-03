@@ -8,8 +8,7 @@ from app.forms.form_servicepayments import FormularioCrearPagoServicio
 from app.forms.form_loan            import FormularioCrearPrestamos
 from app.controllers.importaciones  import AccountController,IncomeController,UserController,ServiceController,LoanController,LoanPaymentController,ServicePaymentController
 from app.models.importaciones       import Income,Account,User,Service,Loan
-from app.routes.notification_funct  import send_gmail_form
-
+from ..funciones.token import confirm_token
 user_functions = Blueprint('user_functions',__name__)
 """
 Aqui van a estar las rutas relacionadas con las funciones que 
@@ -193,19 +192,21 @@ def pago_servicio():
         else:
             return "error"
         
+
+@user_functions.route("/conf_email/<token>")
 @login_required
-@user_functions.route("/conf_email",methods=["GET","POST"])
-def conf_email():
+def confirm_email(token):
+    if current_user.email_conf:
+        return redirect("/index")
+    email = confirm_token(token)
     user = User().get_by_id(current_user.id)
-    if user.email_conf == True:
+    print(f"{email}=={user.email}")
+    if user.email == email:
+        user.email_conf= True
+        UserController().update_user(user)
+        flash("Cuenta confirmada")
         return redirect("/index")
     else:
-        if request.method=="GET":
-            send_gmail_form()
-            return "Revisa tu gmail"
-        if request.method=="POST":
-            user = User().get_by_id(current_user.id)
-            user.email_conf = True
-            UserController().update_user(user)
-            return redirect("/index")
-
+        flash("Token invalido puto")
+        print(True if "gerard"==True else False)
+        return "xd"

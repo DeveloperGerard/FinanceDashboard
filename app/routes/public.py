@@ -1,11 +1,11 @@
 from flask import Blueprint, render_template,redirect,request,flash
-from flask_login import login_user,current_user
+from flask_login import login_user,current_user,login_required
 from ..forms.form_user import FormularioInicio,FormularioRegistro
 from ..controllers.user_controller import UserController
 from ..models.user import User
-from .notification_funct import send_gmail
+from ..funciones.notification_funct import send_gmail,send_gmail_confirmation
 from flask_apscheduler import APScheduler
-
+from ..funciones.token import genera_token
 public= Blueprint('public', __name__) 
 
 """
@@ -45,6 +45,8 @@ def registro():
                 user = User().get_by_email(email)
                 login_user(user)
                 send_gmail(email)
+                token = genera_token(user.email)
+                send_gmail_confirmation(token)
                 return redirect("/index")
         else:
             return redirect("/registro")

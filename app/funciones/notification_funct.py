@@ -5,13 +5,13 @@ from app.models.importaciones import User
 from flask_apscheduler import APScheduler
 scheduler = APScheduler()
 
-def send_gmail_form():
+def send_gmail_confirmation(token):
     from server import mail
     user    = User().get_by_id(current_user.id)
     message = Message(sender="dashboardfinance1@gmail.com",recipients=[current_user.email])
     username = user.username
     title = f"Confirma tu correo{username}" 
-    message.html = render_template("public/mailform.html",title=title)
+    message.html = render_template("public/mailconfirmation.html",title=title,token=token)
     mail.send(message)
     return "Enviado"
   
@@ -29,7 +29,7 @@ def send_gmail(recipient):
     mail.send(message)
     return "Enviado"
 
-def tarea():
+def daily_email():
     from server import app
     with app.app_context():
         from server import mail,Message
@@ -43,5 +43,5 @@ def tarea():
         """
         message.html = render_template("public/mail.html",title=title,body=body)
         mail.send(message)
-scheduler.add_job(id="hola",func=tarea,trigger="cron",hour=16,minute=4)
+scheduler.add_job(id="hola",func=daily_email,trigger="cron",hour=16,minute=4)
 scheduler.start()

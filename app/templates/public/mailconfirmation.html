@@ -18,6 +18,7 @@
       border: 1px solid #e0e0e0;
       border-radius: 8px;
       padding: 20px;
+      text-align: center;
     }
     h1 {
       color: #333333;
@@ -35,6 +36,7 @@
       font-size: 14px;
       color: #888888;
       margin-top: 20px;
+      text-align: center;
     }
   </style>
 </head>
@@ -44,9 +46,7 @@
       <td align="center">
         <div class="email-container">
           <h1>{{title}}</h1>
-          <form action="http://127.0.0.1:5000/conf_email" method="POST">
-                <button type="submit">Confirmar correo</button>
-          </form>
+          <a href="http://127.0.0.1:5000/conf_email/{{token}}">Confirmar correo</a>
           <div class="footer">
             <p>Este es un mensaje automático, por favor no respondas.❌</p>
           </div>
