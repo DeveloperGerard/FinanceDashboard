@@ -1,3 +1,7 @@
+"""
+    Funciones de notificacion
+"""
+
 from flask_login import current_user
 from flask import render_template
 from flask_mail import Message

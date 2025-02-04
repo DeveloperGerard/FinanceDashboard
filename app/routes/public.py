@@ -1,3 +1,8 @@
+"""
+Rutas publicas
+
+"""
+
 from flask import Blueprint, render_template,redirect,request,flash
 from flask_login import login_user,current_user,login_required
 from ..forms.form_user import FormularioInicio,FormularioRegistro
@@ -8,11 +13,6 @@ from flask_apscheduler import APScheduler
 from ..funciones.token import genera_token
 public= Blueprint('public', __name__) 
 
-"""
-Aqui van a estar las rutas a las que cualquiera persona 
-puede acceder aunque no este registrada
-
-"""
 @public.route('/registro',methods=["GET","POST"])
 def registro():
     registro =   FormularioRegistro()

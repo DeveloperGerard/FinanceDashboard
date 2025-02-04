@@ -1,3 +1,8 @@
+"""
+Funciones del usuario
+
+"""
+
 from flask                          import Blueprint,render_template,redirect,request,flash
 from flask_login                    import current_user,login_required
 from app.forms.form_income          import FormularioCrearIngreso
@@ -10,11 +15,6 @@ from app.controllers.importaciones  import AccountController,IncomeController,Us
 from app.models.importaciones       import Income,Account,User,Service,Loan
 from ..funciones.token import confirm_token
 user_functions = Blueprint('user_functions',__name__)
-"""
-Aqui van a estar las rutas relacionadas con las funciones que 
-puede realizar el usuario como crear prestamos,servicios,etc.
-
-"""
 
 
 

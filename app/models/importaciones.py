@@ -1,3 +1,7 @@
+"""
+    Importacion de modelo
+"""
+
 from ..models.account import Account
 from ..models.income import Income
 from ..models.user import User

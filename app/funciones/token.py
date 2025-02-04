@@ -1,6 +1,8 @@
-from itsdangerous import URLSafeTimedSerializer
+"""
+    Funciones para el token para confirma email
+"""
 
-#token functions
+from itsdangerous import URLSafeTimedSerializer
 
 def genera_token(email):
     """
