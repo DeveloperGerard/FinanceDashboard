@@ -15,11 +15,13 @@ from app.controllers.importaciones  import AccountController,IncomeController,Us
 from app.models.importaciones       import Income,Account,User,Service,Loan
 from ..funciones.token import confirm_token,genera_token
 from ..funciones.notification_funct import send_gmail_confirmation
+from ..funciones.email_decorator import email_validation
 user_functions = Blueprint('user_functions',__name__)
 
 
 
 @login_required
+@email_validation
 @user_functions.route("/crearcuenta",methods=["GET","POST"])
 def crear_cuenta():
     if request.method =="GET":
@@ -38,6 +40,7 @@ def crear_cuenta():
 
 
 @login_required
+@email_validation
 @user_functions.route("/crearingreso",methods=["GET","POST"])
 def crear_ingreso():
     if request.method =="GET":
@@ -62,6 +65,7 @@ def crear_ingreso():
 
 
 @login_required
+@email_validation
 @user_functions.route("/crearservicio",methods=["GET","POST"])
 def crear_servicio():
     if request.method == "GET":
@@ -82,6 +86,7 @@ def crear_servicio():
             return redirect("/index")
 
 @login_required
+@email_validation
 @user_functions.route("/crearprestamo",methods=["GET","POST"])
 def crear_prestamo():
     if request.method == "GET":
@@ -107,6 +112,7 @@ def crear_prestamo():
             return render_template("user_functions/crear_prestamo.html",form=form)
 
 @login_required
+@email_validation
 @user_functions.route("/pagoprestamo",methods=["GET","POST"])
 def pago_prestamo():
     if request.method =="GET":
@@ -151,6 +157,7 @@ def pago_prestamo():
             return "error"
 
 @login_required
+@email_validation
 @user_functions.route("/pagoservicio",methods=["GET","POST"])
 def pago_servicio():
     if request.method == "GET":
@@ -222,6 +229,7 @@ def reenviar_token():
     return redirect("https://mail.google.com/")
 
 @login_required
+@email_validation
 @user_functions.route("/cerrar_sesion")
 def cerrar():
     logout_user()
