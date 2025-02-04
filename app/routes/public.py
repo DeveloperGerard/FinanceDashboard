@@ -4,12 +4,11 @@ Rutas publicas
 """
 
 from flask import Blueprint, render_template,redirect,request,flash
-from flask_login import login_user,current_user,login_required
+from flask_login import login_user
 from ..forms.form_user import FormularioInicio,FormularioRegistro
 from ..controllers.user_controller import UserController
 from ..models.user import User
 from ..funciones.notification_funct import send_gmail,send_gmail_confirmation
-from flask_apscheduler import APScheduler
 from ..funciones.token import genera_token
 public= Blueprint('public', __name__) 
 
