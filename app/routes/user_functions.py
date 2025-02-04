@@ -1,23 +1,27 @@
+"""
+Funciones del usuario
+
+"""
+
 from flask                          import Blueprint,render_template,redirect,request,flash
-from flask_login                    import current_user,login_required
+from flask_login                    import current_user,login_required,logout_user
 from app.forms.form_income          import FormularioCrearIngreso
-from app.forms.form_account         import FormularioActualizarCuenta,FormularioCrearCuenta
+from app.forms.form_account         import FormularioCrearCuenta
 from app.forms.form_service         import FormularioCrearServicio
 from app.forms.form_loanpayments    import FormularioCrearPagoPrestamo
 from app.forms.form_servicepayments import FormularioCrearPagoServicio
 from app.forms.form_loan            import FormularioCrearPrestamos
 from app.controllers.importaciones  import AccountController,IncomeController,UserController,ServiceController,LoanController,LoanPaymentController,ServicePaymentController
 from app.models.importaciones       import Income,Account,User,Service,Loan
-
+from ..funciones.token import confirm_token,genera_token
+from ..funciones.notification_funct import send_gmail_confirmation
+from ..funciones.email_decorator import email_validation
 user_functions = Blueprint('user_functions',__name__)
 
-"""
-Aqui van a estar las rutas relacionadas con las funciones que 
-puede realizar el usuario como crear prestamos,servicios,etc.
 
-"""
 
 @login_required
+@email_validation
 @user_functions.route("/crearcuenta",methods=["GET","POST"])
 def crear_cuenta():
     if request.method =="GET":
@@ -36,6 +40,7 @@ def crear_cuenta():
 
 
 @login_required
+@email_validation
 @user_functions.route("/crearingreso",methods=["GET","POST"])
 def crear_ingreso():
     if request.method =="GET":
@@ -60,6 +65,7 @@ def crear_ingreso():
 
 
 @login_required
+@email_validation
 @user_functions.route("/crearservicio",methods=["GET","POST"])
 def crear_servicio():
     if request.method == "GET":
@@ -80,6 +86,7 @@ def crear_servicio():
             return redirect("/index")
 
 @login_required
+@email_validation
 @user_functions.route("/crearprestamo",methods=["GET","POST"])
 def crear_prestamo():
     if request.method == "GET":
@@ -105,6 +112,7 @@ def crear_prestamo():
             return render_template("user_functions/crear_prestamo.html",form=form)
 
 @login_required
+@email_validation
 @user_functions.route("/pagoprestamo",methods=["GET","POST"])
 def pago_prestamo():
     if request.method =="GET":
@@ -149,6 +157,7 @@ def pago_prestamo():
             return "error"
 
 @login_required
+@email_validation
 @user_functions.route("/pagoservicio",methods=["GET","POST"])
 def pago_servicio():
     if request.method == "GET":
@@ -191,3 +200,37 @@ def pago_servicio():
         else:
             return "error"
         
+
+@user_functions.route("/conf_email/<token>")
+@login_required
+def confirm_email(token):
+    if current_user.email_conf:
+        return redirect("/index")
+    email = confirm_token(token)
+    user = User().get_by_id(current_user.id)
+    print(f"{email}=={user.email}")
+    if user.email == email:
+        user.email_conf= True
+        UserController().update_user(user)
+        flash("Cuenta confirmada")
+        return redirect("/index")
+    else:
+        flash("Token invalido puto")
+        #aqui añadir que muestre token vencido
+        print(True if "gerard"==True else False)
+        return "xd"
+
+@user_functions.route("/reenviartoken")
+@login_required
+def reenviar_token():
+    user  = User().get_by_id(current_user.id)
+    token = genera_token(user.email)
+    send_gmail_confirmation(token)
+    return redirect("https://mail.google.com/")
+
+@login_required
+@email_validation
+@user_functions.route("/cerrar_sesion")
+def cerrar():
+    logout_user()
+    return redirect("/")
