@@ -47,5 +47,5 @@ def daily_email():
         """
         message.html = render_template("public/mail.html",title=title,body=body)
         mail.send(message)
-scheduler.add_job(id="hola",func=daily_email,trigger="cron",hour=16,minute=4)
+scheduler.add_job(id="hola",func=daily_email,trigger="cron",hour=9,minute=0)
 scheduler.start()
