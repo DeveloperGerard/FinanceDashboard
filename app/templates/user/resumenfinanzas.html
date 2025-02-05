@@ -33,6 +33,13 @@
         <h1>
             Resumen de pagos mensuales
         </h1>
+        <p>
+            {% for loan_payment in loans_payment %}
+                <p>{{loan_payment.amount}}</p>
+                <p>{{loan_payment.loan_id}}</p>
+            {% endfor %}
+        </p>
+        
     </div>
 </body>
 </html>

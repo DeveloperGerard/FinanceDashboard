@@ -1,5 +1,5 @@
 from app import db 
-
+import datetime
 class Loan_payment(db.Model):
     __tablename__ = "loan_payments"
 
@@ -22,6 +22,17 @@ class Loan_payment(db.Model):
             if payment.loan_id == id:
                 all_loanpayments_list.append(payment)
         return all_loanpayments_list
+    
+    @staticmethod
+    def get_all_by_date(id:int,loans):
+        date = datetime.datetime.now()
+        list = db.session.query(Loan_payment).filter(Loan_payment.date.between(f'{date.year}-{date.month}-1','2025-2-30'))
+        list_loan = []
+        for loan in zip(list,loans):
+            if loan[0].id == loan[1].id:
+                list_loan.append(loan[0])
+        return list_loan
+        
     
 
     

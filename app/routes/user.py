@@ -4,7 +4,7 @@ Visualizacion de datos
 
 from flask import Blueprint, render_template,redirect
 from flask_login import login_required ,current_user
-from app.models.importaciones import Income,Service,User,Account,Loan
+from app.models.importaciones import Income,Service,User,Account,Loan,Loan_payment
 from ..funciones.email_decorator import email_validation
 user= Blueprint('user', __name__) 
 
@@ -62,5 +62,7 @@ def ver_prestamos():
 @email_validation
 @user.route("/resumenfinanzas")
 def resumen_finanzas():
-    loans = Loan().loan_summary(current_user.id)
-    return render_template("user/resumenfinanzas.html",loans=loans)
+    loans         = Loan().loan_summary(current_user.id)
+    loans_user    = Loan().get_all_by_userid(current_user.id)
+    loans_payment = Loan_payment().get_all_by_date(current_user.id,loans_user)
+    return render_template("user/resumenfinanzas.html",loans=loans,loans_payment=loans_payment)
