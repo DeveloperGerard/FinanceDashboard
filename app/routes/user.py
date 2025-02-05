@@ -57,3 +57,10 @@ def ver_servicios():
 def ver_prestamos():
     loans = Loan().get_all_by_userid(current_user.id)
     return  render_template("user/verprestamos.html",loans=loans)
+
+@login_required
+@email_validation
+@user.route("/resumenfinanzas")
+def resumen_finanzas():
+    loans = Loan().loan_summary(current_user.id)
+    return render_template("user/resumenfinanzas.html",loans=loans)

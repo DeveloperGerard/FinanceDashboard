@@ -30,6 +30,21 @@ class Loan(db.Model):
             if loan.user_id ==id:
                 all_loans_list.append(loan)
         return all_loans_list
+    
+    @staticmethod 
+    def loan_summary(id:int):
+        all_loans = db.session.execute(db.select(Loan)).scalars()
+        price           = 0
+        reamining_price = 0 
+        payment_price   = 0
+        for loan in all_loans:
+            if loan.user_id ==id:
+                price += loan.price
+                reamining_price += loan.reamining_price
+        payment_price = price - reamining_price 
+        progress = round((payment_price*100)/price,2)
+        return [price,reamining_price,payment_price,progress]
+    
     @staticmethod
     def get_all_for_payment(id:int):
         all_loans =db.session.execute(db.select(Loan)).scalars()
