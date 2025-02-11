@@ -58,4 +58,17 @@ class Loan(db.Model):
         loan =Loan.query.filter_by(id=id).first()
         return loan
     
-    
+    @staticmethod
+    def get_loan_summary(id):
+        all_loans        = db.session.execute(db.select(Loan)).scalars()
+        all_amount       = 0
+        payment_amount   = 0
+        reamining_amount = 0
+        progress         = 0
+        for loan in all_loans:
+            if loan.user_id ==id:
+                all_amount += loan.price
+                reamining_amount += loan.reamining_price
+        payment_amount = all_amount - reamining_amount
+        progress = (payment_amount*100)/all_amount
+        return {"monto_total":all_amount,"monto_pagado":payment_amount,"monto_restante":reamining_amount,"progreso":progress}
