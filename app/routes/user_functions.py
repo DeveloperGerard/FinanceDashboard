@@ -144,10 +144,11 @@ def pago_prestamo():
                 else:
                     monto  = form.monto.data
 
-                fecha       = form.fecha.data
-                descrip     = form.descripcion.data
+                fecha   = form.fecha.data
+                descrip = form.descripcion.data
+                user_id = current_user.id
                 #creamos el objeto prestamo_pagado para bd
-                LoanPaymentController().create_loan_payment(monto,fecha,descrip,prestamo_id)
+                LoanPaymentController().create_loan_payment(monto,fecha,descrip,prestamo_id,user_id)
 
                 #actualizamos el monto restante para pagar el prestamo
                 prestamo.reamining_price = prestamo.reamining_price -monto
@@ -188,10 +189,11 @@ def pago_servicio():
                     monto = servicio.reamining_price
                 else:
                     monto  = form.monto.data
-                fecha          = form.fecha.data
-                descripcion    = form.descripcion.data
+                fecha       = form.fecha.data
+                descripcion = form.descripcion.data
+                user_id     = current_user.id
                 #creamos el objeto servicio_pagado para bd
-                ServicePaymentController().create_service_payment(monto,fecha,descripcion,servicio_id)
+                ServicePaymentController().create_service_payment(monto,fecha,descripcion,servicio_id,user_id)
 
                 #actualizamos el monto restante para pagar el servicio
                 servicio.reamining_price = servicio.reamining_price-monto
