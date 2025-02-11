@@ -8,13 +8,14 @@ class Loan(db.Model):
     loan_name       = db.Column(db.String(50),nullable=False)
     holder          = db.Column(db.String(50),nullable=False)
     price           = db.Column(db.Integer,nullable=False)
+    date            = db.Column(db.Date(),nullable=False)
     quota           = db.Column(db.Integer,nullable=True)
     tea             = db.Column(db.Integer,nullable=True)
     tea_mora        = db.Column(db.Integer,nullable=True)
     reamining_price = db.Column(db.Integer,nullable=False)
     user_id         = db.Column(db.Integer,db.ForeignKey("users.id",ondelete="CASCADE"))
     account_id      = db.Column(db.Integer,db.ForeignKey("accounts.id",ondelete="CASCADE"))
-    
+    expiration_date = db.Column(db.Date(),nullable=False)
     #relaciones
     loan_payments   = db.relationship("Loan_payment",back_populates="loan") 
     user            = db.relationship("User",back_populates="loans")     

@@ -9,8 +9,9 @@ class Service_payment(db.Model):
     date        = db.Column(db.DateTime(),nullable=False)
     description = db.Column(db.Text(),nullable=True)
     service_id  = db.Column(db.Integer,db.ForeignKey("services.id",ondelete="CASCADE"))
-
+    user_id     = db.Column(db.Integer,db.ForeignKey("users.id",ondelete="CASCADE"))
     #relaciones
+    user        = db.relationship("User",back_populates="services_pay")
     service     = db.relationship("Service",back_populates="service_payments")
 
     #Funciones para obtener datos del model 'pago de servicios'
