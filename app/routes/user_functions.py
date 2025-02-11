@@ -70,7 +70,8 @@ def crear_ingreso():
 def crear_servicio():
     if request.method == "GET":
         form = FormularioCrearServicio()
-        return render_template("user_functions/crear_servicio.html",form=form)
+        accounts = Account().get_all_by_userid(current_user.id)#es para la relacion una a muchos entre(cuenta y servicios)
+        return render_template("user_functions/crear_servicio.html",form=form,accounts=accounts)
     
     if request.method == "POST":
         form = FormularioCrearServicio()
@@ -79,10 +80,12 @@ def crear_servicio():
             nombre      = form.nombre.data
             descripcion = form.descripcion.data
             fecha       = form.fecha.data
+            vencimiento = form.fecha_vencimiento.data
             categoria   = form.categoria.data
             precio      = form.precio.data
             user_id     = current_user.id
-            ServiceController().create_service(nombre,descripcion,fecha,categoria,user_id,precio,precio)
+            cuenta      = int(request.form.get("cuenta"))
+            ServiceController().create_service(nombre,descripcion,fecha,categoria,user_id,precio,precio,cuenta,vencimiento)
             return redirect("/index")
 
 @login_required
@@ -105,8 +108,10 @@ def crear_prestamo():
             user_id  = current_user.id
             tea      = form.tea.data
             tea_mora = form.tea_mora.data
+            fecha    = form.fecha.data
+            vencimiento = form.fecha_vencimiento.data
             cuenta   = int(request.form.get("cuenta"))
-            LoanController().create_loan(nombre,titular,precio,cuota,user_id,cuenta,precio,tea,tea_mora)
+            LoanController().create_loan(nombre,titular,precio,cuota,user_id,cuenta,precio,fecha,vencimiento,tea,tea_mora)
             return redirect("/index")
         else:
             return render_template("user_functions/crear_prestamo.html",form=form)
