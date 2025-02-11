@@ -17,9 +17,13 @@
         {{form.cuota.label()}}
         {{form.cuota()}}      
         {{form.tea.label()}}
-        {{form.tea()}}   
+        {{form.tea()}}
+        {{form.fecha.label()}}
+        {{form.fecha()}}    
         {{form.tea_mora.label()}}
-        {{form.tea_mora()}} 
+        {{form.tea_mora()}}
+        {{form.fecha_vencimiento.label()}}
+        {{form.fecha_vencimiento()}} 
         <select name="cuenta">
             {% for account in accounts %}
                 <option value="{{account.id}}">{{account.account_name}}</option>
