@@ -18,7 +18,7 @@ class Loan(db.Model):
     #relaciones
     loan_payments   = db.relationship("Loan_payment",back_populates="loan") 
     user            = db.relationship("User",back_populates="loans")     
-    account         = db.relationship("Account",back_populates="accounts")            
+    account         = db.relationship("Account",back_populates="accounts_loan")            
 
     #Funciones para obtener datos del modelo prestamo
 
