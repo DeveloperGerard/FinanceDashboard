@@ -8,6 +8,8 @@ class FormularioCrearPrestamos(FlaskForm):
     precio   = IntegerField('Precio',validators=[DataRequired()])
     cuota    = IntegerField('Cuota',validators=[DataRequired(),NumberRange(1)])
     tea      = IntegerField('Tea',validators=[NumberRange(0)])
+    fecha    = DateField("Fecha")
+    fecha_vencimiento = DateField("Vencimiento")
     tea_mora = IntegerField('Tea mora',validators=[NumberRange(0)])
     submit   = SubmitField('Crear prestamo')
 

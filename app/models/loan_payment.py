@@ -9,8 +9,9 @@ class Loan_payment(db.Model):
     date        = db.Column(db.DateTime(),nullable=False)
     description = db.Column(db.Text(),nullable=True)
     loan_id     = db.Column(db.Integer,db.ForeignKey("loans.id",ondelete="CASCADE"))
-    
+    user_id     = db.Column(db.Integer,db.ForeignKey("users.id",ondelete="CASCADE"))
     #relaciones
+    user        = db.relationship("User",back_populates="loans_pay")
     loan        = db.relationship("Loan",back_populates="loan_payments")
     
     #Funciones para obtener datos del model 'pago de prestamos'

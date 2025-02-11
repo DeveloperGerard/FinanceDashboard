@@ -3,12 +3,13 @@ from app import db
 
 class LoanPaymentController:
     @staticmethod
-    def create_loan_payment(amount,date,description,loan_id):
+    def create_loan_payment(amount,date,description,loan_id,user_id):
         loan_payment              = Loan_payment()
         loan_payment.amount       = amount
         loan_payment.date         = date
         loan_payment.description  = description
         loan_payment.loan_id      = loan_id
+        loan_payment.user_id      = user_id
         db.session.add(loan_payment)
         db.session.commit()
         return loan_payment

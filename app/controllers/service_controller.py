@@ -3,7 +3,7 @@ from app import db
 
 class ServiceController:
     @staticmethod
-    def create_service(name,description,date,category,user_id,price,reamingin_price):
+    def create_service(name,description,date,category,user_id,price,reamingin_price,account,expiration):
         service                 = Service()
         service.service_name    = name
         service.description     = description
@@ -12,6 +12,8 @@ class ServiceController:
         service.user_id         = user_id
         service.reamining_price = reamingin_price
         service.price           = price 
+        service.account_id      = account
+        service.expiration_date = expiration
         db.session.add(service)
         db.session.commit()
         return service

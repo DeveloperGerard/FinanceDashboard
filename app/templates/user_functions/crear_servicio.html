@@ -18,7 +18,18 @@
         {{form.categoria()}}
         {{form.precio.label()}}
         {{form.precio()}}
-        {{form.submit()}}
+        {{form.fecha_vencimiento.label()}}
+        {{form.fecha_vencimiento()}}
+        <select name="cuenta">
+            {% for account in accounts %}
+                <option value="{{account.id}}">{{account.account_name}}</option>
+            {% endfor %}
+        </select>
+        {% if accounts %}
+            {{form.submit()}}
+        {% else %}
+            <p>Para crear un servicio necesitas una cuenta</p>
+        {% endif %}
     </form>
 </body>
 </html>

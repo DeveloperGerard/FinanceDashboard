@@ -12,11 +12,13 @@ class Service(db.Model):
     price            = db.Column(db.Integer,nullable=False)
     reamining_price  = db.Column(db.Integer,nullable=False)
     user_id          = db.Column(db.Integer,db.ForeignKey("users.id",ondelete="CASCADE"))
-    
+    account_id       = db.Column(db.Integer,db.ForeignKey("accounts.id",ondelete="CASCADE"))
+    expiration_date  = db.Column(db.Date(),nullable=False)
     #relaciones
     service_payments = db.relationship("Service_payment",back_populates="service")
     user             = db.relationship("User",back_populates="services")
-
+    account          = db.relationship("Account",back_populates="accounts_serv")
+    
     #Funciones para obtener datos del modelo servicio
     @staticmethod
     def get_all_by_userid(id:int):
