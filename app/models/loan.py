@@ -58,6 +58,23 @@ class Loan(db.Model):
         loan =Loan.query.filter_by(id=id).first()
         return loan
     
+    @staticmethod 
+    def get_all_for_account(id:int,account_list:list):
+        all_loans = db.session.execute(db.select(Loan)).scalars()
+        all_loans_list =[]
+        all_acounts = [[] for account in account_list]
+        x = 0
+        for loan in all_loans:
+            if loan.user_id ==id:
+                all_loans_list.append(loan)
+        print(all_loans_list)
+        for loan in all_loans_list:
+            if loan.account_id==(account_list[x]).id:
+                all_acounts[x].append(loan)
+                print(f"{loan.account_id}=={(account_list[x]).id}")
+            x+=1
+        return all_acounts
+    
     @staticmethod
     def get_loan_summary(id):
         all_loans        = db.session.execute(db.select(Loan)).scalars()

@@ -22,9 +22,46 @@
                 Progreso:{{ loan_summ["progreso"] }}%
             </p>
         </div>
-        <div>
-            
+        <div >
+            {% for account in accounts %}
+            <h1>{{account.account_name}}</h1>
+            <div>
+                {% for loan in loans %}
+                {% if loan.account_id == account.id %}
+                        <h2>{{loan.loan_name}}</h2>
+                        {% for loan_payment in loans_payments %}
+                        {% if loan_payment.loan_id == loan.id %}
+                                <h3>Pagos</h3>
+                                <p>{{loan_payment.amount}}</p>
+                                <p>{{loan_payment.date}}</p>
+                                <p>{{loan_payment.description}}</p>
+                                {% endif %}
+                        {% endfor %}
+                        <!--añadir categoria en vez de contenedor a account a loan-price{{accounts.index}}-->
+                    {% endif %}
+                {% endfor %}
+                <!----------------------------------------------------------------------------->
+                {% for service in services %}
+                    {% if service.account_id == account.id %}
+                    <h2>{{service.service_name}}</h2>
+                        {% for service_payment in services_payments %}
+                            {% if service_payment.service_id == service.id %}
+                                <h3>Pagos</h3>
+                                <p >{{service_payment.amount}}</p>
+                                <p>{{service_payment.date}}</p>
+                                <p>{{service_payment.description}}</p>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+                <p>Precio cuenta:${{sum(precio_cuenta[accounts.index(account)])+sum(precio_cuenta2[accounts.index(account)])}}</p>
+            </div>
+            {% endfor %}
         </div>
+        <h1>Gastos mensuales</h1>
+        <p>Prestamos:{{prestamos_re}}</p>
+        <p>Servicios:{{servicios_re}}</p>
+        <p>Total:${{prestamos_re+servicios_re}}</p>
     </div>
 </body>
 </html>

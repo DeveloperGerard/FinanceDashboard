@@ -39,6 +39,16 @@ class Service(db.Model):
         return all_services_list
     
     @staticmethod
+    def get_all_amount_payment(id:int):
+        all_services =db.session.execute(db.select(Service)).scalars()
+        all_services_list =[]
+
+        for service in all_services:
+            if service.user_id == id:
+                all_services_list.append(service.price-service.reamining_price)
+        return sum(all_services_list)
+
+    @staticmethod
     def get_all_by_category(category:str):
         all_services = db.session.execute(db.select(Service)).scalars()
         all_services_list=[]
@@ -58,5 +68,17 @@ class Service(db.Model):
     def get_by_id(id):
         service = Service.query.filter_by(id=id).first()
         return service
-    
-
+    @staticmethod 
+    def get_all_for_account(id:int,account_list:list):
+        all_services =db.session.execute(db.select(Service)).scalars()
+        all_services_list =[]
+        all_acounts = [[] for account in account_list]
+        x = 0
+        for service in all_services:
+            if service.user_id == id:
+                all_services_list.append(service)
+        for service in all_services_list:
+            if service.account_id==(account_list[x]).id:
+                all_acounts[x].append(service)
+            x+=1
+        return all_acounts

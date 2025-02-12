@@ -23,7 +23,27 @@ class Loan_payment(db.Model):
             if payment.loan_id == id:
                 all_loanpayments_list.append(payment)
         return all_loanpayments_list
+    @staticmethod 
+    def get_all_by_userid(id:int):
+        all_loanpayments = db.session.execute(db.select(Loan_payment)).scalars()
+        all_loanpayments_list =[]
+        for payment in all_loanpayments:
+            if payment.user_id== id:
+                all_loanpayments_list.append(payment)
+        return all_loanpayments_list
     
+    @staticmethod
+    def get_all_payment_for_loans(id:int,loans:list):
+        all_loanpayments = db.session.execute(db.select(Loan_payment)).scalars()
+        all_loanpayments_list =[]
+        all_payments = [[] for loan in loans]
+        x = 0
+        for payment in all_loanpayments:
+            for loan in loans:
+                for subloan in loan:
+                    if payment.loan_id == subloan.id:
+                        all_payments[(loans).index(loan)].append(payment.amount)
+        return all_payments
 
     
 
