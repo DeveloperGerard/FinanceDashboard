@@ -11,7 +11,7 @@ class IncomeController:
         income.description    = description
         income.next_income    = next_income
         income.pending_amount = pending_amount
-        income.categoria      = categoria
+        income.category       = categoria
         income.user_id        = user_id
         db.session.add(income)
         db.session.commit()

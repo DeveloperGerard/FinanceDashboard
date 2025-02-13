@@ -41,7 +41,8 @@ def ver_cuentas():
 @email_validation
 @user.route("/veringresos")
 def ver_ingresos():
-    incomes = Income().get_all_by_userid(current_user.id)
+    incomes = Income().get_all_by_category(current_user.id)
+    print(incomes)
     return render_template("user/veringresos.html",incomes=incomes)
 
 @login_required

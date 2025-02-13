@@ -6,10 +6,21 @@
     <title>Document</title>
 </head>
 <body>
-    {% for income in incomes %}
-        <h1>{{income.income_name}}</h1>
-        <p>{{income.date}}</p>
-        <p>{{income.amount}}</p>
+    <p>{{incomes}}</p>
+    {% for income,category in incomes.items() %}
+        <h1>{{income}}</h1>
+        {% for elemento in category %}
+            {% if elemento %}
+            <div style="border: 1px solid black;">
+                <p>Nombre:{{elemento.income_name}}</p>
+                <p>Descripcion:{{elemento.descripcion}}</p>
+                <p>Monto pendiente:${{elemento.pending_amount}}</p>
+                <p>Siguiente ingreso:{{elemento.next_income}}</p>
+                <p>Monto:${{elemento.amount}}</p>
+            </div>
+                
+            {% endif %}
+        {% endfor %}
     {% endfor %}  
 </body>
 </html>

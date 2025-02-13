@@ -8,7 +8,7 @@ class Income(db.Model):
     income_name    = db.Column(db.String(50),nullable=False)
     income_date    = db.Column(db.DateTime(),nullable=False)
     description    = db.Column(db.String(150),nullable=False) 
-    categoria      = db.Column(db.String(100),nullable=False)
+    category       = db.Column(db.String(100),nullable=False)
     next_income    = db.Column(db.DateTime(),nullable=False)
     amount         = db.Column(db.Integer,nullable=False)
     user_id        = db.Column(db.Integer,db.ForeignKey("users.id",ondelete="CASCADE"))
@@ -42,4 +42,19 @@ class Income(db.Model):
         for income in all_incomes:
             amount += income.reamining_price
         return amount
+    @staticmethod
+    def get_all_by_category(id:int):
+        all_incomes = db.session.execute(db.select(Income)).scalars()
+        all_incomes_list ={'Sueldo':[],'Horas extras':[],"Venta":[],"Inversiones":[]}
+        for income in all_incomes:
+            if income.user_id ==id:
+                if income.category == 'Sueldo':
+                    all_incomes_list['Sueldo'].append(income)
+                elif income.category == 'Horas extras':
+                    all_incomes_list['Horas extras'].append(income)
+                elif income.category == 'Venta':
+                    all_incomes_list['Venta'].append(income)
+                else:
+                    all_incomes_list['Inversiones'].append(income)
+        return all_incomes_list
     
