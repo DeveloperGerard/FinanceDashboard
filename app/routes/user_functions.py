@@ -51,11 +51,15 @@ def crear_ingreso():
         form = FormularioCrearIngreso()
         if form.validate_on_submit():
             #despues de validar creamos el objeto ingreso para bd
-            nombre  = form.nombre.data
-            fecha   = form.fecha.data
-            user_id = current_user.id
-            monto   = form.monto.data
-            IncomeController().create_income(nombre,fecha,monto,user_id)
+            nombre          = form.nombre.data
+            fecha           = form.fecha_pago.data
+            user_id         = current_user.id
+            descripcion     = form.descripcion.data
+            categoria       = form.categoria.data
+            proximo_pago    = form.proximo_pago.data
+            monto_pendiente = form.monto_pendiente.data
+            monto           = form.monto.data
+            IncomeController().create_income(nombre,fecha,monto,user_id,descripcion,proximo_pago,monto_pendiente,categoria)
 
             #actualizamos el saldo de la cuenta del usuario
             usuario = User().get_by_id(current_user.id)

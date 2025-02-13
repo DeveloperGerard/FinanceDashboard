@@ -4,11 +4,17 @@ class Income(db.Model):
     __tablename__ = "incomes"
 
     #columnas
-    id            = db.Column(db.Integer,primary_key=True)
-    income_name   = db.Column(db.String(50),nullable=False)
-    date          = db.Column(db.DateTime(),nullable=False)
-    amount        = db.Column(db.Integer,nullable=False)
-    user_id       = db.Column(db.Integer,db.ForeignKey("users.id",ondelete="CASCADE"))
+    id             = db.Column(db.Integer,primary_key=True)
+    income_name    = db.Column(db.String(50),nullable=False)
+    income_date    = db.Column(db.DateTime(),nullable=False)
+    description    = db.Column(db.String(150),nullable=False) 
+    categoria      = db.Column(db.String(100),nullable=False)
+    next_income    = db.Column(db.DateTime(),nullable=False)
+    amount         = db.Column(db.Integer,nullable=False)
+    user_id        = db.Column(db.Integer,db.ForeignKey("users.id",ondelete="CASCADE"))
+    pending_amount = db.Column(db.Integer,nullable=False)
+
+    #!FECHA PAGO-PENDIENTE-PROYECTADO-RECIBIIDO-CATEGORIA
 
     #relaciones
     user          = db.relationship("User",back_populates="incomes")
