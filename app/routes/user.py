@@ -49,7 +49,8 @@ def ver_ingresos():
 @user.route("/verservicios")
 def ver_servicios():
     services = Service().get_all_by_userid(current_user.id)
-    return render_template("user/verservicios.html",services=services)
+    service_amount_all = Service().get_full_amount(current_user.id)
+    return render_template("user/verservicios.html",services=services,service_amount_all=service_amount_all)
 
 @login_required
 @email_validation
@@ -88,4 +89,3 @@ def resumen_financiero():
 
     return  render_template("user/verresumen.html",loan_summ=loan_summ,loans=loans,loans_payments=loans_payments,accounts=accounts,services=services,
                             services_payments=services_payments,precio_cuenta=precio_cuenta,precio_cuenta2=precio_cuenta2,sum=sum,prestamos_re=prestamos_re,servicios_re=servicios_re)
-

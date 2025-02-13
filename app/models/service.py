@@ -58,11 +58,12 @@ class Service(db.Model):
                 all_services_list.append(service)
         return all_services_list
     @staticmethod
-    def get_full_amount():
+    def get_full_amount(id:int):
         all_service = db.session.execute(db.select(Service)).scalars()
         amount = 0
         for service in all_service:
-            amount += service.price
+            if service.user_id == id:
+                amount += service.price
         return amount
     @staticmethod
     def get_by_id(id):
