@@ -48,6 +48,7 @@ def registro():
                 send_gmail_confirmation(token)
                 return redirect("/index")
         else:
+            flash(f"La contraseña debe ser igual")
             return redirect("/registro")
         
 @public.route('/iniciar',methods=["GET","POST"])
