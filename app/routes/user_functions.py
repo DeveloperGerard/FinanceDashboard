@@ -20,9 +20,10 @@ user_functions = Blueprint('user_functions',__name__)
 
 
 
+
+@user_functions.route("/crearcuenta",methods=["GET","POST"])
 @login_required
 @email_validation
-@user_functions.route("/crearcuenta",methods=["GET","POST"])
 def crear_cuenta():
     if request.method =="GET":
         form = FormularioCrearCuenta()
@@ -39,9 +40,10 @@ def crear_cuenta():
             return redirect("/index")
 
 
+
+@user_functions.route("/crearingreso",methods=["GET","POST"])
 @login_required
 @email_validation
-@user_functions.route("/crearingreso",methods=["GET","POST"])
 def crear_ingreso():
     if request.method =="GET":
         form = FormularioCrearIngreso()
@@ -68,9 +70,10 @@ def crear_ingreso():
             return redirect("/index")
 
 
+
+@user_functions.route("/crearservicio",methods=["GET","POST"])
 @login_required
 @email_validation
-@user_functions.route("/crearservicio",methods=["GET","POST"])
 def crear_servicio():
     if request.method == "GET":
         form = FormularioCrearServicio()
@@ -92,9 +95,10 @@ def crear_servicio():
             ServiceController().create_service(nombre,descripcion,fecha,categoria,user_id,precio,precio,cuenta,vencimiento)
             return redirect("/index")
 
+
+@user_functions.route("/crearprestamo",methods=["GET","POST"])
 @login_required
 @email_validation
-@user_functions.route("/crearprestamo",methods=["GET","POST"])
 def crear_prestamo():
     if request.method == "GET":
         form     = FormularioCrearPrestamos()
@@ -120,9 +124,10 @@ def crear_prestamo():
         else:
             return render_template("user_functions/crear_prestamo.html",form=form)
 
+
+@user_functions.route("/pagoprestamo",methods=["GET","POST"])
 @login_required
 @email_validation
-@user_functions.route("/pagoprestamo",methods=["GET","POST"])
 def pago_prestamo():
     if request.method =="GET":
         form  = FormularioCrearPagoPrestamo()
@@ -166,9 +171,9 @@ def pago_prestamo():
         else:
             return "error"
 
+@user_functions.route("/pagoservicio",methods=["GET","POST"])
 @login_required
 @email_validation
-@user_functions.route("/pagoservicio",methods=["GET","POST"])
 def pago_servicio():
     if request.method == "GET":
         form     = FormularioCrearPagoServicio()
@@ -239,9 +244,10 @@ def reenviar_token():
     send_gmail_confirmation(token)
     return redirect("https://mail.google.com/")
 
+
+@user_functions.route("/cerrar_sesion")
 @login_required
 @email_validation
-@user_functions.route("/cerrar_sesion")
 def cerrar():
     logout_user()
     return redirect("/")
