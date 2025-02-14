@@ -82,10 +82,14 @@ class Loan(db.Model):
         payment_amount   = 0
         reamining_amount = 0
         progress         = 0
+        print(all_loans)    
         for loan in all_loans:
             if loan.user_id ==id:
                 all_amount += loan.price
                 reamining_amount += loan.reamining_price
-        payment_amount = all_amount - reamining_amount
-        progress = (payment_amount*100)/all_amount
-        return {"monto_total":all_amount,"monto_pagado":payment_amount,"monto_restante":reamining_amount,"progreso":progress}
+        if all_amount==0:
+            return {"monto_total":0,"monto_pagado":0,"monto_restante":0,"progreso":0}
+        else:
+            payment_amount = all_amount - reamining_amount
+            progress = (payment_amount*100)/all_amount
+            return {"monto_total":all_amount,"monto_pagado":payment_amount,"monto_restante":reamining_amount,"progreso":progress}
