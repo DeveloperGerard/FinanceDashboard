@@ -8,7 +8,7 @@ class FormularioCrearIngreso(FlaskForm):
     descripcion     = StringField("Descripcion",validators=[DataRequired(),Length(0,150)])
     categoria       = RadioField("Categoria:",validators=[DataRequired()],choices=['Sueldo','Horas extras','Venta','Inversiones'])
     monto           = IntegerField("Monto")
-    proximo_pago    = DateField("Proximo pago:",validators=[DataRequired()])
+    proximo_pago    = DateField("Proximo pago:")
     monto_pendiente = IntegerField("Monto pendiente")
     submit          = SubmitField('Crear ingreso')
 

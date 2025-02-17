@@ -10,9 +10,11 @@ from ..controllers.user_controller import UserController
 from ..models.user import User
 from ..funciones.notification_funct import send_gmail,send_gmail_confirmation
 from ..funciones.token import genera_token
+from ..funciones.public_decorator import no_enter
 public= Blueprint('public', __name__) 
 
 @public.route('/registro',methods=["GET","POST"])
+@no_enter
 def registro():
     registro =   FormularioRegistro()
 
@@ -51,7 +53,9 @@ def registro():
             flash(f"La contraseña debe ser igual")
             return redirect("/registro")
         
+        
 @public.route('/iniciar',methods=["GET","POST"])
+@no_enter
 def inicio_sesion():
     if request.method =="GET":
         login = FormularioInicio()
