@@ -2,6 +2,12 @@ from ..models.user import  User
 from app import db
 
 class UserController:
+    """
+        Controlador de `Usuarios`.
+
+        Permite realizar las funciones basicas(`borrar,actualizar,crear objetos`) del modelo usuarios.
+    """
+
     @staticmethod
     def create_user(username,email,password):
         user = User()
