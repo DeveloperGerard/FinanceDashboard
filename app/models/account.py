@@ -11,6 +11,17 @@ class Account(db.Model):
     accounts_serv = db.relationship("Service",back_populates="account")
     @staticmethod 
     def get_all_by_userid(id:int):
+        """
+        Retorna todos los objetos del modelo Account en una lista, relacionados con el `usuario activo actualmente `
+        ejemplo:
+        ```
+            return [account_object_1,account_object_2]
+        ```
+        :Parametros: id
+        :id: = identificador unico de usuario
+        """
+         
+
         all_account = db.session.execute(db.select(Account)).scalars()
         all_account_list =[]
         for account in all_account:

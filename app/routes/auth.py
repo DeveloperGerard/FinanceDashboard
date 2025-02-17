@@ -61,6 +61,7 @@ def ver_servicios():
 @email_validation
 def ver_prestamos():
     loans = Loan().get_all_by_userid(current_user.id)
+    print(loans)
     return  render_template("auth/verprestamos.html",loans=loans)
 
 

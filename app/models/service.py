@@ -22,6 +22,17 @@ class Service(db.Model):
     #Funciones para obtener datos del modelo servicio
     @staticmethod
     def get_all_by_userid(id:int):
+        """
+        Retorna todos los objetos del modelo Service en una lista, relacionados con el `usuario activo actualmente `
+        ejemplo:
+        ```
+            return [service_object_1,service_object_2]
+        ```
+        :Parametros: id
+        :id: = identificador unico de usuario
+        """
+
+
         all_services =db.session.execute(db.select(Service)).scalars()
         all_services_list =[]
 

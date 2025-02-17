@@ -25,12 +25,24 @@ class Loan(db.Model):
 
     @staticmethod
     def get_all_by_userid(id:int):
+        """
+        Retorna todos los objetos del modelo Loan en una lista, relacionados con el `usuario activo actualmente `
+        ejemplo:
+        ```
+            return [loan_object_1,loan_object_2]
+        ```
+        :Parametros: id
+        :id: = identificador unico de usuario
+        """
+
+
         all_loans = db.session.execute(db.select(Loan)).scalars()
         all_loans_list =[]
         for loan in all_loans:
             if loan.user_id ==id:
                 all_loans_list.append(loan)
         return all_loans_list
+    
     @staticmethod
     def get_all_for_payment(id:int):
         all_loans =db.session.execute(db.select(Loan)).scalars()
@@ -39,6 +51,7 @@ class Loan(db.Model):
             if loan.user_id == id and loan.reamining_price>0:
                 all_loans_list.append(loan)
         return all_loans_list
+    
     @staticmethod 
     def get_full_amount():
         all_loans = db.session.execute(db.select(Loan)).scalars()
@@ -46,6 +59,7 @@ class Loan(db.Model):
         for loan in all_loans:
             amount+= loan.price
         return amount
+    
     @staticmethod 
     def get_full_reamining_amount():
         all_loans = db.session.execute(db.select(Loan)).scalars()
@@ -53,6 +67,7 @@ class Loan(db.Model):
         for loan in all_loans:
             amount += loan.reamining_price
         return amount
+    
     @staticmethod
     def get_by_id(id):
         loan =Loan.query.filter_by(id=id).first()
@@ -69,12 +84,18 @@ class Loan(db.Model):
                 all_loans_list.append(loan)
         print(all_loans_list)
         for loan in all_loans_list:
+            print(f"{loan.account_id}=={(account_list[x]).id}")
             if loan.account_id==(account_list[x]).id:
                 all_acounts[x].append(loan)
+                print("xd")
                 print(f"{loan.account_id}=={(account_list[x]).id}")
             x+=1
+            print("kakak")
         return all_acounts
-    
+    #marrato documentar todo antes y solucionar error de arriba lo que pasa es que
+    #itera sobre los prestamo y solo ahy uno entonces no reccore todas las cuentas por que ahy 2
+    #posible solucion evaluar con in si esta en la cuenta y retornar indice 
+    #usar la documentacion de @login required para documentar como los dioses
     @staticmethod
     def get_loan_summary(id):
         all_loans        = db.session.execute(db.select(Loan)).scalars()
