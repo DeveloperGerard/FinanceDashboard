@@ -31,8 +31,8 @@ class Service(db.Model):
     @staticmethod
     def get_all_by_userid(id:int):
         """
-        Retorna todos los objetos del modelo Service en una lista, relacionados con el `usuario activo actualmente `
-        ejemplo:
+        Retorna todos los objetos del modelo Service en una lista, relacionados con el `usuario activo actualmente `\n
+        :Ejemplo:
         ```
             return [service_object_1,service_object_2]
         ```

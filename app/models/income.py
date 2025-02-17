@@ -31,8 +31,8 @@ class Income(db.Model):
     @staticmethod
     def get_all_by_userid(id:int):
         """
-        Retorna todos los objetos del modelo Income en una lista, relacionados con el `usuario activo actualmente `
-        ejemplo:
+        Retorna todos los objetos del modelo Income en una lista, relacionados con el `usuario activo actualmente `\n
+        :Ejemplo:
         ```
             return [income_object_1,income_object_2]
         ```

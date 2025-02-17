@@ -34,8 +34,8 @@ class Loan(db.Model):
     @staticmethod
     def get_all_by_userid(id:int):
         """
-        Retorna todos los objetos del modelo Loan en una lista, relacionados con el `usuario activo actualmente `
-        ejemplo:
+        Retorna todos los objetos del modelo Loan en una lista, relacionados con el `usuario activo actualmente `\n
+        :Ejemplo:
         ```
             return [loan_object_1,loan_object_2]
         ```
