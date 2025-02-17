@@ -37,7 +37,7 @@ def ver_cuentas():
     return render_template("auth/vercuentas.html",accounts=accounts)
 
 
-@login_required 
+
 @auth.route("/veringresos")
 @login_required
 @email_validation
@@ -46,7 +46,7 @@ def ver_ingresos():
     print(incomes)
     return render_template("auth/veringresos.html",incomes=incomes)
 
-@login_required
+
 @auth.route("/verservicios")
 @login_required
 @email_validation
@@ -55,7 +55,6 @@ def ver_servicios():
     service_amount_all = Service().get_full_amount(current_user.id)
     return render_template("auth/verservicios.html",services=services,service_amount_all=service_amount_all)
 
-@login_required
 @auth.route("/verprestamos")
 @login_required
 @email_validation
@@ -65,7 +64,7 @@ def ver_prestamos():
     return  render_template("auth/verprestamos.html",loans=loans)
 
 
-@login_required
+
 @auth.route("/resumefinanciero")
 @login_required
 @email_validation

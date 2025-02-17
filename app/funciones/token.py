@@ -6,7 +6,7 @@ from itsdangerous import URLSafeTimedSerializer
 
 def genera_token(email):
     """
-    A partir de la cadena gmail genera un token
+        A partir de la cadena gmail genera un `token`.
     """
     from server import app
     serializer = URLSafeTimedSerializer(app.config["SECRET_KEY"])
@@ -14,7 +14,7 @@ def genera_token(email):
 
 def confirm_token(token,expiration=3600):
     """
-    Verifica que el token(email encriptado) sea igual al email del usuario para confirmar el correo
+    Verifica que el token `email encriptado` sea igual al email del usuario para confirmar el correo.
     """
     from server import app
     serializer = URLSafeTimedSerializer(app.config["SECRET_KEY"])
