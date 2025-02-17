@@ -1,6 +1,14 @@
 from app import db
 
 class Service(db.Model):
+    """
+        Objeto que representa el modelo `Servicio`.
+
+        Tiene las columnas con todos 
+        datos necesarios que necesita
+        el modelo: `id,nombre,descripcion,fecha de expiracion....`
+    """
+
     __tablename__   = "services"
 
     #columnas
@@ -40,6 +48,7 @@ class Service(db.Model):
             if service.user_id == id:
                 all_services_list.append(service)
         return all_services_list
+    
     @staticmethod
     def get_all_for_payment(id:int):
         all_services =db.session.execute(db.select(Service)).scalars()
@@ -68,6 +77,7 @@ class Service(db.Model):
             if service.category==category:
                 all_services_list.append(service)
         return all_services_list
+    
     @staticmethod
     def get_full_amount(id:int):
         all_service = db.session.execute(db.select(Service)).scalars()
@@ -76,10 +86,12 @@ class Service(db.Model):
             if service.user_id == id:
                 amount += service.price
         return amount
+    
     @staticmethod
     def get_by_id(id):
         service = Service.query.filter_by(id=id).first()
         return service
+    
     @staticmethod 
     def get_all_for_account(id:int,account_list:list):
         all_services =db.session.execute(db.select(Service)).scalars()

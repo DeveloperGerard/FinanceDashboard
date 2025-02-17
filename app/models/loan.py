@@ -1,6 +1,14 @@
 from app import db 
 
 class Loan(db.Model):
+    """
+        Objeto que representa el modelo `Prestamo`.
+
+        Tiene las columnas con todos 
+        datos necesarios que necesita
+        el modelo: `id,precio,nombre,titular....`
+    """
+    
     __tablename__   = "loans"
 
     #columnas

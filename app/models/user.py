@@ -3,6 +3,14 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin 
 
 class User(UserMixin, db.Model): 
+    """
+        Objeto que representa el modelo `Usuario`.
+
+        Tiene las columnas con todos 
+        datos necesarios que necesita
+        el modelo: `id,nombre,correo,contraseña....`
+    """
+
     __tablename__  = "users"
 
     #columnas
@@ -28,7 +36,6 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
      
     #Funciones para obtener datos del modelo usuario
-
     @staticmethod 
     def get_all():
         all_users = db.session.execute(db.select(User)).scalars()

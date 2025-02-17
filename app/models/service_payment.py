@@ -1,6 +1,14 @@
 from app import db 
 
 class Service_payment(db.Model):
+    """
+        Objeto que representa el modelo `Pago de servicio`.
+
+        Tiene las columnas con todos 
+        datos necesarios que necesita
+        el modelo: `id,fecha,descripcion,monto....`
+    """
+
     __tablename__ = "service_payments"
 
     #columnas
@@ -23,6 +31,7 @@ class Service_payment(db.Model):
             if payment.loan_id == id:
                 all_servicepayments_list.append(payment)
         return all_servicepayments_list
+    
     @staticmethod 
     def get_all_by_userid(id:int):
         """

@@ -1,6 +1,14 @@
 from app import db 
 
 class Loan_payment(db.Model):
+    """
+        Objeto que representa el modelo `Pago de prestamo`.
+
+        Tiene las columnas con todos 
+        datos necesarios que necesita
+        el modelo: `id,monto,fecha,prestamo_id....`
+    """
+
     __tablename__ = "loan_payments"
 
     #columnas
@@ -23,6 +31,7 @@ class Loan_payment(db.Model):
             if payment.loan_id == id:
                 all_loanpayments_list.append(payment)
         return all_loanpayments_list
+    
     @staticmethod 
     def get_all_by_userid(id:int):
         """

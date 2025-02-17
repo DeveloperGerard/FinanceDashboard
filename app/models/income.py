@@ -1,6 +1,14 @@
 from app import db
 
 class Income(db.Model):
+    """
+        Objeto que representa el modelo `Ingreso`.
+
+        Tiene las columnas con todos 
+        datos necesarios que necesita
+        el modelo: `id,precio,nombre,fecha,monto....`
+    """
+
     __tablename__ = "incomes"
 
     #columnas
@@ -39,6 +47,7 @@ class Income(db.Model):
             if income.user_id ==id:
                 all_incomes_list.append(income)
         return all_incomes_list
+    
     @staticmethod 
     def get_full_amount():
         all_incomes = db.session.execute(db.select(Income)).scalars()
@@ -46,6 +55,7 @@ class Income(db.Model):
         for income in all_incomes:
             amount+= income.price
         return amount
+    
     @staticmethod 
     def get_full_reamining_amount():
         all_incomes = db.session.execute(db.select(Income)).scalars()
@@ -53,6 +63,7 @@ class Income(db.Model):
         for income in all_incomes:
             amount += income.reamining_price
         return amount
+    
     @staticmethod
     def get_all_by_category(id:int):
         """
