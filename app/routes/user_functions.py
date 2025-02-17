@@ -13,9 +13,9 @@ from app.forms.form_servicepayments import FormularioCrearPagoServicio
 from app.forms.form_loan            import FormularioCrearPrestamos
 from app.controllers.importaciones  import AccountController,IncomeController,UserController,ServiceController,LoanController,LoanPaymentController,ServicePaymentController
 from app.models.importaciones       import Income,Account,User,Service,Loan
-from ..funciones.token import confirm_token,genera_token
-from ..funciones.notification_funct import send_gmail_confirmation
-from ..funciones.email_decorator import email_validation
+from ..extra_functions.token import confirm_token,genera_token
+from ..extra_functions.notification_funct import send_gmail_confirmation
+from ..extra_functions.email_decorator import email_validation
 user_functions = Blueprint('user_functions',__name__)
 
 

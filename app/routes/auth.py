@@ -5,7 +5,7 @@ Visualizacion de datos
 from flask import Blueprint, render_template,redirect
 from flask_login import login_required ,current_user
 from app.models.importaciones import Income,Service,User,Account,Loan,Loan_payment,Service_payment
-from ..funciones.email_decorator import email_validation
+from ..extra_functions.email_decorator import email_validation
 auth= Blueprint('auth', __name__) 
 
 @auth.route('/') 

@@ -8,9 +8,9 @@ from flask_login import login_user
 from ..forms.form_user import FormularioInicio,FormularioRegistro
 from ..controllers.user_controller import UserController
 from ..models.user import User
-from ..funciones.notification_funct import send_gmail,send_gmail_confirmation
-from ..funciones.token import genera_token
-from ..funciones.public_decorator import no_enter
+from ..extra_functions.notification_funct import send_gmail,send_gmail_confirmation
+from ..extra_functions.token import genera_token
+from ..extra_functions.public_decorator import no_enter
 public= Blueprint('public', __name__) 
 
 @public.route('/registro',methods=["GET","POST"])
