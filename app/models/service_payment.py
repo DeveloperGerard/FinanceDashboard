@@ -43,8 +43,8 @@ class Service_payment(db.Model):
                 all_servicepayments_list.append(payment)
         return all_servicepayments_list
     
-    @staticmethod
-    def get_all_payment_for_loans(id:int,services:list):
+    """ @staticmethod
+    def get_all_payment_for_services(services:list):
         all_servicepayments = db.session.execute(db.select(Service_payment)).scalars()
         all_payments = [[] for service in services]
         for payment in all_servicepayments:
@@ -53,3 +53,4 @@ class Service_payment(db.Model):
                     if payment.service_id == subservice.id:
                         all_payments[(services).index(service)].append(payment.amount)
         return all_payments
+    """

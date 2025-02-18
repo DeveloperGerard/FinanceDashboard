@@ -123,7 +123,7 @@ class Loan(db.Model):
         loan =Loan.query.filter_by(id=id).first()
         return loan
     
-    @staticmethod 
+    """@staticmethod 
     def get_all_for_account(id:int,account_list:list):
         all_loans = db.session.execute(db.select(Loan)).scalars()
         all_loans_list =[]
@@ -138,7 +138,42 @@ class Loan(db.Model):
                     all_acounts[x].append(loan)
                 x+=1
         print(all_acounts)
-        return all_acounts
+        return all_acounts"""
+    @staticmethod
+    def get_all_for_account(id:int,account_list:list):
+        """   
+        Retorna los objetos del modelo `prestamos` dividido en las distintas `cuentas`. \n
+        :Ejemplo:
+        ```
+            return [
+                [loan_object_1,loan_object_5],
+                [loan_object_2,loan_object_12],
+                [loan_object_4]
+            ]
+            #Cada fila de la matriz representa una cuenta y dentro de las distintas filas,estan los prestamos relacionados con esa cuenta.
+        ```
+        :Parametros: id,account_list
+        :id: = identificador unico de usuario.
+        :account_list: = lista de cuentas que tiene el usuario.
+        """
+
+
+        all_loans = Loan().get_all_by_userid(id)
+        all_accounts = [[] for account in account_list]
+        for loan in all_loans:
+            for account in account_list:
+                print(account.id)
+                if loan.account_id == account.id:
+                    all_accounts[account_list.index(account)].append(loan)
+        return all_accounts
+        """
+        All_accounts = [[],[]]
+        all_loans  = [loan.objet_1]
+        account_list = [account_object1,account_object2]
+        """
+             
+        
+    #Objetivo es dividir todos nuestros prestamos en cuentas 
     #marrato documentar todo antes y solucionar error de arriba lo que pasa es que
     #itera sobre los prestamo y solo ahy uno entonces no reccore todas las cuentas por que ahy 2
     #posible solucion evaluar con in si esta en la cuenta y retornar indice 

@@ -122,7 +122,7 @@ class Service(db.Model):
         service = Service.query.filter_by(id=id).first()
         return service
     
-    @staticmethod 
+    """@staticmethod 
     def get_all_for_account(id:int,account_list:list):
         all_services =db.session.execute(db.select(Service)).scalars()
         all_services_list =[]
@@ -135,4 +135,31 @@ class Service(db.Model):
             if service.account_id==(account_list[x]).id:
                 all_acounts[x].append(service)
             x+=1
-        return all_acounts
+        return all_acounts"""
+    @staticmethod
+    def get_all_for_account(id:int,account_list:list):
+        """   
+        Retorna los objetos del modelo `servicio` dividido en las distintas `servicios`. \n
+        :Ejemplo:
+        ```
+            return [
+                [service_object_1,service_object_5],
+                [service_object_2,service_object_12],
+                [service_object_4]
+            ]
+            #Cada fila de la matriz representa una cuenta y dentro de las distintas filas,estan los servicios relacionados con esa cuenta.
+        ```
+        :Parametros: id,account_list
+        :id: = identificador unico de usuario.
+        :account_list: = lista de cuentas que tiene el usuario.
+        """
+
+
+        all_services = Service().get_all_by_userid(id)
+        all_accounts = [[] for account in account_list]
+        for service in all_services:
+            for account in account_list:
+                print(account.id)
+                if service.account_id == account.id:
+                    all_accounts[account_list.index(account)].append(service)
+        return all_accounts

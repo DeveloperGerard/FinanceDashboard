@@ -83,13 +83,14 @@ def resumen_financiero():
 
     #cuentas
     cuentas = Loan().get_all_for_account(current_user.id,accounts)
-    precio_cuenta = Loan_payment().get_all_payment_for_loans(current_user.id,cuentas)
     print(cuentas)
-    print(precio_cuenta)
-
     cuentas_2 = Service().get_all_for_account(current_user.id,accounts)
-    precio_cuenta2 = Service_payment().get_all_payment_for_loans(current_user.id,cuentas_2)
-    print()
+    print(cuentas_2)
+    """
+    precio_cuenta = Loan_payment().get_all_payment_for_loans(cuentas)
+    precio_cuenta2 = Service_payment().get_all_payment_for_services(cuentas_2)"""
+    precio_cuenta2 = [[222],[222]]
+    precio_cuenta = [[222],[222]]
 
     #resumen mensual
     prestamos_re = Loan().get_all_amount_payment(current_user.id)
