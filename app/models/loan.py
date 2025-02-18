@@ -53,6 +53,17 @@ class Loan(db.Model):
     
     @staticmethod
     def get_all_for_payment(id:int):
+        """
+        Retorna todos los prestamos disponibles para pagar relacionados con el `usuario activo actualmente`. \n
+        :Ejemplo:
+        ```
+            return [loan_object_1,loan_object_2]
+        ```
+        :Parametros: id
+        :id: = identificador unico de usuario
+        """
+
+
         all_loans =db.session.execute(db.select(Loan)).scalars()
         all_loans_list =[]
         for loan in all_loans:
@@ -78,6 +89,17 @@ class Loan(db.Model):
     
     @staticmethod
     def get_by_id(id):
+        """
+        Retorna el objeto del modelo `prestamo` que coincida con el `id` proporcionado. \n
+        :Ejemplo:
+        ```
+            return loan_object_22
+        ```
+        :Parametros: id
+        :id: = identificador unico de usuario
+        """
+
+
         loan =Loan.query.filter_by(id=id).first()
         return loan
     
@@ -90,22 +112,33 @@ class Loan(db.Model):
         for loan in all_loans:
             if loan.user_id ==id:
                 all_loans_list.append(loan)
-        print(all_loans_list)
         for loan in all_loans_list:
-            print(f"{loan.account_id}=={(account_list[x]).id}")
-            if loan.account_id==(account_list[x]).id:
-                all_acounts[x].append(loan)
-                print("xd")
-                print(f"{loan.account_id}=={(account_list[x]).id}")
-            x+=1
-            print("kakak")
+            for account in account_list:
+                if loan.id == account.id:
+                    all_acounts[x].append(loan)
+                x+=1
+        print(all_acounts)
         return all_acounts
     #marrato documentar todo antes y solucionar error de arriba lo que pasa es que
     #itera sobre los prestamo y solo ahy uno entonces no reccore todas las cuentas por que ahy 2
     #posible solucion evaluar con in si esta en la cuenta y retornar indice 
     #usar la documentacion de @login required para documentar como los dioses
+    #Usar get_all_for_payment de service pero para loan en resumen
     @staticmethod
     def get_loan_summary(id):
+        """
+        Retorna un resumen financiero de todos los prestamos relacionados con el `usuario activo actualmente` y lo retorna en un diccionario.\n
+
+        :Ejemplo:
+        ```
+            return {"monto_total":500000,"monto_pagado":10000,"monto_restante":490000,"progreso":2}
+            #progreso=porcentaje
+        ```
+        :Parametros: id
+        :id: = identificador unico de usuario
+        """
+
+
         all_loans        = db.session.execute(db.select(Loan)).scalars()
         all_amount       = 0
         payment_amount   = 0

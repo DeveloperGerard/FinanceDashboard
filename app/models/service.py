@@ -51,6 +51,17 @@ class Service(db.Model):
     
     @staticmethod
     def get_all_for_payment(id:int):
+        """
+        Retorna todos los servicios disponibles para pagar relacionados con el `usuario activo actualmente`. \n
+        :Ejemplo:
+        ```
+            return [service_object_1,service_object_2]
+        ```
+        :Parametros: id
+        :id: = identificador unico de usuario
+        """
+
+
         all_services =db.session.execute(db.select(Service)).scalars()
         all_services_list =[]
         for service in all_services:
@@ -60,6 +71,16 @@ class Service(db.Model):
     
     @staticmethod
     def get_all_amount_payment(id:int):
+        """
+        Retorna el costo total de todos servicios relacionados con el `usuario activo actualmente`. \n
+        :Ejemplo:
+        ```
+            return 345800
+        ```
+        :Parametros: id
+        :id: = identificador unico de usuario
+        """
+
         all_services =db.session.execute(db.select(Service)).scalars()
         all_services_list =[]
 
@@ -89,6 +110,15 @@ class Service(db.Model):
     
     @staticmethod
     def get_by_id(id):
+        """
+        Retorna el objeto del modelo `servicio` que coincida con el `id` proporcionado. \n
+        :Ejemplo:
+        ```
+            return service_object_12
+        ```
+        :Parametros: id
+        :id: = identificador unico de usuario
+        """
         service = Service.query.filter_by(id=id).first()
         return service
     

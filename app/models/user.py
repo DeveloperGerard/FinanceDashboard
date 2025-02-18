@@ -46,6 +46,16 @@ class User(UserMixin, db.Model):
 
     @staticmethod
     def get_by_id(id):
+        """
+        Retorna el objeto del modelo `usuario` que coincida con el `id` proporcionado. \n
+        :Ejemplo:
+        ```
+            return user_object_2
+        ```
+        :Parametros: id
+        :id: = identificador unico de usuario
+        """
+
         user = User.query.filter_by(id=id).first()
         return user
     

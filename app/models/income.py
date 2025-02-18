@@ -49,11 +49,24 @@ class Income(db.Model):
         return all_incomes_list
     
     @staticmethod 
-    def get_full_amount():
+    def get_full_amount(id:int):
+        """
+        Retorna el monto total de los ingresos relacionados con el `usuario activo actualmente`\n
+
+        :Ejemplo:
+        ```
+            return 5350000
+        ```
+        :Parametros: id
+        :id: = identificador unico de usuario
+        """
+
+
         all_incomes = db.session.execute(db.select(Income)).scalars()
         amount = 0
         for income in all_incomes:
-            amount+= income.price
+            if income.user_id ==id:
+                amount+= income.price
         return amount
     
     @staticmethod 
@@ -67,10 +80,16 @@ class Income(db.Model):
     @staticmethod
     def get_all_by_category(id:int):
         """
-        Retorna todos los objetos del modelo Income en una lista relacionados con el `usuario activo actualmente `
+        Retorna todos los objetos del modelo Income en un diccionario dividido en categorias, relacionados con el `usuario activo actualmente` 
         ejemplo:
         ```
-            return [income_object_1,income_object_2]
+            return 
+            {
+            'Sueldo':[income_object_1],
+            'Horas extras':[income_object_2],
+            "Venta":[income_object_3],
+            "Inversiones":[income_object_4,income_object_5]
+            }
         ```
         :Parametros: id
         :id: = identificador unico de usuario

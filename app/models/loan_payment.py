@@ -24,15 +24,6 @@ class Loan_payment(db.Model):
     
     #Funciones para obtener datos del model 'pago de prestamos'
     @staticmethod 
-    def get_all_by_loanid(id:int):
-        all_loanpayments = db.session.execute(db.select(Loan_payment)).scalars()
-        all_loanpayments_list =[]
-        for payment in all_loanpayments:
-            if payment.loan_id == id:
-                all_loanpayments_list.append(payment)
-        return all_loanpayments_list
-    
-    @staticmethod 
     def get_all_by_userid(id:int):
         """
         Retorna todos los objetos del modelo Loan_payment en una lista, relacionados con el `usuario activo actualmente `\n

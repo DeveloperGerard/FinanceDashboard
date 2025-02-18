@@ -231,7 +231,7 @@ def confirm_email(token):
         flash("Cuenta confirmada")
         return redirect("/index")
     else:
-        flash("Token invalido puto")
+        flash("Token invalido")
         #aqui añadir que muestre token vencido
         print(True if "gerard"==True else False)
         return "xd"
