@@ -8,6 +8,8 @@ class Account(db.Model):
     user_id       = db.Column(db.Integer,db.ForeignKey("users.id",ondelete="CASCADE"))
     user          = db.relationship("User",back_populates="accounts")
     accounts      = db.relationship("Loan",back_populates="account")
+    balance       = db.Column(db.Float, nullable=False)  # Add this attribute
+
     @staticmethod 
     def get_all_by_userid(id:int):
         all_account = db.session.execute(db.select(Account)).scalars()
@@ -16,3 +18,7 @@ class Account(db.Model):
             if account.user_id ==id:
                 all_account_list.append(account)
         return all_account_list
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()

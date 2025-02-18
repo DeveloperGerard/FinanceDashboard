@@ -1,8 +1,9 @@
-from flask import Blueprint, render_template,redirect,request,flash
+from flask import Blueprint, render_template,redirect,request,flash,url_for
 from flask_login import login_required ,LoginManager,current_user,login_user,logout_user
 from ..forms.form_user import FormularioInicio,FormularioRegistro
 from app.models.importaciones import Income,Service,User,Account,Loan
 from app.controllers.resumen import get_financial_summary
+
 
 
 
@@ -22,18 +23,20 @@ def index():
     else:
         return redirect("/iniciar")
                                        
-@login_required
 @user.route("/home")
-def home():
-    summary = get_financial_summary(current_user.id)
-    user = User().get_by_id(current_user.id)
-    print(current_user.username)
-    return render_template("index.html",user=user, summary=summary)
 @login_required
+def home():
+    summary = get_financial_summary(current_user.id)  # Obtener el resumen financiero
+    user = User.query.get(current_user.id)  # Obtener el usuario con su ID
+    print(current_user.username)  # Imprimir el nombre de usuario en la consola
+    return render_template("index.html", user=user, summary=summary)  # Pasar datos a la plantilla
+
 @user.route("/cerrar_sesion")
-def cerrar():
+@login_required
+def cerrar_sesion():
     logout_user()
-    return redirect("/")
+    flash('Has cerrado sesión exitosamente.', 'success')
+    return redirect(url_for('user.index'))
 
 @login_required 
 @user.route("/accounts")

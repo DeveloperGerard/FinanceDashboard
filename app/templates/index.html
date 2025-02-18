@@ -6,6 +6,7 @@
     <title>{% block title %}Mi Aplicación{% endblock %}</title>
 
     <!-- Bootstrap CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
 
@@ -104,7 +105,7 @@
                 <!-- Info de usuario + Logout -->
                 <div class="d-flex align-items-center">
                     <span class="text-white me-3 fw-bold" style="font-size: 1.3rem;">{{ current_user.username }}</span>
-                    <a href="{{ url_for('user.cerrar') }}" class="logout-btn">Logout</a>
+                    <a href="{{ url_for('user.cerrar_sesion') }}" class="logout-btn">Logout</a>
                 </div>
             </div>
         </div>
@@ -123,14 +124,79 @@
         </div>
         {% block content %}{% endblock %}
     </main>
+     <hr>
+     
+     <div class="container mt-5">
+        <h2>Resumen Financiero</h2>
+        
+        <!-- Mostrar Balance Final fuera del gráfico -->
+        <div class="row">
+            <div class="col-12 text-center">
+                <h3>Balance Final: ${{ summary.final_balance | round(2) }}</h3> <!-- Mostramos el balance final -->
+            </div>
+        </div>
+    
+        <!-- Gráfico de Pie con solo Ingresos, Servicios y Préstamos -->
+        <div class="row">
+            <div class="col-12">
+                <canvas id="financialChart" style="max-width: 400px; margin: 0 auto;"></canvas>
+            </div>
+        </div>
+    </div>
 
-    <!-- Footer -->
+    <!-- Footer
     <footer class="bg-light text-center py-4 mt-4">
         <p style="font-size: 1.2rem;">&copy; 2025 FinanceDashboard</p>
-    </footer>
+    </footer>   -->
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Obtener datos desde Flask (inyectados en el template)
+        var summary = {{ summary | tojson }};
+    
+        var ctx = document.getElementById('financialChart').getContext('2d');
+        var financialChart = new Chart(ctx, {
+            type: 'pie',  // Gráfico de tipo "pie"
+            data: {
+                labels: ['Ingresos', 'Servicios', 'Préstamos'],  // Eliminamos el Balance Total
+                datasets: [{
+                    label: 'Resumen Financiero',
+                    data: [
+                        summary.total_income,
+                        summary.total_services,
+                        summary.total_loans
+                    ],
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.6)',  // Ingresos
+                        'rgba(255, 99, 132, 0.6)',  // Servicios
+                        'rgba(255, 206, 86, 0.6)'   // Préstamos
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(255, 206, 86, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(tooltipItem) {
+                                return tooltipItem.label + ': ' + tooltipItem.raw.toFixed(2);  // Formatear las etiquetas con 2 decimales
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
 
 </body>
 </html>

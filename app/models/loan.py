@@ -14,6 +14,7 @@ class Loan(db.Model):
     reamining_price = db.Column(db.Integer,nullable=False)
     user_id         = db.Column(db.Integer,db.ForeignKey("users.id",ondelete="CASCADE"))
     account_id      = db.Column(db.Integer,db.ForeignKey("accounts.id",ondelete="CASCADE"))
+    balance         = db.Column(db.Float, nullable=False)  # Add this attribute
     
     #relaciones
     loan_payments   = db.relationship("Loan_payment",back_populates="loan") 
@@ -56,5 +57,8 @@ class Loan(db.Model):
     def get_by_id(id):
         loan =Loan.query.filter_by(id=id).first()
         return loan
-    
-    
+
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
+

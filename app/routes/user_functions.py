@@ -18,20 +18,21 @@ puede realizar el usuario como crear prestamos,servicios,etc.
 
 """
 
-@user_functions.route("/crearcuenta", methods=["POST"])
+@user_functions.route("/crear_cuenta", methods=["POST"])
 @login_required
 def crear_cuenta():
     try:
         account_name = request.form['account_name']
-        card_number = request.form['card']
-        user_id = current_user.id
+        card = request.form['card']
+        balance = float(request.form['balance'])
 
-        print(f"Received data: account_name={account_name}, card_number={card_number}")
+        print(f"Received data: account_name={account_name}, card={card}, balance={balance}")
 
         new_account = Account(
             account_name=account_name,
-            card=card_number,
-            user_id=user_id
+            card=card,
+            balance=balance,
+            user_id=current_user.id
         )
         db.session.add(new_account)
         db.session.commit()

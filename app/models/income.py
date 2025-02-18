@@ -1,5 +1,6 @@
 from app import db
 
+
 class Income(db.Model):
     __tablename__ = "incomes"
 
@@ -11,6 +12,7 @@ class Income(db.Model):
     user_id       = db.Column(db.Integer,db.ForeignKey("users.id",ondelete="CASCADE"))
 
     #relaciones
+    user_id       = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     user          = db.relationship("User",back_populates="incomes")
 
     #Funciones para obtener datos del modelo ingreso

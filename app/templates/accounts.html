@@ -12,10 +12,13 @@
     .table-responsive {
         width: 100%;
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
     .account-table {
         width: 100%;
-        border-collapse: collapse;
+        min-width: 800px;
+        border-collapse: separate;
+        border-spacing: 0;
     }
     .account-table thead {
         background-color: #2c3e50;
@@ -28,7 +31,7 @@
     }
     .add-account-btn {
         display: inline-block;
-        background-color: #007bff;
+        background-color: #28a745;
         color: white;
         padding: 10px 20px;
         border-radius: 5px;
@@ -38,7 +41,7 @@
         cursor: pointer;
     }
     .add-account-btn:hover {
-        background-color: #0056b3;
+        background-color: #218838;
     }
     .delete-account-btn {
         background-color: #dc3545;
@@ -74,7 +77,7 @@
         border-radius: 4px;
     }
     .form-group button {
-        background-color: #007bff;
+        background-color: #28a745;
         color: white;
         padding: 10px 20px;
         border: none;
@@ -83,7 +86,19 @@
         transition: background-color 0.3s ease;
     }
     .form-group button:hover {
-        background-color: #0056b3;
+        background-color: #218838;
+    }
+    @media screen and (max-width: 480px) {
+        .add-account-btn {
+            width: 100%;
+            text-align: center;
+        }
+        .account-table td:before {
+            font-size: 0.8em;
+        }
+        .account-table td {
+            font-size: 0.9em;
+        }
     }
 </style>
 {% endblock %}
@@ -105,9 +120,12 @@
                 <input type="text" id="account_name" name="account_name" required>
             </div>
             <div class="form-group">
-                <label for="card">Número de Tarjeta:</label>
-                <input type="text" id="card" name="card" pattern="\d{16}" maxlength="16" placeholder="**** **** **** ****" required>
-                <small class="text-muted">Ingrese los 16 dígitos sin espacios.</small>
+                <label for="card">Número de la Cuenta:</label>
+                <input type="text" id="card" name="card" maxlength="16" inputmode="numeric" required>
+            </div>
+            <div class="form-group">
+                <label for="balance">Saldo:</label>
+                <input type="number" id="balance" name="balance" required>
             </div>
             <div class="form-group">
                 <button type="submit">Guardar</button>
@@ -121,7 +139,8 @@
                 <thead>
                     <tr>
                         <th>Nombre de la Cuenta</th>
-                        <th>Número de Tarjeta</th>
+                        <th>Número de la Cuenta</th>
+                        <th>Saldo</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -129,7 +148,8 @@
                     {% for account in accounts %}
                         <tr>
                             <td>{{ account.account_name }}</td>
-                            <td>**** **** **** {{ account.card[-4:] }}</td>
+                            <td>{{ account.account_number }}</td>
+                            <td>${{ account.balance }}</td>
                             <td>
                                 <form action="{{ url_for('user_functions.eliminar_cuenta', account_id=account.id) }}" method="POST" onsubmit="return confirmarEliminacion(event, '{{ account.account_name }}')">
                                     <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
@@ -155,8 +175,8 @@
     function confirmarEliminacion(event, nombreCuenta) {
         event.preventDefault(); // Evita el envío inmediato del formulario
         if (confirm(`¿Estás seguro de que quieres eliminar la cuenta "${nombreCuenta}"? Esta acción no se puede deshacer.`)) {
-        event.target.submit(); // Envía el formulario si el usuario confirma
+            event.target.submit(); // Envía el formulario si el usuario confirma
         }
-    }    
+    }
 </script>
 {% endblock %}
