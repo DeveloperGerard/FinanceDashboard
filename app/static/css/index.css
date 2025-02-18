@@ -1,0 +1,32 @@
+body {
+    background-color: #181a20;
+    color: white;
+    font-family: Arial, sans-serif;
+  }
+  .nav-tabs {
+    border-bottom: 2px solid #FF7F50;
+  }
+  .nav-tabs .nav-link {
+    color: white;
+    border: 1px solid transparent;
+    border-radius: 0;
+    background-color: #181a20;
+  }
+  .nav-tabs .nav-link.active {
+    color: white;
+    background-color: #FF7F50;
+    border-color: #FF7F50;
+  }
+  .nav-tabs .nav-link:hover {
+    color: white;
+    background-color: #FF7F50;
+  }
+  .tab-content {
+    background-color: #20232a;
+    border: 1px solid #FF7F50;
+    padding: 20px;
+    border-radius: 5px;
+  }
+  h1, h2 {
+    color: #FF7F50;
+  }

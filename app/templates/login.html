@@ -1,46 +1,57 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+    <script src="{{ url_for('static', filename='js/ojo.js') }}" defer></script>
+</head>
+<body>
+    <header class="login-header">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
+        <h2>Bienvenido a Finance Dashboard</h2>
+    </header>
+    <div class="login-container">
+        <h1 class="login-title">Iniciar Sesión</h1>
 
-{% block title %}Iniciar Sesión{% endblock %}
-
-{% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
-<script src="{{ url_for('static', filename='js/ojo.js') }}" defer></script>
-{% endblock %}
-
-{% block content %}
-<div class="login-container">
-    <h1 class="login-title">Iniciar Sesión</h1>
-
-    <form action="" method="POST">
-        {{ login.hidden_tag() }}
-
-        <!-- Campo de correo electrónico -->
-        <div style="position: relative;">
-            <span class="input-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#7A7A7A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                    <polyline points="22,6 12,13 2,6"></polyline>
-                </svg>
-            </span>
-            {{ login.email.label(class_="input-label") }}
-            {{ login.email(class_="input-field") }}
+        {% if error %}
+        <div class="error-message">
+            {{ error }}
         </div>
+        {% endif %}
 
-        <!-- Campo de contraseña -->
-        <div style="position: relative;">
-            <img src="{{ url_for('static', filename='icons/password-icon.svg') }}" class="input-icon" alt="Icono de contraseña">
-            {{ login.clave.label(class_="input-label") }}
-            {{ login.clave(class_="input-field") }}
-            <img src="{{ url_for('static', filename='icons/eye-icon.svg') }}" class="eye-icon" alt="Mostrar/Ocultar contraseña">
-        </div>
+        <form action="{{ url_for('public.inicio_sesion') }}" method="POST">
+            {{ login.hidden_tag() }}
 
-        <!-- Botón de inicio de sesión -->
-        {{ login.submit(class_="login-button") }}
-    </form>
+            <!-- Campo de correo electrónico -->
+            <div style="position: relative;">
+                <span class="input-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#7A7A7A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                </span>
+                {{ login.email.label(class_="input-label") }}
+                {{ login.email(class_="input-field") }}
+            </div>
 
-    <!-- Enlace para registrarse -->
-    <p class="register-link">
-        ¿No tienes cuenta? <a href="/register">Regístrate aquí</a>
-    </p>
-</div>
-{% endblock %}
+            <!-- Campo de contraseña -->
+            <div style="position: relative;">
+                <img src="{{ url_for('static', filename='icons/password-icon.svg') }}" class="input-icon" alt="Icono de contraseña">
+                {{ login.clave.label(class_="input-label") }}
+                {{ login.clave(class_="input-field") }}
+                <img src="{{ url_for('static', filename='icons/eye-icon.svg') }}" class="eye-icon" alt="Mostrar/Ocultar contraseña">
+            </div>
+
+            <!-- Botón de inicio de sesión -->
+            {{ login.submit(class_="login-button") }}
+        </form>
+
+        <!-- Enlace para registrarse -->
+        <p class="register-link">
+            ¿No tienes cuenta? <a href="/registro">Regístrate aquí</a>
+        </p>
+    </div>
+</body>
+</html>

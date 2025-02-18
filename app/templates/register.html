@@ -1,53 +1,63 @@
-{% extends "base.html" %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
+    <script src="{{ url_for('static', filename='js/ojo.js') }}" defer></script>
+</head>
+<body>
+    <header class="register-header">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo">
+        <h2>Bienvenido a Finance Dashboard</h2>
+    </header>
+    <div class="rectangle-2">
+        <h1 class="paragraph-1-copy-2">Registrarse</h1>
 
-{% block title %}Registro{% endblock %}
-
-{% block head %}
-<!-- Estilos específicos para la página de registro -->
-<link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}">
-<script src="{{ url_for('static', filename='js/ojo.js') }}" defer></script>
-{% endblock %}
-
-{% block content %}
-<div class="rectangle-2">
-    <h1 class="paragraph-1-copy-2">Registrarse</h1>
-    
-    <form method="POST" action="">
-        {{ register.hidden_tag() }}
-
-        <!-- Campo de nombre -->
-        <div style="position: relative;">
-            {{ register.nombre.label(class_="correo-electronico") }}
-            {{ register.nombre(class_="text-input-2") }}
+        {% if error %}
+        <div class="error-message">
+            {{ error }}
         </div>
-
-        <!-- Campo de correo electrónico -->
-        <div style="position: relative;">
-            {{ register.email.label(class_="correo-electronico") }}
-            {{ register.email(class_="text-input-2") }}
-        </div>
+        {% endif %}
         
-        <!-- Campo de contraseña -->
-        <div style="position: relative;">
-            {{ register.clave.label(class_="contrase-a") }}
-            {{ register.clave(class_="text-input-3") }}
-            <img src="{{ url_for('static', filename='icons/eye-icon.svg') }}" class="eye-icon" alt="Mostrar/Ocultar contraseña" tabindex="0">
-        </div>
+        <form method="POST" action="">
+            {{ registro.hidden_tag() }}
 
-        <!-- Campo de confirmación de contraseña -->
-        <div style="position: relative;">
-            {{ register.confirmar_clave.label(class_="contrase-a") }}
-            {{ register.confirmar_clave(class_="text-input-3") }}
-            <img src="{{ url_for('static', filename='icons/eye-icon.svg') }}" class="eye-icon" alt="Mostrar/Ocultar contraseña">
-        </div>
+            <!-- Campo de nombre -->
+            <div style="position: relative;">
+                {{ registro.username.label(class_="correo-electronico") }}
+                {{ registro.username(class_="text-input-2") }}
+            </div>
+
+            <!-- Campo de correo electrónico -->
+            <div style="position: relative;">
+                {{ registro.email.label(class_="correo-electronico") }}
+                {{ registro.email(class_="text-input-2") }}
+            </div>
+            
+            <!-- Campo de contraseña -->
+            <div style="position: relative;">
+                {{ registro.clave.label(class_="contrase-a") }}
+                {{ registro.clave(class_="text-input-3") }}
+                <img src="{{ url_for('static', filename='icons/eye-icon.svg') }}" class="eye-icon" alt="Mostrar/Ocultar contraseña" tabindex="0">
+            </div>
+
+            <!-- Campo de confirmación de contraseña -->
+            <div style="position: relative;">
+                {{ registro.confirmar_clave.label(class_="contrase-a") }}
+                {{ registro.confirmar_clave(class_="text-input-3") }}
+                <img src="{{ url_for('static', filename='icons/eye-icon.svg') }}" class="eye-icon" alt="Mostrar/Ocultar contraseña">
+            </div>
+            
+            <!-- Botón de registro -->
+            {{ registro.submit(class_="button-14") }}
+        </form>
         
-        <!-- Botón de registro -->
-        {{ register.submit(class_="button-14") }}
-    </form>
-    
-    <!-- Enlace para ir a login -->
-    <p class="-no-tienes-cuenta-registrate-aqui-">
-        ¿Ya tienes cuenta? <a href="/iniciar">Inicia sesión aquí</a>
-    </p>
-</div>
-{% endblock %}
+        <!-- Enlace para ir a login -->
+        <p class="-no-tienes-cuenta-registrate-aqui-">
+            ¿Ya tienes cuenta? <a href="/iniciar">Inicia sesión aquí</a>
+        </p>
+    </div>
+</body>
+</html>

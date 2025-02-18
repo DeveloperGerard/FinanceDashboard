@@ -1,0 +1,254 @@
+{% extends "base.html" %}
+
+{% block title %}Mis Préstamos{% endblock %}
+
+{% block head %}
+<meta name="csrf-token" content="{{ csrf_token }}">
+<style>
+    .loans-section {
+        padding: 15px;
+        margin-top: 50px;
+    }
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    .loan-table {
+        width: 100%;
+        min-width: 800px;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+    .loan-table thead {
+        background-color: #2c3e50;
+        color: white;
+    }
+    .loan-table th, .loan-table td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    @media screen and (max-width: 768px) {
+        .loan-table, 
+        .loan-table thead, 
+        .loan-table tbody, 
+        .loan-table th, 
+        .loan-table td, 
+        .loan-table tr { 
+            display: block; 
+        }
+        .loan-table thead tr { 
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+        }
+        .loan-table tr { 
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .loan-table td { 
+            border: none;
+            position: relative;
+            padding-left: 50%;
+            text-align: right;
+        }
+        .loan-table td:before { 
+            content: attr(data-label);
+            position: absolute;
+            left: 6px;
+            width: 45%;
+            padding-right: 10px;
+            white-space: nowrap;
+            text-align: left;
+            font-weight: bold;
+        }
+    }
+    .loan-status {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 4px;
+        font-size: 0.8em;
+    }
+    .status-active {
+        background-color: #28a745;
+        color: white;
+    }
+    .status-pending {
+        background-color: #ffc107;
+        color: black;
+    }
+    .add-loan-btn {
+        display: inline-block;
+        background-color: #28a745;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        margin-bottom: 15px;
+        transition: background-color 0.3s ease;
+        cursor: pointer;
+    }
+    .add-loan-btn:hover {
+        background-color: #218838;
+    }
+    .delete-loan-btn, .change-status-btn {
+        background-color: #dc3545;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .delete-loan-btn:hover, .change-status-btn:hover {
+        background-color: #c82333;
+    }
+    .form-container {
+        display: none;
+        margin-top: 20px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+    .form-group input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    .form-group button {
+        background-color: #28a745;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+    .form-group button:hover {
+        background-color: #218838;
+    }
+    @media screen and (max-width: 480px) {
+        .add-loan-btn {
+            width: 100%;
+            text-align: center;
+        }
+        .loan-table td:before {
+            font-size: 0.8em;
+        }
+        .loan-table td {
+            font-size: 0.9em;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="loans-section">
+    <h1 class="mb-4">Mis Préstamos</h1>
+
+    <div class="add-loan-btn" onclick="toggleLoanForm()">
+        <i class="fas fa-plus-circle mr-2"></i>Agregar Préstamo
+    </div>
+
+    <!-- Loan Form -->
+    <div id="loan-form-container" class="form-container">
+        <form action="{{ url_for('user_functions.crear_prestamo') }}" method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <div class="form-group">
+                <label for="loan_name">Nombre del Préstamo:</label>
+                <input type="text" id="loan_name" name="loan_name" required>
+            </div>
+            <div class="form-group">
+                <label for="holder">Titular:</label>
+                <input type="text" id="holder" name="holder" required>
+            </div>
+            <div class="form-group">
+                <label for="price">Monto:</label>
+                <input type="number" id="price" name="price" required>
+            </div>
+            <div class="form-group">
+                <label for="quota">Cuotas:</label>
+                <input type="number" id="quota" name="quota">
+            </div>
+            <div class="form-group">
+                <label for="tea">Tasa de Interés:</label>
+                <input type="number" id="tea" name="tea" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <label for="reamining_price">Saldo Pendiente:</label>
+                <input type="number" id="reamining_price" name="reamining_price" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Guardar</button>
+            </div>
+        </form>
+    </div>
+
+    {% if loans %}
+        <div class="table-responsive">
+            <table class="loan-table">
+                <thead>
+                    <tr>
+                        <th>Nombre del Préstamo</th>
+                        <th>Titular</th>
+                        <th>Monto</th>
+                        <th>Cuotas</th>
+                        <th>Tasa de Interés</th>
+                        <th>Saldo Pendiente</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for loan in loans %}
+                        <tr>
+                            <td data-label="Nombre del Préstamo">{{ loan.loan_name }}</td>
+                            <td data-label="Titular">{{ loan.holder }}</td>
+                            <td data-label="Monto">${{ loan.price }}</td>
+                            <td data-label="Cuotas">{{ loan.quota or 'N/A' }}</td>
+                            <td data-label="Tasa de Interés">{{ loan.tea }}%</td>
+                            <td data-label="Saldo Pendiente">${{ loan.reamining_price }}</td>
+                            <td data-label="Estado">
+                                <span class="loan-status {{ 'status-active' if loan.reamining_price > 0 else 'status-pending' }}">
+                                    {{ 'Activo' if loan.reamining_price > 0 else 'Finalizado' }}
+                                </span>
+                            </td>
+                            <td data-label="Acciones">
+                                <form action="{{ url_for('user_functions.eliminar_prestamo', loan_id=loan.id) }}" method="POST" style="display:inline;">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                    <button type="submit" class="delete-loan-btn">Eliminar</button>
+                                </form>
+                                <form action="{{ url_for('user_functions.cambiar_estado_prestamo', loan_id=loan.id) }}" method="POST" style="display:inline;">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                    <button type="submit" class="change-status-btn">Cambiar Estado</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>No tienes préstamos activos.</p>
+    {% endif %}
+</div>
+
+<script>
+    function toggleLoanForm() {
+        var formContainer = document.getElementById('loan-form-container');
+        formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
+    }
+</script>
+{% endblock %}

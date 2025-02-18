@@ -1,20 +1,136 @@
-<!DOCTYPE html> 
-<html lang="es"> 
-<head> 
-    <meta charset="UTF-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>{}{} - Finance Dashboard</title> 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"> 
-</head> 
-<body> 
-    <nav> 
-        <div class="nav-wrapper"> 
-            <a href="{{ url_for('main.index') }}" class="brand-logo">Finance Dashboard</a> 
-        </div> 
-    </nav> 
-    <main> 
-        {}{} 
-    </main> 
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script> 
-</body> 
-</html> 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Mi Aplicación{% endblock %}</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+
+    {% block head %}{% endblock %}
+
+    <style>
+        /* Ajuste del cuerpo para evitar que el navbar tape contenido */
+        body {
+            font-family: Arial, sans-serif;
+            padding-top: 90px; /* Ajuste para navbar más grande */
+        }
+
+        /* Navbar */
+        .navbar {
+            padding: 20px 0; /* Aumenta el espacio dentro del navbar */
+            font-size: 1.3rem; /* Hace los textos más grandes */
+        }
+        
+        .navbar-brand {
+            font-size: 1.8rem; /* Agranda el logo */
+            font-weight: bold;
+        }
+
+        .nav-link {
+            padding: 15px 20px; /* Espaciado más grande en los enlaces */
+            font-size: 1.3rem;
+        }
+
+        /* Botón de Logout */
+        .logout-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+
+        .summary {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .summary h3 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .summary p {
+            font-size: 1.2rem;
+        }
+
+        .summary hr {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar Bootstrap 5 más grande -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('user.home') }}">FinanceDashboard</a>
+            
+            <!-- Botón para móviles -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('user.services') }}">Servicios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('user.loans') }}">Mis Préstamos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('user.incomes') }}">Ingresos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('user.accounts') }}">Mis Tarjetas</a>
+                    </li>
+                </ul>
+
+                <!-- Info de usuario + Logout -->
+                <div class="d-flex align-items-center">
+                    <span class="text-white me-3 fw-bold" style="font-size: 1.3rem;">{{ current_user.username }}</span>
+                    <a href="{{ url_for('user.cerrar') }}" class="logout-btn">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <main class="container">
+        <div class="summary">
+            <h3>Resumen Financiero</h3>
+            <p><strong>💰 Ingresos Totales:</strong> ${{ summary.total_income }}</p>
+            <p><strong>💸 Gastos en Servicios:</strong> ${{ summary.total_services }}</p>
+            <p><strong>🏦 Deuda en Préstamos:</strong> ${{ summary.total_loans }}</p>
+            <p><strong>💳 Saldo en Tarjetas/Cuentas:</strong> ${{ summary.total_balance }}</p>
+            <hr>
+            <h3><strong>📈 Balance Final:</strong> ${{ summary.final_balance }}</h3>
+        </div>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-light text-center py-4 mt-4">
+        <p style="font-size: 1.2rem;">&copy; 2025 FinanceDashboard</p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
