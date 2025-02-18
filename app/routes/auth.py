@@ -92,7 +92,7 @@ def resumen_financiero():
     print()
 
     #resumen mensual
-    prestamos_re = loan_summ["monto_pagado"]
+    prestamos_re = Loan().get_all_amount_payment(current_user.id)
     servicios_re = Service().get_all_amount_payment(current_user.id)
 
     return  render_template("auth/verresumen.html",loan_summ=loan_summ,loans=loans,loans_payments=loans_payments,accounts=accounts,services=services,

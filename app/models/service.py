@@ -72,7 +72,7 @@ class Service(db.Model):
     @staticmethod
     def get_all_amount_payment(id:int):
         """
-        Retorna el costo total de todos servicios relacionados con el `usuario activo actualmente`. \n
+        Retorna el pago en general realizado con los servicios, relacionados con el `usuario activo actualmente`. \n
         :Ejemplo:
         ```
             return 345800

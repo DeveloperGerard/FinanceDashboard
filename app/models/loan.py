@@ -52,6 +52,26 @@ class Loan(db.Model):
         return all_loans_list
     
     @staticmethod
+    def get_all_amount_payment(id:int):
+        """
+        Retorna el pago en general realizado con los prestamos, relacionados con el `usuario activo actualmente`. \n
+        :Ejemplo:
+        ```
+            return 345800
+        ```
+        :Parametros: id
+        :id: = identificador unico de usuario
+        """
+
+        all_loans =db.session.execute(db.select(Loan)).scalars()
+        all_loans_list =[]
+
+        for loan in all_loans:
+            if loan.user_id == id:
+                all_loans_list.append(loan.price-loan.reamining_price)
+        return sum(all_loans_list)
+
+    @staticmethod
     def get_all_for_payment(id:int):
         """
         Retorna todos los prestamos disponibles para pagar relacionados con el `usuario activo actualmente`. \n
