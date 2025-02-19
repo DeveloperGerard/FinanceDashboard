@@ -2,6 +2,12 @@ from ..models.loan import Loan
 from app import db
 
 class LoanController:
+    """
+        Controlador de `Prestamos`.
+
+        Permite realizar las funciones basicas(`borrar,actualizar,crear objetos`) del modelo prestamos.
+    """
+
     @staticmethod
     def create_loan(name,holder,price,quota,user_id,account_id,reamingin_price,date,expiration_date,tea=0,tea_mora=0,):
         loan                 = Loan()

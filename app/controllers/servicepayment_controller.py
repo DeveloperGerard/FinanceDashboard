@@ -2,6 +2,12 @@ from ..models.service_payment import  Service_payment
 from app import db
 
 class ServicePaymentController:
+    """
+        Controlador de `Pago de servicios`.
+
+        Permite realizar las funciones basicas(`borrar,actualizar,crear objetos`) del modelo pago de servicios.
+    """
+
     @staticmethod
     def create_service_payment(amount,date,description,service_id,user_id):
         service_payment              = Service_payment()

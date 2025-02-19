@@ -10,6 +10,11 @@ from flask_apscheduler import APScheduler
 scheduler = APScheduler()
 
 def send_gmail_confirmation(token):
+    """
+        Envia la plantilla para confirmar tu correo con el `token` de seguridad
+        a tu correo.
+    """
+
     from server import mail
     user    = User().get_by_id(current_user.id)
     message = Message(sender="dashboardfinance1@gmail.com",recipients=[current_user.email])
@@ -20,6 +25,10 @@ def send_gmail_confirmation(token):
     return "Enviado"
   
 def send_gmail(recipient):
+    """
+        Envia un mensaje de `bienvenida` a tu correo.
+    """
+
     from server import mail
     message = Message(sender="dashboardfinance1@gmail.com",recipients=[recipient])
     user    = User().get_by_id(current_user.id)
@@ -34,6 +43,10 @@ def send_gmail(recipient):
     return "Enviado"
 
 def daily_email():
+    """
+        Envia un mensaje diariamente todos los dias a las `9:00 de la mañana` a tu correo.
+    """
+
     from server import app
     with app.app_context():
         from server import mail,Message

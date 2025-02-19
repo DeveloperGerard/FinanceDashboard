@@ -13,16 +13,17 @@ from app.forms.form_servicepayments import FormularioCrearPagoServicio
 from app.forms.form_loan            import FormularioCrearPrestamos
 from app.controllers.importaciones  import AccountController,IncomeController,UserController,ServiceController,LoanController,LoanPaymentController,ServicePaymentController
 from app.models.importaciones       import Income,Account,User,Service,Loan
-from ..funciones.token import confirm_token,genera_token
-from ..funciones.notification_funct import send_gmail_confirmation
-from ..funciones.email_decorator import email_validation
+from ..extra_functions.token import confirm_token,genera_token
+from ..extra_functions.notification_funct import send_gmail_confirmation
+from ..extra_functions.email_decorator import email_validation
 user_functions = Blueprint('user_functions',__name__)
 
 
 
+
+@user_functions.route("/crearcuenta",methods=["GET","POST"])
 @login_required
 @email_validation
-@user_functions.route("/crearcuenta",methods=["GET","POST"])
 def crear_cuenta():
     if request.method =="GET":
         form = FormularioCrearCuenta()
@@ -39,9 +40,10 @@ def crear_cuenta():
             return redirect("/index")
 
 
+
+@user_functions.route("/crearingreso",methods=["GET","POST"])
 @login_required
 @email_validation
-@user_functions.route("/crearingreso",methods=["GET","POST"])
 def crear_ingreso():
     if request.method =="GET":
         form = FormularioCrearIngreso()
@@ -51,11 +53,15 @@ def crear_ingreso():
         form = FormularioCrearIngreso()
         if form.validate_on_submit():
             #despues de validar creamos el objeto ingreso para bd
-            nombre  = form.nombre.data
-            fecha   = form.fecha.data
-            user_id = current_user.id
-            monto   = form.monto.data
-            IncomeController().create_income(nombre,fecha,monto,user_id)
+            nombre          = form.nombre.data
+            fecha           = form.fecha_pago.data
+            user_id         = current_user.id
+            descripcion     = form.descripcion.data
+            categoria       = form.categoria.data
+            proximo_pago    = form.proximo_pago.data
+            monto_pendiente = form.monto_pendiente.data
+            monto           = form.monto.data
+            IncomeController().create_income(nombre,fecha,monto,user_id,descripcion,proximo_pago,monto_pendiente,categoria)
 
             #actualizamos el saldo de la cuenta del usuario
             usuario = User().get_by_id(current_user.id)
@@ -64,9 +70,10 @@ def crear_ingreso():
             return redirect("/index")
 
 
+
+@user_functions.route("/crearservicio",methods=["GET","POST"])
 @login_required
 @email_validation
-@user_functions.route("/crearservicio",methods=["GET","POST"])
 def crear_servicio():
     if request.method == "GET":
         form = FormularioCrearServicio()
@@ -88,9 +95,10 @@ def crear_servicio():
             ServiceController().create_service(nombre,descripcion,fecha,categoria,user_id,precio,precio,cuenta,vencimiento)
             return redirect("/index")
 
+
+@user_functions.route("/crearprestamo",methods=["GET","POST"])
 @login_required
 @email_validation
-@user_functions.route("/crearprestamo",methods=["GET","POST"])
 def crear_prestamo():
     if request.method == "GET":
         form     = FormularioCrearPrestamos()
@@ -116,9 +124,10 @@ def crear_prestamo():
         else:
             return render_template("user_functions/crear_prestamo.html",form=form)
 
+
+@user_functions.route("/pagoprestamo",methods=["GET","POST"])
 @login_required
 @email_validation
-@user_functions.route("/pagoprestamo",methods=["GET","POST"])
 def pago_prestamo():
     if request.method =="GET":
         form  = FormularioCrearPagoPrestamo()
@@ -162,9 +171,9 @@ def pago_prestamo():
         else:
             return "error"
 
+@user_functions.route("/pagoservicio",methods=["GET","POST"])
 @login_required
 @email_validation
-@user_functions.route("/pagoservicio",methods=["GET","POST"])
 def pago_servicio():
     if request.method == "GET":
         form     = FormularioCrearPagoServicio()
@@ -215,16 +224,14 @@ def confirm_email(token):
         return redirect("/index")
     email = confirm_token(token)
     user = User().get_by_id(current_user.id)
-    print(f"{email}=={user.email}")
     if user.email == email:
         user.email_conf= True
         UserController().update_user(user)
         flash("Cuenta confirmada")
         return redirect("/index")
     else:
-        flash("Token invalido puto")
+        flash("Token invalido")
         #aqui añadir que muestre token vencido
-        print(True if "gerard"==True else False)
         return "xd"
 
 @user_functions.route("/reenviartoken")
@@ -235,9 +242,10 @@ def reenviar_token():
     send_gmail_confirmation(token)
     return redirect("https://mail.google.com/")
 
+
+@user_functions.route("/cerrar_sesion")
 @login_required
 @email_validation
-@user_functions.route("/cerrar_sesion")
 def cerrar():
     logout_user()
     return redirect("/")
