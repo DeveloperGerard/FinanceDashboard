@@ -2,6 +2,12 @@ from ..models.account import  Account
 from app import db
 
 class AccountController:
+    """
+        Controlador de `Cuentas`.
+
+        Permite realizar las funciones basicas(`borrar,actualizar,crear objetos`) del modelo cuentas.
+    """
+    
     @staticmethod
     def create_account(name,card,user_id):
         account              = Account()

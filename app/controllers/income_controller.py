@@ -2,13 +2,23 @@ from ..models.income import  Income
 from app import db
 
 class IncomeController:
+    """
+        Controlador de `Ingresos`.
+
+        Permite realizar las funciones basicas(`borrar,actualizar,crear objetos`) del modelo ingresos.
+    """
+
     @staticmethod
-    def create_income(name,date,amount,user_id):
-        income             = Income()
-        income.income_name = name
-        income.date        = date
-        income.amount      = amount
-        income.user_id     = user_id
+    def create_income(name,date,amount,user_id,description,next_income,pending_amount,categoria):
+        income                = Income()
+        income.income_name    = name
+        income.income_date    = date
+        income.amount         = amount
+        income.description    = description
+        income.next_income    = next_income
+        income.pending_amount = pending_amount
+        income.category       = categoria
+        income.user_id        = user_id
         db.session.add(income)
         db.session.commit()
         return income

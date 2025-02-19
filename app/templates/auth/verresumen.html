@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <div>
+            <h1>Resumen global de prestamos</h1>
+            <p>
+                Monto total prestamos:{{ loan_summary["monto_total"] }}
+            </p>
+            <p> 
+                Monto pagado:{{ loan_summary["monto_pagado"] }}
+            </p>
+            <p>
+                Monto restante:{{ loan_summary["monto_restante"] }}
+            </p>
+            <p>
+                Progreso:{{ loan_summary["progreso"] }}%
+            </p>
+        </div>
+        <!--Resumen de los prestamos--->
+
+        <div >
+            <!---Itera sobre cada cuenta y muestra los prestamos que pertenecen a la cuenta y despues muestra sus pagos--->
+            <h1>Resumen de pagos</h1>
+            {% for account in accounts %}
+            <h1>{{account.account_name}}</h1>
+            <div>
+                {% for loan in loans %}
+                    {% if loan.account_id == account.id %}
+                        <h2>{{loan.loan_name}}</h2>
+                        {% for loan_payment in loans_payments %}
+                            {% if loan_payment.loan_id == loan.id %}
+                                <h3>Pagos</h3>
+                                <p>{{loan_payment.amount}}</p>
+                                <p>{{loan_payment.date}}</p>
+                                <p>{{loan_payment.description}}</p>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+                {% for service in services %}
+                    {% if service.account_id == account.id %}
+                    <h2>{{service.service_name}}</h2>
+                        {% for service_payment in services_payments %}
+                            {% if service_payment.service_id == service.id %}
+                                <h3>Pagos</h3>
+                                <p >{{service_payment.amount}}</p>
+                                <p>{{service_payment.date}}</p>
+                                <p>{{service_payment.description}}</p>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+                <p>Precio cuenta:${{sum(pres[accounts.index(account)])+sum(prep[accounts.index(account)])}}</p>
+            </div>
+            {% endfor %}
+        </div>
+        <!---Resumen de pago de los servicios y prestamos-->
+
+        <h1>Gastos mensuales</h1>
+        <p>Prestamos:{{loan_ms}}</p>
+        <p>Servicios:{{service_ms}}</p>
+        <p>Total:${{loan_ms+service_ms}}</p>
+        <!--Resumen global de todos los gastos mensuales--->
+    </div>
+</body>
+</html>

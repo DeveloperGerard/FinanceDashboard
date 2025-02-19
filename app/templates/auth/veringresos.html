@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% for income,category in incomes.items() %}
+        <h1>{{income}}</h1>
+        {% for elemento in category %}
+            {% if elemento %}
+            <div style="border: 1px solid black;">
+                <p>Nombre:{{elemento.income_name}}</p>
+                <p>Descripcion:{{elemento.descripcion}}</p>
+                <p>Monto pendiente:${{elemento.pending_amount}}</p>
+                <p>Siguiente ingreso:{{elemento.next_income}}</p>
+                <p>Monto:${{elemento.amount}}</p>
+            </div>
+                
+            {% endif %}
+        {% endfor %}
+    {% endfor %}  
+</body>
+</html>
