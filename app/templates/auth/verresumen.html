@@ -10,16 +10,16 @@
         <div>
             <h1>Resumen global de prestamos</h1>
             <p>
-                Monto total prestamos:{{ loan_summ["monto_total"] }}
+                Monto total prestamos:{{ loan_summary["monto_total"] }}
             </p>
             <p> 
-                Monto pagado:{{ loan_summ["monto_pagado"] }}
+                Monto pagado:{{ loan_summary["monto_pagado"] }}
             </p>
             <p>
-                Monto restante:{{ loan_summ["monto_restante"] }}
+                Monto restante:{{ loan_summary["monto_restante"] }}
             </p>
             <p>
-                Progreso:{{ loan_summ["progreso"] }}%
+                Progreso:{{ loan_summary["progreso"] }}%
             </p>
         </div>
         <!--Resumen de los prestamos--->
@@ -56,16 +56,16 @@
                         {% endfor %}
                     {% endif %}
                 {% endfor %}
-                <p>Precio cuenta:${{sum(precio_cuenta[accounts.index(account)])+sum(precio_cuenta2[accounts.index(account)])}}</p>
+                <p>Precio cuenta:${{sum(pres[accounts.index(account)])+sum(prep[accounts.index(account)])}}</p>
             </div>
             {% endfor %}
         </div>
         <!---Resumen de pago de los servicios y prestamos-->
 
         <h1>Gastos mensuales</h1>
-        <p>Prestamos:{{prestamos_re}}</p>
-        <p>Servicios:{{servicios_re}}</p>
-        <p>Total:${{prestamos_re+servicios_re}}</p>
+        <p>Prestamos:{{loan_ms}}</p>
+        <p>Servicios:{{service_ms}}</p>
+        <p>Total:${{loan_ms+service_ms}}</p>
         <!--Resumen global de todos los gastos mensuales--->
     </div>
 </body>

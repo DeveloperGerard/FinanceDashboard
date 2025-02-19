@@ -70,31 +70,31 @@ def ver_prestamos():
 @email_validation
 def resumen_financiero():
     #resumen prestamos
-    loan_summ = Loan().get_loan_summary(current_user.id)
+    loan_summary = Loan().get_loan_summary(current_user.id)
 
     accounts       = Account().get_all_by_userid(current_user.id)
     #resumen pagos prestamos
     loans          = Loan().get_all_by_userid(current_user.id)
-    loans_payments = Loan_payment().get_all_by_userid(current_user.id)
+    loans_payments = Loan_payment().get_all_by_userid_forsummary(current_user.id)
 
     #resumen pagos servicios
     services          = Service().get_all_by_userid(current_user.id)
-    services_payments = Service_payment().get_all_by_userid(current_user.id)
+    services_payments = Service_payment().get_all_by_userid_forsummary(current_user.id)
 
-    #cuentas
-    cuentas = Loan().get_all_for_account(current_user.id,accounts)
-    print(cuentas)
-    cuentas_2 = Service().get_all_for_account(current_user.id,accounts)
-    print(cuentas_2)
-    """
-    precio_cuenta = Loan_payment().get_all_payment_for_loans(cuentas)
-    precio_cuenta2 = Service_payment().get_all_payment_for_services(cuentas_2)"""
-    precio_cuenta2 = [[222],[222]]
-    precio_cuenta = [[222],[222]]
+    #obtengo todas los prestamos y servicios divididos en cuentas
+    account_loans = Loan().get_all_for_account(current_user.id,accounts)
+    account_services = Service().get_all_for_account(current_user.id,accounts)
 
+    #remplazo los servicios y prestamos por sus pagos
+    price_service_accounts = Service_payment().get_all_amount_for_account(current_user.id,account_services)
+    price_service_loans = Loan_payment().get_all_amount_for_account(current_user.id,account_loans)
+    
     #resumen mensual
-    prestamos_re = Loan().get_all_amount_payment(current_user.id)
-    servicios_re = Service().get_all_amount_payment(current_user.id)
+    loan_month_summary = Loan().get_all_amount_payment(current_user.id)
+    service_month_summary = Service().get_all_amount_payment(current_user.id)
 
-    return  render_template("auth/verresumen.html",loan_summ=loan_summ,loans=loans,loans_payments=loans_payments,accounts=accounts,services=services,
-                            services_payments=services_payments,precio_cuenta=precio_cuenta,precio_cuenta2=precio_cuenta2,sum=sum,prestamos_re=prestamos_re,servicios_re=servicios_re)
+    return  render_template("auth/verresumen.html",loan_summary=loan_summary,loans=loans,loans_payments=loans_payments,
+                            accounts=accounts,services=services,
+                            services_payments=services_payments,
+                            pres=price_service_accounts,prep=price_service_loans
+                            ,sum=sum,loan_ms=loan_month_summary,service_ms=service_month_summary)

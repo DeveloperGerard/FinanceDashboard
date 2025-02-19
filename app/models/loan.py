@@ -123,22 +123,7 @@ class Loan(db.Model):
         loan =Loan.query.filter_by(id=id).first()
         return loan
     
-    """@staticmethod 
-    def get_all_for_account(id:int,account_list:list):
-        all_loans = db.session.execute(db.select(Loan)).scalars()
-        all_loans_list =[]
-        all_acounts = [[] for account in account_list]
-        x = 0
-        for loan in all_loans:
-            if loan.user_id ==id:
-                all_loans_list.append(loan)
-        for loan in all_loans_list:
-            for account in account_list:
-                if loan.id == account.id:
-                    all_acounts[x].append(loan)
-                x+=1
-        print(all_acounts)
-        return all_acounts"""
+    
     @staticmethod
     def get_all_for_account(id:int,account_list:list):
         """   
@@ -166,19 +151,7 @@ class Loan(db.Model):
                 if loan.account_id == account.id:
                     all_accounts[account_list.index(account)].append(loan)
         return all_accounts
-        """
-        All_accounts = [[],[]]
-        all_loans  = [loan.objet_1]
-        account_list = [account_object1,account_object2]
-        """
-             
-        
-    #Objetivo es dividir todos nuestros prestamos en cuentas 
-    #marrato documentar todo antes y solucionar error de arriba lo que pasa es que
-    #itera sobre los prestamo y solo ahy uno entonces no reccore todas las cuentas por que ahy 2
-    #posible solucion evaluar con in si esta en la cuenta y retornar indice 
-    #usar la documentacion de @login required para documentar como los dioses
-    #Usar get_all_for_payment de service pero para loan en resumen
+       
     @staticmethod
     def get_loan_summary(id):
         """
