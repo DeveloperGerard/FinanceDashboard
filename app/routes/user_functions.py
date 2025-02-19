@@ -224,7 +224,6 @@ def confirm_email(token):
         return redirect("/index")
     email = confirm_token(token)
     user = User().get_by_id(current_user.id)
-    print(f"{email}=={user.email}")
     if user.email == email:
         user.email_conf= True
         UserController().update_user(user)
@@ -233,7 +232,6 @@ def confirm_email(token):
     else:
         flash("Token invalido")
         #aqui añadir que muestre token vencido
-        print(True if "gerard"==True else False)
         return "xd"
 
 @user_functions.route("/reenviartoken")

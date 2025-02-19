@@ -145,7 +145,6 @@ class Service(db.Model):
         all_accounts = [[] for account in account_list]
         for service in all_services:
             for account in account_list:
-                print(account.id)
                 if service.account_id == account.id:
                     all_accounts[account_list.index(account)].append(service)
         return all_accounts

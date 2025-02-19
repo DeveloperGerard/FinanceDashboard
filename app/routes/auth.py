@@ -13,10 +13,8 @@ auth= Blueprint('auth', __name__)
 def index(): 
     if current_user.is_authenticated:
         if current_user.email_conf is False:
-            print("Xddd")
             return render_template("public/confirmation.html")
-        else:
-            print("Xdddassaasas")
+        else:    
             return redirect('/home')
     else:
         return redirect("/iniciar")
@@ -26,7 +24,6 @@ def index():
 @email_validation
 def saludo():
     user = User().get_by_id(current_user.id)
-    print(current_user.username)
     return render_template("auth/prueba.html",user=user)
 
 @auth.route("/vercuentas")
@@ -43,7 +40,6 @@ def ver_cuentas():
 @email_validation
 def ver_ingresos():
     incomes = Income().get_all_by_category(current_user.id)
-    print(incomes)
     return render_template("auth/veringresos.html",incomes=incomes)
 
 
@@ -60,7 +56,6 @@ def ver_servicios():
 @email_validation
 def ver_prestamos():
     loans = Loan().get_all_by_userid(current_user.id)
-    print(loans)
     return  render_template("auth/verprestamos.html",loans=loans)
 
 
