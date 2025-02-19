@@ -1,7 +1,7 @@
 from ..models.scheduled_incomes import Scheduled_income 
 from app import db
 
-class IncomeController:
+class ScheduledIncomeController:
     """
         Controlador de `Ingresos programados`.
 
@@ -9,7 +9,7 @@ class IncomeController:
     """
 
     @staticmethod
-    def create_income(name,date,amount,user_id,description,next_income,pending_amount,categoria):
+    def create_income(name,date,amount,user_id,description,next_income,categoria,received_amount:0,pending_amount:0):
         income                = Scheduled_income()
         income.income_name    = name
         income.income_date    = date
@@ -17,6 +17,7 @@ class IncomeController:
         income.description    = description
         income.next_income    = next_income
         income.pending_amount = pending_amount
+        income.received_amount= received_amount
         income.category       = categoria
         income.user_id        = user_id
         db.session.add(income)

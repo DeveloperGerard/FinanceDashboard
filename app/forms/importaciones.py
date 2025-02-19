@@ -1,0 +1,19 @@
+from ..forms.form_loan import FormularioCrearPrestamos
+from ..forms.form_income import FormularioCrearIngreso
+from ..forms.form_account import FormularioCrearCuenta
+from ..forms.form_loanpayments import FormularioCrearPagoPrestamo
+from ..forms.form_scheduled_incomes import FormularioCrearIngresoProgamado
+from ..forms.form_service import FormularioCrearServicio
+from ..forms.form_servicepayments import FormularioCrearPagoServicio
+from ..forms.form_user import FormularioRegistro,FormularioInicio
+
+FormularioCrearPrestamos
+FormularioCrearIngreso
+FormularioCrearCuenta
+FormularioCrearPagoPrestamo
+FormularioCrearIngresoProgamado
+FormularioCrearServicio
+FormularioCrearPagoServicio
+
+FormularioRegistro
+FormularioInicio

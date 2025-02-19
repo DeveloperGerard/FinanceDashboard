@@ -6,15 +6,15 @@
     <title>Document</title>
 </head>
 <body>
+    <!---Revisar esto luego por duda con items peligroso o no  ? -->
     {% for income,category in incomes.items() %}
         <h1>{{income}}</h1>
         {% for elemento in category %}
             {% if elemento %}
             <div style="border: 1px solid black;">
                 <p>Nombre:{{elemento.income_name}}</p>
-                <p>Descripcion:{{elemento.descripcion}}</p>
-                <p>Monto pendiente:${{elemento.pending_amount}}</p>
-                <p>Siguiente ingreso:{{elemento.next_income}}</p>
+                <p>Descripcion:{{elemento.description}}</p>
+                <p>Fecha:{{elemento.income_date}}</p>
                 <p>Monto:${{elemento.amount}}</p>
             </div>
                 
