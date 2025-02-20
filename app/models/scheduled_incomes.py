@@ -95,7 +95,7 @@ class Scheduled_income(db.Model):
     @staticmethod
     def get_all_by_category(id:int):
         """
-        Retorna todos los objetos del modelo Income en un diccionario dividido en categorias, relacionados con el `usuario activo actualmente` 
+        Retorna todos los objetos del modelo `Ingresos programados` en un diccionario dividido en categorias, relacionados con el `usuario activo actualmente` 
         ejemplo:
         ```
             return 

@@ -72,11 +72,13 @@ def actualizar_ingreso_programado():
     if request.method == "POST":
         form = FormularioActualizarIngresoProgramado()
         if form.validate_on_submit():
-            #despues de validar creamos el objeto ingreso para bd
+            #despues de validar actualizamos la informacion del objeto ingreso_programado
             ingreso_programado = Scheduled_income().get_by_id(request.form.get('ingreso_programado'))
             ingreso_programado.next_income = form.proximo_pago.data
             ingreso_programado.received_amount = form.monto_recibido.data
+            ingreso_programado.pending_amount = ingreso_programado.amount - form.monto_recibido.data
             ScheduledIncomeController().update_income(ingreso_programado)
+
             #actualizamos el saldo de la cuenta del usuario
             usuario = User().get_by_id(current_user.id)
             usuario.balance = usuario.balance + form.monto_recibido.data
@@ -94,7 +96,7 @@ def crear_ingreso_programado():
     if request.method == "POST":
         form = FormularioCrearIngresoProgamado()
         if form.validate_on_submit():
-            #despues de validar creamos el objeto ingreso para bd
+            #despues de validar creamos el objeto ingreso programado para bd
             nombre          = form.nombre.data
             fecha           = form.fecha_pago.data
             user_id         = current_user.id
