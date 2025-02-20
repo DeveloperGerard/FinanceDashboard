@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="" method="post">
+        {{form.hidden_tag()}}
+        {{form.monto_recibido.label()}}
+        {{form.monto_recibido()}}
+        {{form.proximo_pago.label()}}
+        {{form.proximo_pago()}}
+        <select name="ingreso_programado">
+            {% for scheduled_income in scheduled_incomes %}
+                <option value="{{scheduled_income.id}}">{{scheduled_income.income_name}}</option>
+            {% endfor %}
+        </select>
+        {{form.submit()}}
+    </form>
+</body>
+</html>

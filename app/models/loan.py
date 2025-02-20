@@ -116,7 +116,7 @@ class Loan(db.Model):
             return loan_object_22
         ```
         :Parametros: id
-        :id: = identificador unico de usuario
+        :id: = identificador unico de prestamo
         """
 
 

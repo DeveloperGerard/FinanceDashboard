@@ -68,6 +68,22 @@ class Scheduled_income(db.Model):
                 amount+= income.price
         return amount
     
+    @staticmethod
+    def get_by_id(id):
+        """
+        Retorna el objeto del modelo `Ingreso programado` que coincida con el `id` proporcionado. \n
+        :Ejemplo:
+        ```
+            return scheduled_income_object_25
+        ```
+        :Parametros: id
+        :id: = identificador unico del ingreso programado
+        """
+
+
+        scheduled =Scheduled_income.query.filter_by(id=id).first()
+        return scheduled
+
     @staticmethod 
     def get_full_reamining_amount():
         all_incomes = db.session.execute(db.select(Scheduled_income)).scalars()
