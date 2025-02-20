@@ -4,7 +4,7 @@ Visualizacion de datos
 
 from flask import Blueprint, render_template,redirect
 from flask_login import login_required ,current_user
-from app.models.importaciones import Income,Service,User,Account,Loan,Loan_payment,Service_payment
+from app.models.importaciones import Income,Service,User,Account,Loan,Loan_payment,Service_payment,Scheduled_income
 from ..extra_functions.email_decorator import email_validation
 auth= Blueprint('auth', __name__) 
 
@@ -40,6 +40,14 @@ def ver_cuentas():
 @email_validation
 def ver_ingresos():
     incomes = Income().get_all_by_category(current_user.id)
+    return render_template("auth/veringresos.html",incomes=incomes)
+
+
+@auth.route("/veringresosprogramados")
+@login_required
+@email_validation
+def ver_ingresos_programados():
+    incomes = Scheduled_income().get_all_by_category(current_user.id)
     return render_template("auth/veringresos.html",incomes=incomes)
 
 

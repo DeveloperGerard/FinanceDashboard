@@ -9,15 +9,13 @@
     <!---Revisar esto luego por duda con items peligroso o no  ? -->
     {% for income,category in incomes.items() %}
         <h1>{{income}}</h1>
-        {% for incom in category %}
-            {% if incom %}
+        {% for elemento in category %}
+            {% if elemento %}
             <div style="border: 1px solid black;">
-                <p>Nombre:{{incom.income_name}}</p>
-                <p>Descripcion:{{incom.description}}</p>
-                <p>Fecha:{{incom.income_date}}</p>
-                <p>Monto que recibiras:${{incom.amount}}</p>
-                <p>Monto recibido:${{incom.received_amount}}</p>
-                <p>Monto pendiente:${{incom.pending_amount}}</p>
+                <p>Nombre:{{elemento.income_name}}</p>
+                <p>Descripcion:{{elemento.description}}</p>
+                <p>Fecha:{{elemento.income_date}}</p>
+                <p>Monto:${{elemento.amount}}</p>
             </div>
                 
             {% endif %}
