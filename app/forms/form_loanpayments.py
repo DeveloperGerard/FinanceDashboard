@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,SubmitField,PasswordField,EmailField,IntegerField,SelectField,DateField,DateTimeField,TextAreaField
-from wtforms.validators import DataRequired, Email,Length,EqualTo
+from wtforms import SubmitField,IntegerField,DateField,TextAreaField
+from wtforms.validators import DataRequired,Length
 
 class FormularioCrearPagoPrestamo(FlaskForm):
     monto       = IntegerField("Monto",validators=[DataRequired()])

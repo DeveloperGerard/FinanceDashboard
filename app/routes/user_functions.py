@@ -5,20 +5,13 @@ Funciones del usuario
 
 from flask                          import Blueprint,render_template,redirect,request,flash
 from flask_login                    import current_user,login_required,logout_user
-from app.forms.form_income          import FormularioCrearIngreso
-from app.forms.form_account         import FormularioCrearCuenta
-from app.forms.form_service         import FormularioCrearServicio
-from app.forms.form_loanpayments    import FormularioCrearPagoPrestamo
-from app.forms.form_servicepayments import FormularioCrearPagoServicio
-from app.forms.form_loan            import FormularioCrearPrestamos
-from app.controllers.importaciones  import AccountController,IncomeController,UserController,ServiceController,LoanController,LoanPaymentController,ServicePaymentController
-from app.models.importaciones       import Income,Account,User,Service,Loan
+from app.forms.importaciones        import FormularioCrearPrestamos,FormularioCrearPagoServicio,FormularioCrearPagoPrestamo,FormularioCrearServicio,FormularioCrearCuenta,FormularioCrearIngresoProgamado,FormularioCrearIngreso,FormularioActualizarIngresoProgramado
+from app.controllers.importaciones  import AccountController,IncomeController,UserController,ServiceController,LoanController,LoanPaymentController,ServicePaymentController,ScheduledIncomeController
+from app.models.importaciones       import Income,Account,User,Service,Loan,Scheduled_income
 from ..extra_functions.token import confirm_token,genera_token
 from ..extra_functions.notification_funct import send_gmail_confirmation
 from ..extra_functions.email_decorator import email_validation
 user_functions = Blueprint('user_functions',__name__)
-
-
 
 
 @user_functions.route("/crearcuenta",methods=["GET","POST"])
@@ -58,10 +51,8 @@ def crear_ingreso():
             user_id         = current_user.id
             descripcion     = form.descripcion.data
             categoria       = form.categoria.data
-            proximo_pago    = form.proximo_pago.data
-            monto_pendiente = form.monto_pendiente.data
             monto           = form.monto.data
-            IncomeController().create_income(nombre,fecha,monto,user_id,descripcion,proximo_pago,monto_pendiente,categoria)
+            IncomeController().create_income(nombre,fecha,monto,user_id,descripcion,categoria)
 
             #actualizamos el saldo de la cuenta del usuario
             usuario = User().get_by_id(current_user.id)
@@ -69,6 +60,52 @@ def crear_ingreso():
             UserController().update_user(usuario)
             return redirect("/index")
 
+@user_functions.route("/actualizaringresoprogramado",methods=["GET","POST"])
+@login_required
+@email_validation
+def actualizar_ingreso_programado():
+    if request.method =="GET":
+        form = FormularioActualizarIngresoProgramado()
+        scheduled_incomes = Scheduled_income().get_all_by_userid(current_user.id)
+        return render_template("user_functions/actualizar_schinc.html",form=form,scheduled_incomes=scheduled_incomes)
+    
+    if request.method == "POST":
+        form = FormularioActualizarIngresoProgramado()
+        if form.validate_on_submit():
+            #despues de validar actualizamos la informacion del objeto ingreso_programado
+            ingreso_programado = Scheduled_income().get_by_id(request.form.get('ingreso_programado'))
+            ingreso_programado.next_income = form.proximo_pago.data
+            ingreso_programado.received_amount = form.monto_recibido.data
+            ingreso_programado.pending_amount = ingreso_programado.amount - form.monto_recibido.data
+            ScheduledIncomeController().update_income(ingreso_programado)
+
+            #actualizamos el saldo de la cuenta del usuario
+            usuario = User().get_by_id(current_user.id)
+            usuario.balance = usuario.balance + form.monto_recibido.data
+            UserController().update_user(usuario)
+            return redirect("/index")
+
+@user_functions.route("/crearingresoprogramado",methods=["GET","POST"])
+@login_required
+@email_validation
+def crear_ingreso_programado():
+    if request.method =="GET":
+        form = FormularioCrearIngresoProgamado()
+        return render_template("user_functions/crear_ingreso_programado.html",form=form)
+    
+    if request.method == "POST":
+        form = FormularioCrearIngresoProgamado()
+        if form.validate_on_submit():
+            #despues de validar creamos el objeto ingreso programado para bd
+            nombre          = form.nombre.data
+            fecha           = form.fecha_pago.data
+            user_id         = current_user.id
+            descripcion     = form.descripcion.data
+            categoria       = form.categoria.data
+            proximo_pago    = form.proximo_pago.data
+            monto           = form.monto.data
+            ScheduledIncomeController().create_income(nombre,fecha,monto,user_id,descripcion,categoria=categoria,next_income=proximo_pago,received_amount=0,pending_amount=monto)
+            return redirect("/index")
 
 
 @user_functions.route("/crearservicio",methods=["GET","POST"])
@@ -216,7 +253,6 @@ def pago_servicio():
         else:
             return "error"
         
-
 @user_functions.route("/conf_email/<token>")
 @login_required
 def confirm_email(token):
