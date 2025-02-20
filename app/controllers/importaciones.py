@@ -9,11 +9,12 @@ from ..controllers.loanpayment_controller import LoanPaymentController
 from ..controllers.service_controller import ServiceController
 from ..controllers.servicepayment_controller import ServicePaymentController
 from ..controllers.user_controller import UserController
-
-AccountController = AccountController
-IncomeController = IncomeController 
-LoanController = LoanController
-LoanPaymentController = LoanPaymentController
-ServiceController = ServiceController
-ServicePaymentController = ServicePaymentController
-UserController = UserController
+from ..controllers.scheduled_income_controller import ScheduledIncomeController
+ScheduledIncomeController
+AccountController
+IncomeController 
+LoanController
+LoanPaymentController
+ServiceController
+ServicePaymentController 
+UserController 

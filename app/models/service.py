@@ -117,7 +117,7 @@ class Service(db.Model):
             return service_object_12
         ```
         :Parametros: id
-        :id: = identificador unico de usuario
+        :id: = identificador unico de servicio
         """
         service = Service.query.filter_by(id=id).first()
         return service

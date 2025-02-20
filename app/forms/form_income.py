@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,SubmitField,PasswordField,EmailField,IntegerField,SelectField,DateField,DateTimeField,RadioField
-from wtforms.validators import DataRequired, Email,Length,EqualTo
+from wtforms import StringField,SubmitField,IntegerField,DateField,RadioField
+from wtforms.validators import DataRequired, Length
 
 class FormularioCrearIngreso(FlaskForm):
     nombre          = StringField("Nombre",validators=[DataRequired(),Length(0,50)])
@@ -8,8 +8,6 @@ class FormularioCrearIngreso(FlaskForm):
     descripcion     = StringField("Descripcion",validators=[DataRequired(),Length(0,150)])
     categoria       = RadioField("Categoria:",validators=[DataRequired()],choices=['Sueldo','Horas extras','Venta','Inversiones'])
     monto           = IntegerField("Monto")
-    proximo_pago    = DateField("Proximo pago:")
-    monto_pendiente = IntegerField("Monto pendiente")
     submit          = SubmitField('Crear ingreso')
 
 class FormularioActualizarIngreso(FlaskForm):

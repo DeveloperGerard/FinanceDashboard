@@ -1,27 +1,30 @@
 from app import db
 
-class Income(db.Model):
+class Scheduled_income(db.Model):
     """
-        Objeto que representa el modelo `Ingreso`.
+        Objeto que representa el modelo `Ingreso programado`.
 
         Tiene las columnas con todos 
         datos necesarios que necesita
         el modelo: `id,precio,nombre,fecha,monto....`
     """
 
-    __tablename__ = "incomes"
+    __tablename__ = "scheduled_incomes"
 
     #columnas
-    id             = db.Column(db.Integer,primary_key=True)
-    income_name    = db.Column(db.String(50),nullable=False)
-    income_date    = db.Column(db.DateTime(),nullable=False)
-    description    = db.Column(db.String(150),nullable=False) 
-    category       = db.Column(db.String(100),nullable=False)
-    amount         = db.Column(db.Integer,nullable=False)
-    user_id        = db.Column(db.Integer,db.ForeignKey("users.id",ondelete="CASCADE"))
+    id              = db.Column(db.Integer,primary_key=True)
+    income_name     = db.Column(db.String(50),nullable=False)
+    income_date     = db.Column(db.DateTime(),nullable=False)
+    description     = db.Column(db.String(150),nullable=False) 
+    category        = db.Column(db.String(100),nullable=False)
+    next_income     = db.Column(db.DateTime(),nullable=False)
+    amount          = db.Column(db.Integer,nullable=False)
+    received_amount = db.Column(db.Integer,nullable=False)
+    user_id         = db.Column(db.Integer,db.ForeignKey("users.id",ondelete="CASCADE"))
+    pending_amount  = db.Column(db.Integer,nullable=False)
 
     #relaciones
-    user          = db.relationship("User",back_populates="incomes")
+    user          = db.relationship("User",back_populates="scheduled_incomes")
 
     #Funciones para obtener datos del modelo ingreso
     @staticmethod
@@ -37,7 +40,7 @@ class Income(db.Model):
         """
 
 
-        all_incomes = db.session.execute(db.select(Income)).scalars()
+        all_incomes = db.session.execute(db.select(Scheduled_income)).scalars()
         all_incomes_list =[]
         for income in all_incomes:
             if income.user_id ==id:
@@ -58,16 +61,32 @@ class Income(db.Model):
         """
 
 
-        all_incomes = db.session.execute(db.select(Income)).scalars()
+        all_incomes = db.session.execute(db.select(Scheduled_income)).scalars()
         amount = 0
         for income in all_incomes:
             if income.user_id ==id:
                 amount+= income.price
         return amount
     
+    @staticmethod
+    def get_by_id(id):
+        """
+        Retorna el objeto del modelo `Ingreso programado` que coincida con el `id` proporcionado. \n
+        :Ejemplo:
+        ```
+            return scheduled_income_object_25
+        ```
+        :Parametros: id
+        :id: = identificador unico del ingreso programado
+        """
+
+
+        scheduled =Scheduled_income.query.filter_by(id=id).first()
+        return scheduled
+
     @staticmethod 
     def get_full_reamining_amount():
-        all_incomes = db.session.execute(db.select(Income)).scalars()
+        all_incomes = db.session.execute(db.select(Scheduled_income)).scalars()
         amount = 0
         for income in all_incomes:
             amount += income.reamining_price
@@ -76,7 +95,7 @@ class Income(db.Model):
     @staticmethod
     def get_all_by_category(id:int):
         """
-        Retorna todos los objetos del modelo Income en un diccionario dividido en categorias, relacionados con el `usuario activo actualmente` 
+        Retorna todos los objetos del modelo `Ingresos programados` en un diccionario dividido en categorias, relacionados con el `usuario activo actualmente` 
         ejemplo:
         ```
             return 
@@ -92,7 +111,7 @@ class Income(db.Model):
         """
 
 
-        all_incomes = db.session.execute(db.select(Income)).scalars()
+        all_incomes = db.session.execute(db.select(Scheduled_income)).scalars()
         all_incomes_list ={'Sueldo':[],'Horas extras':[],"Venta":[],"Inversiones":[]}
         for income in all_incomes:
             if income.user_id ==id:

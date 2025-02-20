@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,SubmitField,PasswordField,EmailField,IntegerField,SelectField,DateField,DateTimeField
-from wtforms.validators import DataRequired, Email,Length,EqualTo,NumberRange
+from wtforms import StringField,SubmitField,IntegerField,DateField
+from wtforms.validators import DataRequired,Length,NumberRange
 
 class FormularioCrearPrestamos(FlaskForm):
     nombre   = StringField('Nombre',validators=[DataRequired(),Length(min=0,max=50)])

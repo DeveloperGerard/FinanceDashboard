@@ -16,7 +16,7 @@ def create_app():
     
     #-----Importando los modelos para la migracion
     Migrate(app,db)
-    from app.models import user,account,income,loan,service,service_payment,loan_payment
+    from app.models import user,account,income,loan,service,service_payment,loan_payment,scheduled_incomes
 
     #-----Inicializando el manejo de sesiones(inicio,cierre)
     @login_manager.user_loader

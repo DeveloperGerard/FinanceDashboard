@@ -22,12 +22,13 @@ class User(UserMixin, db.Model):
     email_conf     = db.Column(db.Boolean(),default=False)
     
     #relaciones
-    incomes        = db.relationship("Income",back_populates="user")
-    services       = db.relationship("Service",back_populates="user")
-    services_pay   = db.relationship("Service_payment",back_populates="user")
-    accounts       = db.relationship("Account",back_populates="user")
-    loans          = db.relationship("Loan",back_populates="user")
-    loans_pay      = db.relationship("Loan_payment",back_populates="user")
+    incomes           = db.relationship("Income",back_populates="user")
+    scheduled_incomes = db.relationship("Scheduled_income",back_populates="user")
+    services          = db.relationship("Service",back_populates="user")
+    services_pay      = db.relationship("Service_payment",back_populates="user")
+    accounts          = db.relationship("Account",back_populates="user")
+    loans             = db.relationship("Loan",back_populates="user")
+    loans_pay         = db.relationship("Loan_payment",back_populates="user")
 
     def set_password(self, password): 
         self.password_hash = generate_password_hash(password) 

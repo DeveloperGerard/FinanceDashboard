@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,SubmitField,PasswordField,EmailField,IntegerField,SelectField,DateField,DateTimeField,TextAreaField,RadioField
-from wtforms.validators import DataRequired, Email,Length,EqualTo
+from wtforms import StringField,SubmitField,IntegerField,DateField,TextAreaField,RadioField
+from wtforms.validators import DataRequired,Length
 
 
 class FormularioCrearServicio(FlaskForm):
