@@ -19,7 +19,7 @@ def send_gmail_confirmation(token):
     user    = User().get_by_id(current_user.id)
     message = Message(sender="dashboardfinance1@gmail.com",recipients=[current_user.email])
     username = user.username
-    title = f"Confirma tu correo{username}" 
+    title = f"Confirma tu correo {username}" 
     message.html = render_template("public/mailconfirmation.html",title=title,token=token)
     mail.send(message)
     return "Enviado"
