@@ -63,13 +63,13 @@ def daily_email():
         messages = Email_message().get_all()
 
         #eligiendo el mensaje aleatorio
-        message_elected = (messages[random.randint(1,2)]).template_name
+        message_elected = (messages[random.randint(0,1)]).template_name
 
         #añadiendo html al mensaje
-        message.html = render_template(f"extra_functions/{message_elected}")
-        
+        message.html = render_template(f"extra_functions/messages_dialy/{message_elected}")
+
         #envio
         mail.send(message)
         scheduler.remove_job("hola")
-scheduler.add_job(id="hola",func=daily_email,trigger="cron",hour=14,minute=31)
+scheduler.add_job(id="hola",func=daily_email,trigger="cron",hour=15,minute=20)
 scheduler.start()

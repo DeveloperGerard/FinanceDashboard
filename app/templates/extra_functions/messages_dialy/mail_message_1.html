@@ -31,8 +31,12 @@
       line-height: 1.5;
       text-align: center; /* Cambiado de justify a center */
     }
+    ol{
+      font-size: 14px;
+      color: #888888;
+      text-align: start;
+    }
     .footer {
-      text-align: center;
       font-size: 14px;
       color: #888888;
       margin-top: 20px;
@@ -45,10 +49,15 @@
     <tr>
       <td align="center">
         <div class="email-container">
-          <h1>{{title}}</h1>
+          <h1>¡Recuerda pagar tus prestamos!</h1>
           <p>
-            {{body}}
+            Antes de pedir un prestamo siempre fijate en:
           </p>
+          <ul>
+              <li>Antes de solicitar un préstamo, asegúrate de que realmente lo necesitas.</li>
+              <li>Conoce la tasa de interés.💵</li>
+              <li>Asegúrate de entender bien los términos.📃</li>
+          </ul>
           <div class="footer">
             <p>Este es un mensaje automático, por favor no respondas.❌</p>
           </div>
