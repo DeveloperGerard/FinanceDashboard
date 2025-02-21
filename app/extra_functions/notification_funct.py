@@ -5,8 +5,9 @@
 from flask_login import current_user
 from flask import render_template
 from flask_mail import Message
-from app.models.importaciones import User
+from app.models.importaciones import User,Email_message
 from flask_apscheduler import APScheduler
+import random
 scheduler = APScheduler()
 
 def send_gmail_confirmation(token):
@@ -17,10 +18,10 @@ def send_gmail_confirmation(token):
 
     from server import mail
     user    = User().get_by_id(current_user.id)
-    message = Message(sender="dashboardfinance1@gmail.com",recipients=[current_user.email])
+    message = Message(sender="dashboardfinance1@gmail.com",recipients=[current_user.email],subject="Confirmacion de correo")
     username = user.username
     title = f"Confirma tu correo {username}" 
-    message.html = render_template("public/mailconfirmation.html",title=title,token=token)
+    message.html = render_template("extra_functions/mailconfirmation.html",title=title,token=token)
     mail.send(message)
     return "Enviado"
   
@@ -38,27 +39,37 @@ def send_gmail(recipient):
             si tienes dudas puedes dirigirte al que esta en nuestra pagina tutorial para aprender a usar la web y gestionar tus 
             finanzas.
     """
-    message.html = render_template("public/mail.html",title=title,body=body)
+    message.html = render_template("extra_functions/mail.html",title=title,body=body)
     mail.send(message)
     return "Enviado"
 
 def daily_email():
     """
-        Envia un mensaje diariamente todos los dias a las `9:00 de la mañana` a tu correo.
+        Envia un mensaje diariamente todos los dias a las `9:00 de la mañana` a tu correo el mensaje es `aleatorio`.
     """
-
     from server import app
     with app.app_context():
-        from server import mail,Message
+        #Importaciones necesarias
+        from server import mail
+        from flask_mail import Message
+
+        #receptores
         users = User().get_all()
-        message = Message(sender="dashboardfinance1@gmail.com",recipients=[user.email for user in users])
-        title = f"Acuerdate de pagar tus prestamos😊" 
-        body  = """
-            Un préstamo es una transacción financiera en la que una parte, denominada prestamista, proporciona una cantidad
-            específica de dinero o recursos a otra parte, 
-            conocida como prestatario, con la expectativa de que se devuelva en el futuro, generalmente con intereses.
-        """
-        message.html = render_template("public/mail.html",title=title,body=body)
+
+        #objeto mensaje
+        message = Message(sender="dashboardfinance1@gmail.com",recipients=[user.email for user in users],subject="Mensaje informativo")
+
+        #mensajes disponibles
+        messages = Email_message().get_all()
+
+        #eligiendo el mensaje aleatorio
+        message_elected = (messages[random.randint(1,2)]).template_name
+
+        #añadiendo html al mensaje
+        message.html = render_template(f"extra_functions/{message_elected}")
+        
+        #envio
         mail.send(message)
-scheduler.add_job(id="hola",func=daily_email,trigger="cron",hour=9,minute=0)
+        scheduler.remove_job("hola")
+scheduler.add_job(id="hola",func=daily_email,trigger="cron",hour=14,minute=31)
 scheduler.start()

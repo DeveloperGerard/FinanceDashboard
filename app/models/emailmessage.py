@@ -4,16 +4,15 @@ class Email_message(db.Model):
     """
     ⚠️El `usuario` no interectua con este modelo.⚠️\n
     Objeto que representa los mensajes que se envian diariamente por `email`.\n
-    Contiene las columnas titulo,descripcion.
+    Contiene las columnas template_name que son los mensajes que se envian.
     
     """
 
     __tablename__   = "email_messages"
 
 
-    id          = db.Column(db.Integer,primary_key=True)
-    title       = db.Column(db.String(50),nullable=False)
-    description = db.Column(db.Text,nullable=False)
+    id            = db.Column(db.Integer,primary_key=True)
+    template_name = db.Column(db.String(50),nullable=False)
     
     @staticmethod
     def get_all():
