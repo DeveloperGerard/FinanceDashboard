@@ -3,16 +3,19 @@ Funciones del usuario
 
 """
 
-from flask                          import Blueprint,render_template,redirect,request,flash
-from flask_login                    import current_user,login_required,logout_user
-from app.forms.importaciones        import FormularioCrearPrestamos,FormularioCrearPagoServicio,FormularioCrearPagoPrestamo,FormularioCrearServicio,FormularioCrearCuenta,FormularioCrearIngresoProgamado,FormularioCrearIngreso,FormularioActualizarIngresoProgramado
-from app.controllers.importaciones  import AccountController,IncomeController,UserController,ServiceController,LoanController,LoanPaymentController,ServicePaymentController,ScheduledIncomeController
-from app.models.importaciones       import Income,Account,User,Service,Loan,Scheduled_income
-from ..extra_functions.token import confirm_token,genera_token
+#modulos externos
+from flask                                import Blueprint,render_template,redirect,request,flash
+from flask_login                          import current_user,login_required,logout_user
+#modulos propios
+from app.forms.importaciones              import FormularioCrearPrestamos,FormularioCrearPagoServicio,FormularioCrearPagoPrestamo,FormularioCrearServicio,FormularioCrearCuenta,FormularioCrearIngresoProgamado,FormularioCrearIngreso,FormularioActualizarIngresoProgramado
+from app.controllers.importaciones        import AccountController,IncomeController,UserController,ServiceController,LoanController,LoanPaymentController,ServicePaymentController,ScheduledIncomeController
+from app.models.importaciones             import Income,Account,User,Service,Loan,Scheduled_income
+from ..extra_functions.token              import confirm_token,genera_token
 from ..extra_functions.notification_funct import send_gmail_confirmation
-from ..extra_functions.email_decorator import email_validation
-user_functions = Blueprint('user_functions',__name__)
+from ..extra_functions.email_decorator    import email_validation
 
+#blueprint
+user_functions = Blueprint('user_functions',__name__)
 
 @user_functions.route("/crearcuenta",methods=["GET","POST"])
 @login_required
@@ -25,14 +28,12 @@ def crear_cuenta():
     if request.method == "POST":
         form = FormularioCrearCuenta()
         if form.validate_on_submit():
+
             #despues de validar creamos el objeto cuenta para bd
             nombre  = form.nombre.data
             tarjeta = form.tarjeta.data
-            user_id = current_user.id
-            AccountController().create_account(nombre,tarjeta,user_id)
+            AccountController().create_account(nombre,tarjeta,current_user.id)
             return redirect("/index")
-
-
 
 @user_functions.route("/crearingreso",methods=["GET","POST"])
 @login_required
@@ -45,17 +46,17 @@ def crear_ingreso():
     if request.method == "POST":
         form = FormularioCrearIngreso()
         if form.validate_on_submit():
+
             #despues de validar creamos el objeto ingreso para bd
             nombre          = form.nombre.data
             fecha           = form.fecha_pago.data
-            user_id         = current_user.id
             descripcion     = form.descripcion.data
             categoria       = form.categoria.data
             monto           = form.monto.data
-            IncomeController().create_income(nombre,fecha,monto,user_id,descripcion,categoria)
+            IncomeController().create_income(nombre,fecha,monto,current_user.id,descripcion,categoria)
 
             #actualizamos el saldo de la cuenta del usuario
-            usuario = User().get_by_id(current_user.id)
+            usuario         = User().get_by_id(current_user.id)
             usuario.balance = usuario.balance + monto
             UserController().update_user(usuario)
             return redirect("/index")
@@ -66,21 +67,22 @@ def crear_ingreso():
 def actualizar_ingreso_programado():
     if request.method =="GET":
         form = FormularioActualizarIngresoProgramado()
-        scheduled_incomes = Scheduled_income().get_all_by_userid(current_user.id)
+        scheduled_incomes = Scheduled_income().get_all_by_userid(current_user.id)#renderizamos con ingresos programados para que el usuario escoga cual actualizar
         return render_template("user_functions/actualizar_schinc.html",form=form,scheduled_incomes=scheduled_incomes)
     
     if request.method == "POST":
         form = FormularioActualizarIngresoProgramado()
         if form.validate_on_submit():
+
             #despues de validar actualizamos la informacion del objeto ingreso_programado
-            ingreso_programado = Scheduled_income().get_by_id(request.form.get('ingreso_programado'))
-            ingreso_programado.next_income = form.proximo_pago.data
+            ingreso_programado                 = Scheduled_income().get_by_id(request.form.get('ingreso_programado'))
+            ingreso_programado.next_income     = form.proximo_pago.data
             ingreso_programado.received_amount = form.monto_recibido.data
-            ingreso_programado.pending_amount = ingreso_programado.amount - form.monto_recibido.data
+            ingreso_programado.pending_amount  = ingreso_programado.amount - form.monto_recibido.data
             ScheduledIncomeController().update_income(ingreso_programado)
 
             #actualizamos el saldo de la cuenta del usuario
-            usuario = User().get_by_id(current_user.id)
+            usuario         = User().get_by_id(current_user.id)
             usuario.balance = usuario.balance + form.monto_recibido.data
             UserController().update_user(usuario)
             return redirect("/index")
@@ -120,6 +122,7 @@ def crear_servicio():
     if request.method == "POST":
         form = FormularioCrearServicio()
         if form.validate_on_submit():
+
             #despues de validar creamos el objeto servicio para bd
             nombre      = form.nombre.data
             descripcion = form.descripcion.data
@@ -145,6 +148,7 @@ def crear_prestamo():
     if request.method == "POST":
         form = FormularioCrearPrestamos()
         if form.validate_on_submit():
+
             #despues de validar creamos el objeto prestamo para bd
             nombre   = form.nombre.data
             titular  = form.titular.data 
