@@ -13,7 +13,7 @@ auth= Blueprint('auth', __name__)
 def index(): 
     if current_user.is_authenticated:
         if current_user.email_conf is False:
-            return render_template("public/confirmation.html")
+            return render_template("extra_functions/confirmation.html")
         else:    
             return redirect('/home')
     else:

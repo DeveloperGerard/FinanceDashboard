@@ -29,7 +29,7 @@
       color: #555555;
       font-size: 16px;
       line-height: 1.5;
-      text-align: justify;
+      text-align: center; /* Cambiado de justify a center */
     }
     .footer {
       text-align: center;
@@ -45,8 +45,12 @@
     <tr>
       <td align="center">
         <div class="email-container">
-          <h1>{{title}}</h1>
-          <a href="http://127.0.0.1:5000/conf_email/{{token}}">Confirmar correo</a>
+          <h1>Gracias por tu registro {{username}}😊</h1>
+          <p>
+            Bienvenido a esta comunidad ahora ya puedes disfrutar de nuestras herramientas
+            si tienes dudas puedes dirigirte al que esta en nuestra pagina tutorial para aprender a usar la web y gestionar tus 
+            finanzas.
+          </p>
           <div class="footer">
             <p>Este es un mensaje automático, por favor no respondas.❌</p>
           </div>

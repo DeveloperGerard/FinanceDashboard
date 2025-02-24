@@ -7,6 +7,7 @@ from app.routes.auth import auth
 from app.routes.user_functions import user_functions
 from app.routes.public import public
 from flask_mail import Mail
+
 app = create_app()#aplicacion
 
 
