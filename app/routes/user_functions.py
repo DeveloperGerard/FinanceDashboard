@@ -98,17 +98,16 @@ def crear_ingreso_programado():
     if request.method == "POST":
         form = FormularioCrearIngresoProgamado()
         if form.validate_on_submit():
+
             #despues de validar creamos el objeto ingreso programado para bd
             nombre          = form.nombre.data
             fecha           = form.fecha_pago.data
-            user_id         = current_user.id
             descripcion     = form.descripcion.data
             categoria       = form.categoria.data
             proximo_pago    = form.proximo_pago.data
             monto           = form.monto.data
-            ScheduledIncomeController().create_income(nombre,fecha,monto,user_id,descripcion,categoria=categoria,next_income=proximo_pago,received_amount=0,pending_amount=monto)
+            ScheduledIncomeController().create_income(nombre,fecha,monto,current_user.id,descripcion,categoria=categoria,next_income=proximo_pago,received_amount=0,pending_amount=monto)
             return redirect("/index")
-
 
 @user_functions.route("/crearservicio",methods=["GET","POST"])
 @login_required
@@ -130,9 +129,8 @@ def crear_servicio():
             vencimiento = form.fecha_vencimiento.data
             categoria   = form.categoria.data
             precio      = form.precio.data
-            user_id     = current_user.id
             cuenta      = int(request.form.get("cuenta"))
-            ServiceController().create_service(nombre,descripcion,fecha,categoria,user_id,precio,precio,cuenta,vencimiento)
+            ServiceController().create_service(nombre,descripcion,fecha,categoria,current_user.id,precio,precio,cuenta,vencimiento)
             return redirect("/index")
 
 

@@ -4,12 +4,12 @@ from wtforms.validators import DataRequired,Length
 
 
 class FormularioCrearServicio(FlaskForm):
-    nombre            = StringField("Nombre",validators=[DataRequired(),Length(0,60)])
-    descripcion       = TextAreaField("Descripcion",validators=[Length(0,200)])
-    fecha             = DateField("Fecha")
+    nombre            = StringField("Nombre",validators=[DataRequired(),Length(0,50)])
+    descripcion       = TextAreaField("Descripcion",validators=[Length(0,160)])
+    fecha             = DateField("Fecha",validators=[DataRequired()])
     categoria         = RadioField("Categoria:",validators=[DataRequired()],choices=['Entretencion','Telefonia','Informatica','Higiene','Alquiler','Academico','Transporte','Medico'])
-    precio            = IntegerField("Precio")
-    fecha_vencimiento = DateField("Vencimiento") 
+    precio            = IntegerField("Precio",validators=[DataRequired()])
+    fecha_vencimiento = DateField("Vencimiento",validators=[DataRequired()]) 
     submit            = SubmitField("Crear servicio")
 
 class FormularioActualizarServicio(FlaskForm):
