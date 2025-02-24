@@ -148,17 +148,16 @@ def crear_prestamo():
         if form.validate_on_submit():
 
             #despues de validar creamos el objeto prestamo para bd
-            nombre   = form.nombre.data
-            titular  = form.titular.data 
-            precio   = form.precio.data
-            cuota    = form.cuota.data
-            user_id  = current_user.id
-            tea      = form.tea.data
-            tea_mora = form.tea_mora.data
-            fecha    = form.fecha.data
+            nombre      = form.nombre.data
+            titular     = form.titular.data 
+            precio      = form.precio.data
+            cuota       = form.cuota.data
+            tea         = form.tea.data
+            tea_mora    = form.tea_mora.data
+            fecha       = form.fecha.data
             vencimiento = form.fecha_vencimiento.data
-            cuenta   = int(request.form.get("cuenta"))
-            LoanController().create_loan(nombre,titular,precio,cuota,user_id,cuenta,precio,fecha,vencimiento,tea,tea_mora)
+            cuenta      = int(request.form.get("cuenta"))
+            LoanController().create_loan(nombre,titular,precio,cuota,current_user.id,cuenta,precio,fecha,vencimiento,tea,tea_mora)
             return redirect("/index")
         else:
             return render_template("user_functions/crear_prestamo.html",form=form)
@@ -176,6 +175,7 @@ def pago_prestamo():
     if request.method =="POST":
         form = FormularioCrearPagoPrestamo()
         if form.validate_on_submit:
+            
             #una vez validamos el formulario, evaluamos que el usuario tenga monto suficiente
             user = User().get_by_id(current_user.id)
             if user.balance < form.monto.data:
