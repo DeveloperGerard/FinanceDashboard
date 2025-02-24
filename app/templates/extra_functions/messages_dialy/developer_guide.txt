@@ -1,0 +1,4 @@
+Estas plantillas son los mensajes que el usuario recibirá todos los días de forma aleatoria.
+Decidí usar varias plantillas en lugar de una sola, ya que no todas siguen la misma estructura.
+
+Si vas a crear un nuevo mensaje, asegúrate de registrarlo en la base de datos. 📌

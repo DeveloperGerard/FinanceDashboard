@@ -15,13 +15,17 @@ def send_gmail_confirmation(token):
         Envia la plantilla para confirmar tu correo con el `token` de seguridad
         a tu correo.
     """
-
     from server import mail
+
+    #Obtenemos datos de el usuario para la plantilla
     user    = User().get_by_id(current_user.id)
-    message = Message(sender="dashboardfinance1@gmail.com",recipients=[current_user.email],subject="Confirmacion de correo")
     username = user.username
-    title = f"Confirma tu correo {username}" 
-    message.html = render_template("extra_functions/mailconfirmation.html",title=title,token=token)
+
+    #Creamos el objeto Message añadimos los atributos y sus valores que necesitamos y despues agregamos la plantilla que se mostrara en el email.
+    message = Message(sender="dashboardfinance1@gmail.com",recipients=[current_user.email],subject="Confirmacion de correo")
+    message.html = render_template("extra_functions/mailconfirmation.html",username=username,token=token)
+
+    #Enviamos al usuario el mensaje
     mail.send(message)
     return "Enviado"
   
@@ -29,17 +33,17 @@ def send_gmail(recipient):
     """
         Envia un mensaje de `bienvenida` a tu correo.
     """
-
     from server import mail
-    message = Message(sender="dashboardfinance1@gmail.com",recipients=[recipient])
+
+    #Obtenemos datos de el usuario para la plantilla
     user    = User().get_by_id(current_user.id)
     username = user.username
-    title = f"Gracias por tu registro {username}😊" 
-    body  = """Bienvenido a esta comunidad ahora ya puedes disfrutar de nuestras herramientas
-            si tienes dudas puedes dirigirte al que esta en nuestra pagina tutorial para aprender a usar la web y gestionar tus 
-            finanzas.
-    """
-    message.html = render_template("extra_functions/mail.html",title=title,body=body)
+
+    #Creamos el objeto Message añadimos los atributos y sus valores que necesitamos y despues agregamos la plantilla que se mostrara en el email.
+    message = Message(sender="dashboardfinance1@gmail.com",recipients=[recipient],subject="Bienvenido/a")
+    message.html = render_template("extra_functions/mail.html",username=username)
+    
+    #Enviamos al usuario el mensaje 
     mail.send(message)
     return "Enviado"
 
@@ -48,6 +52,7 @@ def daily_email():
         Envia un mensaje diariamente todos los dias a las `9:00 de la mañana` a tu correo el mensaje es `aleatorio`.
     """
     from server import app
+
     with app.app_context():
         #Importaciones necesarias
         from server import mail
@@ -63,7 +68,7 @@ def daily_email():
         messages = Email_message().get_all()
 
         #eligiendo el mensaje aleatorio
-        message_elected = (messages[random.randint(0,1)]).template_name
+        message_elected = (messages[random.randint(0,len(messages)-1)]).template_name
 
         #añadiendo html al mensaje
         message.html = render_template(f"extra_functions/messages_dialy/{message_elected}")
@@ -71,5 +76,5 @@ def daily_email():
         #envio
         mail.send(message)
         scheduler.remove_job("hola")
-scheduler.add_job(id="hola",func=daily_email,trigger="cron",hour=15,minute=20)
+scheduler.add_job(id="hola",func=daily_email,trigger="cron",hour=9,minute=0)
 scheduler.start()
