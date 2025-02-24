@@ -16,18 +16,22 @@ def create_app():
     
     #-----Importando los modelos para la migracion
     Migrate(app,db)
-    from app.models import user,account,income,loan,service,service_payment,loan_payment,scheduled_incomes
+    from app.models import user,account,income,loan,service,service_payment,loan_payment,scheduled_incomes,emailmessage
 
     #-----Inicializando el manejo de sesiones(inicio,cierre)
     @login_manager.user_loader
     def load_user(user_id):
         return user.User().get_by_id(int(user_id))
     
-    #-----repasarlo bien
+    #-----Despues de cada solicitud enviamos una respuesta con esos 3 encabezados
     @app.after_request
     def add_header(response):
+        
+        #Las cabezeras/headers llevan informacion sobre el contenido de la peticion o sobre el servidor
         response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, post-check=0, pre-check=0, max-age=0'
         response.headers['Pragma'] = 'no-cache'
         response.headers['Expires'] = '0'
+
+        #retornamos la respuesta con las cabezeras establecidas
         return response
     return app 

@@ -1,15 +1,17 @@
 """
-    Funciones para el token para confirma email
+    Funciones para que un usuario confirme su correo.
 """
 
 from itsdangerous import URLSafeTimedSerializer
 
+#?Informacion de serializacion:https://www.vpnunlimited.com/es/help/cybersecurity/serialization
+
 def genera_token(email):
     """
-        A partir de la cadena gmail genera un `token`.
+        A partir de la cadena gmail y  PASSWORD_SALT genera un `token`.
     """
     from server import app
-    serializer = URLSafeTimedSerializer(app.config["SECRET_KEY"])
+    serializer = URLSafeTimedSerializer(app.config["SECRET_KEY"])#Inicializamos la clase URLSafeTimedSerializer con la SECRET_KEY variable de configuracion
     return serializer.dumps(email,salt=app.config["SECURITY_PASSWORD_SALT"])
 
 def confirm_token(token,expiration=3600):
