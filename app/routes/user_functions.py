@@ -68,23 +68,37 @@ def crear_ingreso():
 def actualizar_ingreso_programado():
     if request.method =="GET":
         form = FormularioActualizarIngresoProgramado()
-        scheduled_incomes = Scheduled_income().get_all_by_userid(current_user.id)#renderizamos con ingresos programados para que el usuario escoga cual actualizar
+        scheduled_incomes = Scheduled_income().get_all_for_payment(current_user.id)#renderizamos con ingresos programados para que el usuario escoga cual actualizar
         return render_template("user_functions/actualizar_schinc.html",form=form,scheduled_incomes=scheduled_incomes)
     
     if request.method == "POST":
         form = FormularioActualizarIngresoProgramado()
         if form.validate_on_submit():
+            usuario         = User().get_by_id(current_user.id)
 
             #despues de validar actualizamos la informacion del objeto ingreso_programado
-            ingreso_programado                 = Scheduled_income().get_by_id(request.form.get('ingreso_programado'))
-            ingreso_programado.next_income     = form.proximo_pago.data
-            ingreso_programado.received_amount = form.monto_recibido.data
-            ingreso_programado.pending_amount  = ingreso_programado.amount - form.monto_recibido.data
-            ScheduledIncomeController().update_income(ingreso_programado)
+            scheduled_income                 = Scheduled_income().get_by_id(request.form.get('ingreso_programado'))
+            scheduled_income.next_income     = form.proximo_pago.data
+            #recibo 50000 y el monto recibiras es 30000
+            if form.monto_recibido.data>scheduled_income.amount:
+                scheduled_income.received_amount = scheduled_income.amount
+                #actualizamos el saldo de la cuenta del usuario
+                usuario.balance = usuario.balance + scheduled_income.pending_amount
+                print("Entro a aqui 1")
+            else:
+                print("Entro a aqui 2")
+                scheduled_income.received_amount = form.monto_recibido.data + scheduled_income.received_amount
+                #actualizamos el saldo de la cuenta del usuario con el monto recibido del form si es que no supera el monto limite establecido
+                usuario.balance = usuario.balance + form.monto_recibido.data
 
-            #actualizamos el saldo de la cuenta del usuario
-            usuario         = User().get_by_id(current_user.id)
-            usuario.balance = usuario.balance + form.monto_recibido.data
+            if form.monto_recibido.data >= scheduled_income.pending_amount:
+                scheduled_income.pending_amount = 0
+            else:
+                scheduled_income.pending_amount  = scheduled_income.amount - form.monto_recibido.data
+
+            ScheduledIncomeController().update_income(scheduled_income)
+            #si el monto recivido es mayor que el pendiente simplemente lo deja en 0 y le suma lo que faltava al usuario
+
             UserController().update_user(usuario)
             return redirect("/index")
 

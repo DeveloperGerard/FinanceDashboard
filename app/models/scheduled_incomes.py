@@ -28,7 +28,7 @@ class Scheduled_income(db.Model):
 
     #Funciones para obtener datos del modelo ingreso
     @staticmethod
-    def get_all_by_userid(id:int):
+    def get_all_for_payment(id:int):
         """
         Retorna todos los objetos del modelo Income en una lista, relacionados con el `usuario activo actualmente `\n
         :Ejemplo:
@@ -43,7 +43,7 @@ class Scheduled_income(db.Model):
         all_incomes = db.session.execute(db.select(Scheduled_income)).scalars()
         all_incomes_list =[]
         for income in all_incomes:
-            if income.user_id ==id:
+            if income.user_id ==id and income.pending_amount!=0:
                 all_incomes_list.append(income)
         return all_incomes_list
     
