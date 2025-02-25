@@ -6,6 +6,7 @@ Funciones del usuario
 #modulos externos
 from flask                                import Blueprint,render_template,redirect,request,flash
 from flask_login                          import current_user,login_required,logout_user
+from datetime import datetime
 #modulos propios
 from app.forms.importaciones              import FormularioCrearPrestamos,FormularioCrearPagoServicio,FormularioCrearPagoPrestamo,FormularioCrearServicio,FormularioCrearCuenta,FormularioCrearIngresoProgamado,FormularioCrearIngreso,FormularioActualizarIngresoProgramado
 from app.controllers.importaciones        import AccountController,IncomeController,UserController,ServiceController,LoanController,LoanPaymentController,ServicePaymentController,ScheduledIncomeController
@@ -101,7 +102,7 @@ def crear_ingreso_programado():
 
             #despues de validar creamos el objeto ingreso programado para bd
             nombre          = form.nombre.data
-            fecha           = form.fecha_pago.data
+            fecha           = datetime.now()
             descripcion     = form.descripcion.data
             categoria       = form.categoria.data
             proximo_pago    = form.proximo_pago.data
@@ -125,7 +126,7 @@ def crear_servicio():
             #despues de validar creamos el objeto servicio para bd
             nombre      = form.nombre.data
             descripcion = form.descripcion.data
-            fecha       = form.fecha.data
+            fecha       = datetime.now()
             vencimiento = form.fecha_vencimiento.data
             categoria   = form.categoria.data
             precio      = form.precio.data
@@ -153,11 +154,10 @@ def crear_prestamo():
             precio      = form.precio.data
             cuota       = form.cuota.data
             tea         = form.tea.data
-            tea_mora    = form.tea_mora.data
-            fecha       = form.fecha.data
+            fecha       = datetime.now()
             vencimiento = form.fecha_vencimiento.data
             cuenta      = int(request.form.get("cuenta"))
-            LoanController().create_loan(nombre,titular,precio,cuota,current_user.id,cuenta,precio,fecha,vencimiento,tea,tea_mora)
+            LoanController().create_loan(nombre,titular,precio,cuota,current_user.id,cuenta,precio,fecha,vencimiento,tea)
             return redirect("/index")
         else:
             return render_template("user_functions/crear_prestamo.html",form=form)
