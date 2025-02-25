@@ -16,7 +16,7 @@ class Scheduled_income(db.Model):
     income_name     = db.Column(db.String(50),nullable=False)
     income_date     = db.Column(db.DateTime(),nullable=False)
     description     = db.Column(db.String(150),nullable=False) 
-    category        = db.Column(db.String(100),nullable=False)
+    category        = db.Column(db.String(30),nullable=False)
     next_income     = db.Column(db.DateTime(),nullable=False)
     amount          = db.Column(db.Integer,nullable=False)
     received_amount = db.Column(db.Integer,nullable=False)
@@ -28,7 +28,7 @@ class Scheduled_income(db.Model):
 
     #Funciones para obtener datos del modelo ingreso
     @staticmethod
-    def get_all_by_userid(id:int):
+    def get_all_for_payment(id:int):
         """
         Retorna todos los objetos del modelo Income en una lista, relacionados con el `usuario activo actualmente `\n
         :Ejemplo:
@@ -43,7 +43,7 @@ class Scheduled_income(db.Model):
         all_incomes = db.session.execute(db.select(Scheduled_income)).scalars()
         all_incomes_list =[]
         for income in all_incomes:
-            if income.user_id ==id:
+            if income.user_id ==id and income.pending_amount!=0:
                 all_incomes_list.append(income)
         return all_incomes_list
     

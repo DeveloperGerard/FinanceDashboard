@@ -19,7 +19,6 @@ class Loan(db.Model):
     date            = db.Column(db.Date(),nullable=False)
     quota           = db.Column(db.Integer,nullable=True)
     tea             = db.Column(db.Integer,nullable=True)
-    tea_mora        = db.Column(db.Integer,nullable=True)
     reamining_price = db.Column(db.Integer,nullable=False)
     user_id         = db.Column(db.Integer,db.ForeignKey("users.id",ondelete="CASCADE"))
     account_id      = db.Column(db.Integer,db.ForeignKey("accounts.id",ondelete="CASCADE"))
