@@ -9,9 +9,9 @@ from flask_login                          import current_user,login_required,log
 from datetime import datetime
 #modulos propios
 from app.forms.importaciones              import FormularioCrearPrestamos,FormularioCrearPagoServicio,FormularioCrearPagoPrestamo,FormularioCrearServicio,FormularioCrearCuenta,FormularioCrearIngresoProgamado,FormularioCrearIngreso,FormularioActualizarIngresoProgramado
-from app.forms.importaciones              import FormularioActualizarCuenta,FormularioActualizarIngreso
+from app.forms.importaciones              import FormularioActualizarCuenta,FormularioActualizarIngreso,FormularioActualizarPagoPrestamo,FormularioActualizarPrestamos,FormularioActualizarServicio
 from app.controllers.importaciones        import AccountController,IncomeController,UserController,ServiceController,LoanController,LoanPaymentController,ServicePaymentController,ScheduledIncomeController
-from app.models.importaciones             import Income,Account,User,Service,Loan,Scheduled_income
+from app.models.importaciones             import Income,Account,User,Service,Loan,Scheduled_income,Loan_payment
 from ..extra_functions.token              import confirm_token,genera_token
 from ..extra_functions.notification_funct import send_gmail_confirmation
 from ..extra_functions.email_decorator    import email_validation
@@ -347,4 +347,67 @@ def actualizar_ingreso():
             income.amount      = monto
             income.category    = categoria
             IncomeController().update_income(income)
+            return redirect("/")
+        
+@user_functions.route("/actualizar_pago_prestamo",methods=["GET","POST"])
+@login_required
+@email_validation
+def actualizar_pago_prestamo():
+    if request.method == "GET":
+        form = FormularioActualizarPagoPrestamo()
+        loan_payments = Loan_payment().get_all_by_userid(current_user.id)
+        return render_template("actualizar_pago_prestamo.html",form=form,loan_payments=loan_payments)
+    if request.method == "POST":
+        pass
+
+@user_functions.route("/actualizar_prestamo",methods=["GET","POST"])
+@login_required
+@email_validation
+def actualizar_prestamo():
+    if request.method == "GET":
+        form  = FormularioActualizarPrestamos()
+        loans = Loan().get_all_by_userid(current_user.id) 
+        return render_template("user_functions/actualizar/actualizar_prestamo.html",form=form,loans=loans)
+    if request.method == "POST":
+        form  = FormularioActualizarPrestamos()
+        if form.validate_on_submit():
+            nombre      = form.nombre.data
+            titular     = form.titular.data 
+            precio      = form.precio.data
+            cuota       = form.cuota.data
+            tea         = form.tea.data
+            vencimiento = form.fecha_vencimiento.data
+            loan = Loan().get_by_id(int(request.form.get("loan")))
+            loan.loan_name   = nombre
+            loan.holder      = titular
+            loan.price       = precio
+            loan.quota       = cuota
+            loan.tea         = tea
+            loan.expiration_date = vencimiento
+            LoanController().update_loan(loan)
+            return redirect("/")
+
+@user_functions.route("/actualizar_servicio",methods=["GET","POST"])
+@login_required
+@email_validation
+def actualizar_servicio():
+    if request.method == "GET":
+        form = FormularioActualizarServicio()
+        services = Service().get_all_by_userid(current_user.id)
+        return render_template("user_functions/actualizar/actualizar_servicio.html",form=form,services=services)
+    if request.method == "POST":
+        form = FormularioActualizarServicio()
+        if form.validate_on_submit():
+            nombre      = form.nombre.data
+            descripcion = form.descripcion.data
+            vencimiento = form.fecha_vencimiento.data
+            categoria   = form.categoria.data
+            precio      = form.precio.data
+            service     = Service().get_by_id(int(request.form.get("service")))
+            service.service_name    = nombre
+            service.description     = descripcion 
+            service.expiration_date = vencimiento
+            service.category        = categoria
+            service.price           = precio
+            ServiceController().update_service(service)
             return redirect("/")

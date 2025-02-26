@@ -17,4 +17,5 @@ class FormularioActualizarServicio(FlaskForm):
     fecha           = DateField("Fecha")
     categoria       = StringField("Categoria:",validators=[DataRequired()])
     precio          = IntegerField("Precio")
+    fecha_vencimiento = DateField("Vencimiento",validators=[DataRequired()]) 
     submit          = SubmitField("Actualizar servicio")

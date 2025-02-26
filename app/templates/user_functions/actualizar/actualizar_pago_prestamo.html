@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="" method="POST">
+        {{form.hidden_tag()}}
+        {{form.monto.label()}}
+        {{form.monto()}}
+        {{form.fecha.label()}}
+        {{form.fecha()}}
+        {{form.descripcion.label()}}
+        {{form.descripcion()}}
+        <select name="prestamo" id="">
+            {% for loan_payment in loan_payments %}      
+                <option value="{{loan_payment.id}}">{{loan.loan_name}}</option>     
+            {% endfor %}
+        </select>
+        {% if loans %}
+            {{form.submit()}}
+        {% else %}
+            <p>Tus prestamos estan pagados</p>
+        {% endif %}
+        {% for mesg in get_flashed_messages() %}
+            <h2 style="color:red;">{{ mesg }}</h2>
+        {% endfor %}
+    </form>
+</body>
+</html>

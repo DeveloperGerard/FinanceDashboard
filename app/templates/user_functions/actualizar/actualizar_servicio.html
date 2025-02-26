@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="" method="POST">
+        {{form.hidden_tag()}}
+        {{form.nombre.label()}}
+        {{form.nombre()}}
+        {{form.descripcion.label()}}
+        {{form.descripcion()}}
+        {{form.categoria.label()}}
+        {{form.categoria()}}
+        {{form.precio.label()}}
+        {{form.precio()}}
+        {{form.fecha_vencimiento.label()}}
+        {{form.fecha_vencimiento()}}
+        <select name="service">
+            {% for service in services %}
+                <option value="{{service.id}}">{{service.service_name}}</option>
+            {% endfor %}
+        </select>
+        {% if services %}
+            {{form.submit()}}
+        {% else %}
+            <p>No ahy servicios que actualizar</p>
+        {% endif %}
+    </form>
+</body>
+</html>

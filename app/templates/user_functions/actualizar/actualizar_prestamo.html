@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="" method="POST">
+        {{form.hidden_tag()}}
+        {{form.nombre.label()}}
+        {{form.nombre()}}
+        {{form.titular.label()}}
+        {{form.titular()}}  
+        {{form.precio.label()}}
+        {{form.precio()}} 
+        {{form.cuota.label()}}
+        {{form.cuota()}}      
+        {{form.tea.label()}}
+        {{form.tea()}}   
+        {{form.fecha_vencimiento.label()}}
+        {{form.fecha_vencimiento()}} 
+        <select name="loan">
+            {% for loan in loans %}
+                <option value="{{loan.id}}">{{loan.loan_name}}</option>
+            {% endfor %}
+        </select>
+        {% if loans %}
+            {{form.submit()}}
+        {% else %}
+            <p>No tienes prestamos que actualizar</p>
+        {% endif %}
+    </form>
+</body>
+</html>
