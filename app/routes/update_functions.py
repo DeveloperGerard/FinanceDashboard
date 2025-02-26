@@ -70,8 +70,8 @@ def actualizar_cuenta():
             nombre  = form.nombre.data
             tarjeta = form.tarjeta.data
             account = Account().get_by_id(int(request.form.get("account")))
-            account.account_name = nombre
-            account.card         = tarjeta
+            account.account_name = nombre  if nombre  !="" else account.account_name
+            account.card         = tarjeta if tarjeta !="" else account.card
             AccountController().update_account(account)
             return redirect("/")
 
@@ -102,17 +102,6 @@ def actualizar_ingreso():
             IncomeController().update_income(income)
             return redirect("/")
         
-@update_functions.route("/actualizar_pago_prestamo",methods=["GET","POST"])
-@login_required
-@email_validation
-def actualizar_pago_prestamo():
-    if request.method == "GET":
-        form = FormularioActualizarPagoPrestamo()
-        loan_payments = Loan_payment().get_all_by_userid(current_user.id)
-        return render_template("actualizar_pago_prestamo.html",form=form,loan_payments=loan_payments)
-    if request.method == "POST":
-        pass
-
 @update_functions.route("/actualizar_prestamo",methods=["GET","POST"])
 @login_required
 @email_validation
