@@ -17,7 +17,7 @@ def index():
         else:    
             return redirect('/home')
     else:
-        return redirect("/iniciar")
+        return redirect("/public/iniciar")
                                        
 @auth.route("/home")
 @login_required

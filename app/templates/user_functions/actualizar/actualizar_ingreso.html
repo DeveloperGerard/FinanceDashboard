@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form action="" method="POST">
+        {{form.hidden_tag()}}
+        {{form.nombre.label()}}
+        {{form.nombre()}}
+        {{form.fecha_pago.label()}}
+        {{form.fecha_pago()}}
+        {{form.monto.label()}}
+        {{form.monto()}}
+        {{form.descripcion.label()}}
+        {{form.descripcion()}}
+        {{form.categoria.label()}}
+        {{form.categoria()}}
+        <select name="income" id="">
+            {% for income in incomes %}
+                <option value="{{income.id}}">{{income.income_name}}</option>
+            {% endfor %}
+        </select>
+        {% if incomes %}
+            {{form.submit()}}
+        {% else %}
+            <p>No ahy ingresos que actualizar</p>
+        {% endif %}
+    </form>
+</body>
+</html>

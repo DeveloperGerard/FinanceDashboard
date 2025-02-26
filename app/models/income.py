@@ -105,4 +105,18 @@ class Income(db.Model):
                 else:
                     all_incomes_list['Inversiones'].append(income)
         return all_incomes_list
-    
+        
+    @staticmethod
+    def get_by_id(id):
+        """
+        Retorna el objeto del modelo `ingreso` que coincida con el `id` proporcionado. \n
+        :Ejemplo:
+        ```
+            return income_object_22
+        ```
+        :Parametros: id
+        :id: = identificador unico de ingreso
+        """
+
+        income = Income.query.filter_by(id=id).first()
+        return income

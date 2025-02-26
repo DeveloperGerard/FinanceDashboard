@@ -11,7 +11,9 @@ class FormularioCrearIngreso(FlaskForm):
     submit          = SubmitField('Crear ingreso')
 
 class FormularioActualizarIngreso(FlaskForm):
-    nombre = StringField("Nombre",validators=[DataRequired(),Length(0,50)])
-    fecha  = DateField("Fecha",validators=[DataRequired()])
-    monto  = IntegerField("Monto") 
-    submit = SubmitField('Actualizar ingreso')
+    nombre          = StringField("Nombre",validators=[DataRequired(),Length(2,50)])
+    fecha_pago      = DateField("Fecha de pago",validators=[DataRequired()])
+    descripcion     = StringField("Descripcion",validators=[DataRequired(),Length(0,150)])
+    categoria       = RadioField("Categoria:",validators=[DataRequired()],choices=['Sueldo','Horas extras','Venta','Inversiones'])
+    monto           = IntegerField("Monto")
+    submit          = SubmitField('Crear ingreso')

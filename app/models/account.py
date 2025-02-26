@@ -41,3 +41,18 @@ class Account(db.Model):
             if account.user_id ==id:
                 all_account_list.append(account)
         return all_account_list
+    @staticmethod
+    def get_by_id(id):
+        """
+        Retorna el objeto del modelo `cuenta` que coincida con el `id` proporcionado. \n
+        :Ejemplo:
+        ```
+            return account_object_22
+        ```
+        :Parametros: id
+        :id: = identificador unico de cuenta
+        """
+
+
+        account =Account.query.filter_by(id=id).first()
+        return account

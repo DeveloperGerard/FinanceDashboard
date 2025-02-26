@@ -16,7 +16,8 @@ app = create_app()#aplicacion
 
 app.register_blueprint(auth) #mostrar informacion de usuario
 app.register_blueprint(user_functions) #funciones del usuario
-app.register_blueprint(public) #informacion/Funciones publicas
+app.register_blueprint(public,url_prefix="/public") #informacion/Funciones publicas
+#! subdomain
 
 mail = Mail(app) #objeto Mail para manejo de mensajes de correo
 
