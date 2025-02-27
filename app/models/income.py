@@ -93,7 +93,7 @@ class Income(db.Model):
 
 
         all_incomes = db.session.execute(db.select(Income)).scalars()
-        all_incomes_list ={'Sueldo':[],'Horas extras':[],"Venta":[],"Inversiones":[]}
+        all_incomes_list ={'Sueldo':[],'Horas extras':[],"Venta":[],"Inversiones":[],"Otro":[]}
         for income in all_incomes:
             if income.user_id ==id:
                 if income.category == 'Sueldo':
@@ -102,6 +102,8 @@ class Income(db.Model):
                     all_incomes_list['Horas extras'].append(income)
                 elif income.category == 'Venta':
                     all_incomes_list['Venta'].append(income)
+                elif income.category == 'Otro':
+                    all_incomes_list['Otro'].append(income)
                 else:
                     all_incomes_list['Inversiones'].append(income)
         return all_incomes_list

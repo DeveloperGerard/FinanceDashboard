@@ -76,5 +76,5 @@ def daily_email():
         #envio
         mail.send(message)
         scheduler.remove_job("hola")
-scheduler.add_job(id="hola",func=daily_email,trigger="cron",hour=9,minute=0)
+scheduler.add_job(id="hola",func=daily_email,trigger="cron",hour=10,minute=12)
 scheduler.start()

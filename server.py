@@ -20,7 +20,7 @@ app.register_blueprint(auth) #mostrar informacion de usuario
 app.register_blueprint(update_functions) #funciones para actualizar datos
 app.register_blueprint(create_functions) #funciones para crear datos
 app.register_blueprint(extra_functions) # funciones adicionales
-app.register_blueprint(public,url_prefix="/public") #informacion/Funciones publicas
+app.register_blueprint(public) #informacion/Funciones publicass
 #! subdomain
 
 mail = Mail(app) #objeto Mail para manejo de mensajes de correo

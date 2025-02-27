@@ -37,7 +37,7 @@ def ver_ingresos():
 @email_validation
 def ver_ingresos_programados():
     incomes = Scheduled_income().get_all_by_category(current_user.id)
-    return render_template("auth/veringresos.html",incomes=incomes)
+    return render_template("auth/veringresosprogramados.html",incomes=incomes)
 
 
 @auth.route("/verservicios")
