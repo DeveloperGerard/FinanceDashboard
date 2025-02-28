@@ -4,23 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="{{url_for('static',filename='js/update/update_loan.js')}}" defer></script>
 </head>
 <body>
     <form action="" method="POST">
         {{form.hidden_tag()}}
         {{form.nombre.label()}}
-        {{form.nombre()}}
+        {{form.nombre(id="name")}}
         {{form.titular.label()}}
-        {{form.titular()}}  
+        {{form.titular(id="holder")}}  
         {{form.precio.label()}}
-        {{form.precio()}} 
+        {{form.precio(id="price")}} 
         {{form.cuota.label()}}
-        {{form.cuota()}}      
+        {{form.cuota(id="quota")}}      
         {{form.tea.label()}}
-        {{form.tea()}}   
+        {{form.tea(id="tea")}}   
         {{form.fecha_vencimiento.label()}}
-        {{form.fecha_vencimiento()}} 
-        <select name="loan">
+        {{form.fecha_vencimiento(id="expiration_date")}} 
+        <select name="loan" id="loan_object">
             {% for loan in loans %}
                 <option value="{{loan.id}}">{{loan.loan_name}}</option>
             {% endfor %}

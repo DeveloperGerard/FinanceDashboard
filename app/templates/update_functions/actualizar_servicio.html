@@ -4,21 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <script src="{{url_for('static',filename='js/update/update_service.js')}}" defer></script>
 </head>
 <body>
     <form action="" method="POST">
         {{form.hidden_tag()}}
         {{form.nombre.label()}}
-        {{form.nombre()}}
+        {{form.nombre(id="name")}}
         {{form.descripcion.label()}}
-        {{form.descripcion()}}
+        {{form.descripcion(id="description")}}
         {{form.categoria.label()}}
-        {{form.categoria()}}
+        {{form.categoria(id="category")}}
         {{form.precio.label()}}
-        {{form.precio()}}
+        {{form.precio(id="price")}}
         {{form.fecha_vencimiento.label()}}
-        {{form.fecha_vencimiento()}}
-        <select name="service">
+        {{form.fecha_vencimiento(id="expiration_date")}}
+        <select name="service" id="service_object">
             {% for service in services %}
                 <option value="{{service.id}}">{{service.service_name}}</option>
             {% endfor %}
