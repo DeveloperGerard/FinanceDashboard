@@ -96,8 +96,8 @@ def actualizar_cuenta():
             nombre  = form.nombre.data
             tarjeta = form.tarjeta.data
             account = Account().get_by_id(int(request.form.get("account")))
-            account.account_name = nombre  if nombre  !="" else account.account_name
-            account.card         = tarjeta if tarjeta !="" else account.card
+            account.account_name =nombre
+            account.card         = tarjeta
             AccountController().update_account(account)
             return redirect("/")
 
@@ -114,18 +114,22 @@ def actualizar_ingreso():
     if request.method == "POST":
         form    = FormularioActualizarIngreso()
         if form.validate_on_submit():
+            user = User().get_by_id(current_user.id)
             nombre          = form.nombre.data
             fecha           = form.fecha_pago.data
             descripcion     = form.descripcion.data
             categoria       = form.categoria.data
             monto           = form.monto.data
             income = Income().get_by_id(int(request.form.get("income")))
+            user.balance -= income.amount  
             income.income_name = nombre
             income.income_date = fecha
             income.description = descripcion
             income.amount      = monto
             income.category    = categoria
             IncomeController().update_income(income)
+            user.balance += income.amount
+            UserController().update_user(user)
             return redirect("/")
         
 @update_functions.route("/actualizar_prestamo",methods=["GET","POST"])

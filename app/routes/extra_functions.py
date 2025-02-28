@@ -124,7 +124,7 @@ def info_ingreso_programado(id):
         "description":income.description,
         "category":income.category,
         "amount":income.amount,
-        "next_income":income.income_date
+        "next_income":income.next_income
     }
     return jsonify(income_data)
 
