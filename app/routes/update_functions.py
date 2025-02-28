@@ -9,24 +9,24 @@ from flask_login                          import current_user,login_required
 
 #modulos propios
 from app.forms.importaciones              import FormularioActualizarIngresoProgramado
-from app.forms.importaciones              import FormularioActualizarCuenta,FormularioActualizarIngreso,FormularioActualizarPagoPrestamo,FormularioActualizarPrestamos,FormularioActualizarServicio
+from app.forms.importaciones              import FormularioActualizarCuenta,FormularioActualizarIngreso,FormularioActualizarPagoPrestamo,FormularioActualizarPrestamos,FormularioActualizarServicio,FormularioRecibirIngresoProgramado
 from app.controllers.importaciones        import AccountController,IncomeController,UserController,ServiceController,LoanController,ScheduledIncomeController
 from app.models.importaciones             import Income,Account,User,Service,Loan,Scheduled_income,Loan_payment
 from ..extra_functions.email_decorator    import email_validation
 #blueprint
 update_functions = Blueprint('update_functions',__name__)
 
-@update_functions.route("/actualizaringresoprogramado",methods=["GET","POST"])
+@update_functions.route("/recibiringresoprogramado",methods=["GET","POST"])
 @login_required
 @email_validation
-def actualizar_ingreso_programado():
+def recibir_ingreso_programado():
     if request.method =="GET":
-        form = FormularioActualizarIngresoProgramado()
+        form = FormularioRecibirIngresoProgramado()
         scheduled_incomes = Scheduled_income().get_all_for_payment(current_user.id)#renderizamos con ingresos programados para que el usuario escoga cual actualizar
-        return render_template("update_functions/actualizar_schinc.html",form=form,scheduled_incomes=scheduled_incomes)
+        return render_template("update_functions/recibir_schinc.html",form=form,scheduled_incomes=scheduled_incomes)
     
     if request.method == "POST":
-        form = FormularioActualizarIngresoProgramado()
+        form = FormularioRecibirIngresoProgramado()
         if form.validate_on_submit():
             usuario         = User().get_by_id(current_user.id)
 
@@ -54,6 +54,32 @@ def actualizar_ingreso_programado():
 
             ScheduledIncomeController().update_income(scheduled_income)
             UserController().update_user(usuario)
+            return redirect("/index")
+
+@update_functions.route("/actualizaringresoprogramado",methods=["GET","POST"])
+@login_required
+@email_validation
+def actualizar_ingreso_programado():
+    if request.method =="GET":
+        form = FormularioActualizarIngresoProgramado()
+        scheduled_incomes = Scheduled_income().get_all_for_payment(current_user.id)#renderizamos con ingresos programados para que el usuario escoga cual actualizar
+        return render_template("update_functions/actualizar_shinc.html",form=form,scheduled_incomes=scheduled_incomes)
+    
+    if request.method == "POST":
+        form = FormularioActualizarIngresoProgramado()
+        if form.validate_on_submit():
+            nombre       = form.nombre.data
+            descripcion  = form.descripcion.data
+            categoria    = form.categoria.data
+            monto        = form.monto.data
+            proximo_pago = form.proximo_pago.data
+            scheduled_income = Scheduled_income().get_by_id(int(request.form.get("ingreso_programado")))
+            scheduled_income.income_name = nombre
+            scheduled_income.next_income = proximo_pago
+            scheduled_income.category = categoria
+            scheduled_income.description = descripcion
+            scheduled_income.amount = monto
+            ScheduledIncomeController().update_income(scheduled_income) 
             return redirect("/index")
 
 @update_functions.route("/actualizar_cuenta",methods=["GET","POST"])

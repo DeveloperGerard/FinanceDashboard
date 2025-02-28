@@ -11,7 +11,7 @@ from flask_login                          import current_user,login_required,log
 from ..extra_functions.token              import confirm_token,genera_token
 from ..extra_functions.notification_funct import send_gmail_confirmation
 from ..extra_functions.email_decorator    import email_validation
-from ..models.importaciones               import User,Account,Income,Loan,Service
+from ..models.importaciones               import User,Account,Income,Loan,Service,Scheduled_income
 from ..controllers.importaciones          import UserController
 extra_functions = Blueprint("extra_functions",__name__)
 
@@ -113,5 +113,20 @@ def info_servicio(id):
         "expiration_date":service.expiration_date
     }
     return jsonify(service_data)
+
+@extra_functions.route("/informacion_ingreso_programado/<int:id>")
+@login_required
+@email_validation
+def info_ingreso_programado(id):
+    income = Scheduled_income().get_by_id(id)
+    income_data = {
+        "name":income.income_name,
+        "description":income.description,
+        "category":income.category,
+        "amount":income.amount,
+        "next_income":income.income_date
+    }
+    return jsonify(income_data)
+
 
 

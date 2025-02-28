@@ -2,10 +2,11 @@ from ..forms.form_loan import FormularioCrearPrestamos,FormularioActualizarPrest
 from ..forms.form_income import FormularioCrearIngreso,FormularioActualizarIngreso
 from ..forms.form_account import FormularioCrearCuenta,FormularioActualizarCuenta
 from ..forms.form_loanpayments import FormularioCrearPagoPrestamo,FormularioActualizarPagoPrestamo
-from ..forms.form_scheduled_incomes import FormularioCrearIngresoProgamado,FormularioActualizarIngresoProgramado
+from ..forms.form_scheduled_incomes import FormularioCrearIngresoProgamado,FormularioActualizarIngresoProgramado,FormularioRecibirIngresoProgramado
 from ..forms.form_service import FormularioCrearServicio,FormularioActualizarServicio
 from ..forms.form_servicepayments import FormularioCrearPagoServicio
 from ..forms.form_user import FormularioRegistro,FormularioInicio
+FormularioRecibirIngresoProgramado
 FormularioActualizarServicio
 FormularioActualizarPrestamos
 FormularioActualizarPagoPrestamo
