@@ -47,7 +47,7 @@ select.addEventListener("change",function(){
         .then(data => {
             console.log('Income Data:', data);
             let name = document.getElementById('name');
-            name.value = data.name
+            name.value = data.income_name
 
             let dateString    = data.income_date
             let date          = new Date(dateString)

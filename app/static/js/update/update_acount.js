@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error fetching user data:', error);
         });
 });
-let select = document.getElementById('account_xd');
+let select = document.getElementById('account_object');
 select.addEventListener("change",function(){
     let account    = document.getElementById('account_object');
     let account_id =account.value;
@@ -24,7 +24,7 @@ select.addEventListener("change",function(){
         .then(data => {
             console.log('Account Data:', data);
             let name = document.getElementById('name');
-            name.value = data.name
+            name.value = data.account_name
             let card = document.getElementById('card');
             card.value = data.card
         })
