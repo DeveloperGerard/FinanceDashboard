@@ -8,6 +8,10 @@ from app.forms.form_servicepayments import FormularioCrearPagoServicio
 from app.forms.form_loan            import FormularioCrearPrestamos
 from app.controllers.importaciones  import AccountController,IncomeController,UserController,ServiceController,LoanController,LoanPaymentController,ServicePaymentController
 from app.models.importaciones       import Income,Account,User,Service,Loan
+from ..extra_functions.token              import confirm_token,genera_token
+from ..extra_functions.notification_funct import send_gmail_confirmation
+from ..extra_functions.email_decorator    import email_validation
+
 from .. import db
 
 user_functions = Blueprint('user_functions',__name__)
@@ -328,5 +332,27 @@ def eliminar_cuenta(account_id):
         flash(f'Error al eliminar cuenta: {str(e)}', 'error')
         return redirect(url_for('user.accounts'))
 
+@user_functions.route("/conf_email/<token>")
+@login_required
+def confirm_email(token):
+    if current_user.email_conf:
+        return redirect("/index")
+    email = confirm_token(token)
+    user = User().get_by_id(current_user.id)
+    if user.email == email:
+        user.email_conf= True
+        UserController().update_user(user)
+        flash("Cuenta confirmada")
+        return redirect("/index")
+    else:
+        flash("Token invalido")
+        #aqui añadir que muestre token vencido
+        return "xd"
 
-
+@user_functions.route("/reenviartoken")
+@login_required
+def reenviar_token():
+    user  = User().get_by_id(current_user.id)
+    token = genera_token(user.email)
+    send_gmail_confirmation(token)
+    return redirect("https://mail.google.com/")

@@ -3,6 +3,9 @@ from flask_login import login_user
 from ..forms.form_user import FormularioInicio,FormularioRegistro
 from ..controllers.user_controller import UserController
 from ..models.user import User
+from ..extra_functions.notification_funct import send_gmail,send_gmail_confirmation
+from ..extra_functions.token import genera_token
+from ..extra_functions.public_decorator import no_enter
 
 public= Blueprint('public', __name__) 
 
@@ -12,6 +15,7 @@ puede acceder aunque no este registrada
 
 """
 @public.route('/registro',methods=["GET","POST"])
+@no_enter
 def registro():
     registro =   FormularioRegistro()
 
@@ -22,7 +26,7 @@ def registro():
         registro = FormularioRegistro()
         if registro.validate_on_submit():
             email          = registro.email.data
-            name           = registro.nombre.data
+            name           = registro.username.data
             usuario_email  = User().get_by_email(email)
             usuario_nombre = User().get_by_name(name)
 
@@ -35,37 +39,39 @@ def registro():
                 flash(f"Ese nombre ya esta registrado usa otro","error")
                 return redirect("/registro")
             else:
-                #Si no hay duplicados se crea usuario y se abre sesion
-                nombre = registro.nombre.data
+                #Si no ahy duplicados se crea usuario y se abre sesion
+                nombre = registro.username.data
                 email  = registro.email.data
                 clave  = registro.clave.data
                 UserController().create_user(nombre,email,clave)
                 user = User().get_by_email(email)
                 login_user(user)
+                send_gmail(email)
+                token = genera_token(user.email)
+                send_gmail_confirmation(token)
                 return redirect("/index")
         else:
+            flash(f"La contraseña debe ser igual")
             return redirect("/registro")
         
 @public.route('/iniciar',methods=["GET","POST"])
+@no_enter
 def inicio_sesion():
-    if request.method == "GET":
+    if request.method =="GET":
         login = FormularioInicio()
-        return render_template("login.html", login=login)
-    
-    elif request.method == "POST":
+        return render_template("login.html",login=login)
+    elif request.method=="POST":
         login_e = FormularioInicio()
+        email = login_e.email.data
         if login_e.validate_on_submit():
-            email = login_e.email.data
-            user = User().get_by_email(email)
-            
+            user  = User().get_by_email(email)
             if user is None:
-                flash("Ese usuario no esta registrado", "error")
+                flash(f"Ese usuario no esta registrado","error")
                 return redirect("/iniciar")
-                
-            if user.check_password(login_e.clave.data):
-                login_user(user)
-                return redirect("/home")
             else:
-                flash("Contraseña incorrecta", "error")
-                
-        return render_template("login.html", login=login_e)
+                if user.check_password(login_e.clave.data):
+                    login_user(user)
+                    return redirect("/home") 
+                else:  
+                    flash(f"Contraseña incorrecta","error")
+                    return redirect("/iniciar")
