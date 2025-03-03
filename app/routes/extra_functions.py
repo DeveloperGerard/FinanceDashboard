@@ -28,7 +28,16 @@ def index():
             return redirect('/home')
     else:
         return redirect("/iniciar")
-                                       
+
+@extra_functions.route("/cerrar_sesion")
+@login_required
+@email_validation
+def cerrar():
+    logout_user()
+    return redirect("/")
+
+#-------------------------Funciones para confirmar correo------------------------
+
 @extra_functions.route("/conf_email/<token>")
 @login_required
 def confirm_email(token):
@@ -55,13 +64,8 @@ def reenviar_token():
     return redirect("https://mail.google.com/")
 
 
-@extra_functions.route("/cerrar_sesion")
-@login_required
-@email_validation
-def cerrar():
-    logout_user()
-    return redirect("/")
 
+#----------------Estas funciones permiten el acceso a informacion del usuario para que se carge en los formularios de actualizacion----------
 @extra_functions.route("/informacion_cuenta/<int:id>")
 @login_required
 @email_validation
@@ -131,11 +135,16 @@ def info_ingreso_programado(id):
     return jsonify(income_data)
 
 
+#---------------------CAMBIO DE CLAVE Y EMAIL-----------------------
 
 @extra_functions.route("/solicitud_cambio_clave")
 @login_required
 @email_validation
 def solicitud_cambio_clave():
+    """
+        Enviamos el mensaje de solicitud de cambio de clave al email con el token para verificar que es su correo
+    
+    """
     token = genera_token(current_user.email)
     send_changepassword_request(token)
     return render_template("extra_functions/change_password/solicitud_cambio_clave.html")
@@ -144,6 +153,10 @@ def solicitud_cambio_clave():
 @login_required
 @email_validation
 def cambiar_clave(token):
+    """
+        Recibimos el token verificamos que sea el email correcto y evaluamos el tipo de metodo get(formulario para cambiar contraseña)
+        post(verificamos que la informacion este bien y actualizamos la contraseña del usuario)
+    """
     token = token
     email = confirm_token(token)
     if current_user.email == email:
@@ -166,14 +179,22 @@ def cambiar_clave(token):
 @login_required
 @email_validation
 def solicitud_cambio_email():
+    """
+        Enviamos el mensaje de solicitud de cambio de correo, al email con el token para verificar que es su correo
+    
+    """
     token = genera_token(current_user.email)
-    send_changeemail_request(token)#enviar el mensaje a el gmail
+    send_changeemail_request(token)
     return render_template("extra_functions/change_email/solicitud_cambio_email.html")
 
 @extra_functions.route("/cambio_email/<token>",methods=["GET","POST"])
 @login_required
 @email_validation
 def cambiar_email(token):
+    """
+        Recibimos el token verificamos que sea el email correcto y evaluamos el tipo de metodo get(formulario para cambiar correo)
+        post(verificamos que la informacion este bien y actualizamos el correo del usuario)
+    """
     token = token
     email = confirm_token(token)
     if current_user.email == email:
@@ -193,3 +214,4 @@ def cambiar_email(token):
                 return render_template("extra_functions/confirmation.html")
     else:
         return "Error"
+    

@@ -38,7 +38,7 @@ def send_changepassword_request(token):
 
     #Creamos el objeto Message añadimos los atributos y sus valores que necesitamos y despues agregamos la plantilla que se mostrara en el email.
     message = Message(sender="dashboardfinance1@gmail.com",recipients=[current_user.email],subject="Confirmacion de correo")
-    message.html = render_template("extra_functions/change_password/cambio_contraseña.html",username=username,token=token,form=form)
+    message.html = render_template("extra_functions/change_password/mail_message.html",username=username,token=token,form=form)
 
     #Enviamos al usuario el mensaje
     mail.send(message)
@@ -53,7 +53,7 @@ def send_changeemail_request(token):
 
     #Creamos el objeto Message añadimos los atributos y sus valores que necesitamos y despues agregamos la plantilla que se mostrara en el email.
     message = Message(sender="dashboardfinance1@gmail.com",recipients=[current_user.email],subject="Confirmacion de correo")
-    message.html = render_template("extra_functions/change_email/cambio_correo.html",username=username,token=token,form=form)
+    message.html = render_template("extra_functions/change_email/mail_message.html",username=username,token=token,form=form)
 
     #Enviamos al usuario el mensaje
     mail.send(message)
