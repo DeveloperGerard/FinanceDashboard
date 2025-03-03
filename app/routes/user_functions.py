@@ -24,6 +24,7 @@ puede realizar el usuario como crear prestamos,servicios,etc.
 
 @user_functions.route("/crear_cuenta", methods=["POST"])
 @login_required
+@email_validation
 def crear_cuenta():
     try:
         account_name = request.form['account_name']
@@ -51,6 +52,7 @@ def crear_cuenta():
 
 @user_functions.route("/crearingreso", methods=["POST"])
 @login_required
+@email_validation
 def crear_ingreso():
     try:
         income_name = request.form['income_name']
@@ -77,6 +79,7 @@ def crear_ingreso():
 
 @user_functions.route("/crearservicio", methods=["POST"])
 @login_required
+@email_validation
 def crear_servicio():
     try:
         service_name = request.form['service_name']
@@ -110,6 +113,7 @@ def crear_servicio():
 
 @user_functions.route("/crear_prestamo", methods=["POST"])
 @login_required
+@email_validation
 def crear_prestamo():
     try:
         loan_name = request.form['loan_name']
@@ -136,8 +140,10 @@ def crear_prestamo():
         flash(f'Error al crear préstamo: {str(e)}', 'danger')
         return redirect(url_for('user.loans'))
 
-@login_required
+
 @user_functions.route("/pagoprestamo",methods=["GET","POST"])
+@login_required
+@email_validation
 def pago_prestamo():
     if request.method =="GET":
         form  = FormularioCrearPagoPrestamo()
@@ -180,8 +186,9 @@ def pago_prestamo():
         else:
             return "error"
 
-@login_required
 @user_functions.route("/pagoservicio",methods=["GET","POST"])
+@login_required
+@email_validation
 def pago_servicio():
     if request.method == "GET":
         form     = FormularioCrearPagoServicio()
@@ -225,6 +232,7 @@ def pago_servicio():
         
 @user_functions.route("/eliminar_prestamo/<int:loan_id>", methods=["POST"])
 @login_required
+@email_validation
 def eliminar_prestamo(loan_id):
     try:
         loan = Loan.query.get(loan_id)
@@ -246,6 +254,7 @@ def eliminar_prestamo(loan_id):
 
 @user_functions.route("/cambiar_estado_prestamo/<int:loan_id>", methods=["POST"])
 @login_required
+@email_validation
 def cambiar_estado_prestamo(loan_id):
     try:
         loan = Loan.query.get(loan_id)
@@ -267,6 +276,7 @@ def cambiar_estado_prestamo(loan_id):
     
 @user_functions.route("/eliminar_servicio/<int:service_id>", methods=["POST"])
 @login_required
+@email_validation
 def eliminar_servicio(service_id):
     try:
         service = Service.query.get(service_id)
@@ -290,6 +300,7 @@ def eliminar_servicio(service_id):
     
 @user_functions.route("/eliminar_ingreso/<int:income_id>", methods=["POST"])
 @login_required
+@email_validation
 def eliminar_ingreso(income_id):
     try:
         income = Income.query.get(income_id)
@@ -312,6 +323,7 @@ def eliminar_ingreso(income_id):
 
 @user_functions.route("/eliminar_cuenta/<int:account_id>", methods=["POST"])
 @login_required
+@email_validation
 def eliminar_cuenta(account_id):
     try:
         account = Account.query.get(account_id)

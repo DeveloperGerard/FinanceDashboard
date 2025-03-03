@@ -10,7 +10,8 @@ class User(UserMixin, db.Model):
     username       = db.Column(db.String(64), unique=True, nullable=False) 
     email          = db.Column(db.String(120), unique=True, nullable=False) 
     password_hash  = db.Column(db.String(255)) 
-    balance = db.Column(db.Float, default=0) 
+    balance        = db.Column(db.Float, default=0) 
+    email_conf     = db.Column(db.Boolean(),default=False)
     
     #relaciones
     incomes        = db.relationship("Income",back_populates="user")

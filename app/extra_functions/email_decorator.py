@@ -9,7 +9,7 @@ def email_validation(func):
     """
     def wrap(*args,**kwargs):
         if current_user.email_conf is False:
-            return render_template("public/confirmation.html")
+            return render_template("extra_functions/confirmation.html")
         return func(*args,**kwargs)
     wrap.__name__ = func.__name__
     return wrap
