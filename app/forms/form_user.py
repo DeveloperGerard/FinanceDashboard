@@ -17,7 +17,9 @@ class FormularioInicio(FlaskForm):
 class FormularioCambiarContraseña(FlaskForm):
     clave     = PasswordField('clave',validators=[DataRequired(),Length(min=8,max=128),EqualTo('confirmar',message="Las claves deben ser iguales")])
     confirmar = PasswordField('Confirmar clave',validators=[DataRequired()])
-    submit    = SubmitField('Registrarse')
+    submit    = SubmitField('Cambiar contraseña')
 
 class FormularioCambiarGmail(FlaskForm):
-    pass
+    email     = EmailField('Email',validators=[DataRequired(),Email(),Length(min=3,max=320),EqualTo('confirmar',message="Los correos deben ser iguales")])
+    confirmar = EmailField('Repetir email',validators=[DataRequired(),Email(),Length(min=3,max=320)])
+    submit    = SubmitField('Cambiar correo')

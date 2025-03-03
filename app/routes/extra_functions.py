@@ -10,11 +10,11 @@ from werkzeug.security                    import generate_password_hash
 
 #modulos propios
 from ..extra_functions.token              import confirm_token,genera_token
-from ..extra_functions.notification_funct import send_gmail_confirmation,send_changepassword_request
+from ..extra_functions.notification_funct import send_gmail_confirmation,send_changepassword_request,send_changeemail_request
 from ..extra_functions.email_decorator    import email_validation
 from ..models.importaciones               import User,Account,Income,Loan,Service,Scheduled_income
 from ..controllers.importaciones          import UserController
-from app.forms.importaciones              import FormularioCambiarContraseña
+from app.forms.importaciones              import FormularioCambiarContraseña,FormularioCambiarGmail
 extra_functions = Blueprint("extra_functions",__name__)
 
 
@@ -158,5 +158,38 @@ def cambiar_clave(token):
                 user.password_hash = generate_password_hash(nueva_contraseña)
                 UserController().update_user(user)
                 return "xd"
+    else:
+        return "Error"
+    
+
+@extra_functions.route("/solicitud_cambio_email")
+@login_required
+@email_validation
+def solicitud_cambio_email():
+    token = genera_token(current_user.email)
+    send_changeemail_request(token)#enviar el mensaje a el gmail
+    return render_template("extra_functions/change_email/solicitud_cambio_email.html")
+
+@extra_functions.route("/cambio_email/<token>",methods=["GET","POST"])
+@login_required
+@email_validation
+def cambiar_email(token):
+    token = token
+    email = confirm_token(token)
+    if current_user.email == email:
+        form = FormularioCambiarGmail()
+        if request.method == "GET":
+            return render_template("extra_functions/change_email/cambio_email.html",form=form)
+        if request.method == "POST":
+            form = FormularioCambiarGmail()
+            if form.validate_on_submit():
+                user = User().get_by_id(current_user.id)
+                nuevo_email = form.email.data
+                user.email  = nuevo_email
+                user.email_conf = 0
+                new_email_tk = genera_token(nuevo_email)
+                send_gmail_confirmation(new_email_tk)
+                UserController().update_user(user)
+                return render_template("extra_functions/confirmation.html")
     else:
         return "Error"
