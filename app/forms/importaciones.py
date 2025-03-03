@@ -5,8 +5,9 @@ from ..forms.form_loanpayments import FormularioCrearPagoPrestamo,FormularioActu
 from ..forms.form_scheduled_incomes import FormularioCrearIngresoProgamado,FormularioActualizarIngresoProgramado,FormularioRecibirIngresoProgramado
 from ..forms.form_service import FormularioCrearServicio,FormularioActualizarServicio
 from ..forms.form_servicepayments import FormularioCrearPagoServicio
-from ..forms.form_user import FormularioRegistro,FormularioInicio
+from ..forms.form_user import FormularioRegistro,FormularioInicio,FormularioCambiarContraseña
 FormularioRecibirIngresoProgramado
+FormularioCambiarContraseña
 FormularioActualizarServicio
 FormularioActualizarPrestamos
 FormularioActualizarPagoPrestamo

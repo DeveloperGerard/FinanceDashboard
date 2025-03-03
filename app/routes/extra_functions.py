@@ -4,15 +4,17 @@
 
 
 #modulos externos
-from flask                                import Blueprint,redirect,flash,render_template,jsonify
+from flask                                import Blueprint,redirect,flash,render_template,jsonify,request
 from flask_login                          import current_user,login_required,logout_user
+from werkzeug.security                    import generate_password_hash
 
 #modulos propios
 from ..extra_functions.token              import confirm_token,genera_token
-from ..extra_functions.notification_funct import send_gmail_confirmation
+from ..extra_functions.notification_funct import send_gmail_confirmation,send_changepassword_request
 from ..extra_functions.email_decorator    import email_validation
 from ..models.importaciones               import User,Account,Income,Loan,Service,Scheduled_income
 from ..controllers.importaciones          import UserController
+from app.forms.importaciones              import FormularioCambiarContraseña
 extra_functions = Blueprint("extra_functions",__name__)
 
 
@@ -130,3 +132,31 @@ def info_ingreso_programado(id):
 
 
 
+@extra_functions.route("/solicitud_cambio_clave")
+@login_required
+@email_validation
+def solicitud_cambio_clave():
+    token = genera_token(current_user.email)
+    send_changepassword_request(token)
+    return render_template("extra_functions/change_password/solicitud_cambio_clave.html")
+
+@extra_functions.route("/cambio_clave/<token>",methods=["GET","POST"])
+@login_required
+@email_validation
+def cambiar_clave(token):
+    token = token
+    email = confirm_token(token)
+    if current_user.email == email:
+        form = FormularioCambiarContraseña()
+        if request.method == "GET":
+            return render_template("extra_functions/change_password/cambio_pass.html",form=form)
+        if request.method == "POST":
+            form = FormularioCambiarContraseña()
+            if form.validate_on_submit():
+                user = User().get_by_id(current_user.id)
+                nueva_contraseña = form.clave.data
+                user.password_hash = generate_password_hash(nueva_contraseña)
+                UserController().update_user(user)
+                return "xd"
+    else:
+        return "Error"

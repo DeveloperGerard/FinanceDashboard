@@ -14,3 +14,10 @@ class FormularioInicio(FlaskForm):
     clave      = PasswordField('clave',validators=[DataRequired(),Length(min=8,max=128)])
     submit     = SubmitField("Iniciar sesion")
 
+class FormularioCambiarContraseña(FlaskForm):
+    clave     = PasswordField('clave',validators=[DataRequired(),Length(min=8,max=128),EqualTo('confirmar',message="Las claves deben ser iguales")])
+    confirmar = PasswordField('Confirmar clave',validators=[DataRequired()])
+    submit    = SubmitField('Registrarse')
+
+class FormularioCambiarGmail(FlaskForm):
+    pass
