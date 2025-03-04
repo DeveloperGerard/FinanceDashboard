@@ -13,6 +13,7 @@ from app.forms.importaciones              import FormularioCrearPrestamos,Formul
 from app.controllers.importaciones        import AccountController,IncomeController,UserController,ServiceController,LoanController,LoanPaymentController,ServicePaymentController,ScheduledIncomeController
 from app.models.importaciones             import Account,User,Service,Loan
 from ..extra_functions.email_decorator    import email_validation
+from ..extra_functions.calcular_tem       import calcular_tem
 
 create_functions= Blueprint('create_functions', __name__)
 
@@ -165,11 +166,16 @@ def pago_prestamo():
                 else:
                     monto  = form.monto.data
 
-                fecha   = form.fecha.data
+                fecha_pago =form.fecha.data  
+                tea = prestamo.tea
+                if tea >0:
+                    if fecha_pago > prestamo.expiration_date:
+                        monto =monto+calcular_tem(prestamo.tea,prestamo.quota)*monto 
+                        
                 descrip = form.descripcion.data
                 user_id = current_user.id
                 #creamos el objeto prestamo_pagado para bd
-                LoanPaymentController().create_loan_payment(monto,fecha,descrip,prestamo_id,user_id)
+                LoanPaymentController().create_loan_payment(monto,fecha_pago,descrip,prestamo_id,user_id)
 
                 #actualizamos el monto restante para pagar el prestamo
                 prestamo.reamining_price = prestamo.reamining_price -monto
