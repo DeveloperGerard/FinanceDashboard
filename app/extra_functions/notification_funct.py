@@ -29,6 +29,7 @@ def send_gmail_confirmation(token):
     #Enviamos al usuario el mensaje
     mail.send(message)
     return "Enviado"
+
 def send_changepassword_request(token):
     from server import mail
     form = FormularioCambiarContraseña()
