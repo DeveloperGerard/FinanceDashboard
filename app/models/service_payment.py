@@ -65,7 +65,7 @@ class Service_payment(db.Model):
         all_servicepayments = db.session.execute(db.select(Service_payment)).scalars()
         all_servicepayments_list =[]
         for payment in all_servicepayments:
-            if payment.user_id== id and payment.date>start_date and payment.date<end_date:
+            if payment.user_id== id and payment.date>start_date and payment.date<=end_date:
                 all_servicepayments_list.append(payment)
         return all_servicepayments_list
 

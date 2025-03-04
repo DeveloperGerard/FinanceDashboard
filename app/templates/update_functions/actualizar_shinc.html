@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="{{url_for('static',filename='js/update/update_schinc.js')}}" defer></script>
+</head>
+<body>
+    <form action="" method="post">
+        {{form.hidden_tag()}}
+        {{form.nombre.label()}}
+        {{form.nombre(id="name")}}
+        {{form.descripcion.label()}}
+        {{form.descripcion(id="description")}}
+        {{form.categoria.label()}}
+        {{form.categoria(id="category")}}
+        {{form.monto.label()}}
+        {{form.monto(id="amount")}}
+        {{form.proximo_pago.label()}}
+        {{form.proximo_pago(id="next_income")}}
+        <select name="ingreso_programado" id="income_object">
+            {% for scheduled_income in scheduled_incomes %}
+                <option value="{{scheduled_income.id}}">{{scheduled_income.income_name}}</option>
+            {% endfor %}
+        </select>
+        {{form.submit()}}
+    </form>
+</body>
+</html>

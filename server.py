@@ -4,7 +4,9 @@ Archivo despliegue
 
 from app import create_app
 from app.routes.auth import auth
-from app.routes.user_functions import user_functions
+from app.routes.update_functions import update_functions
+from app.routes.create_functions import create_functions
+from app.routes.extra_functions import extra_functions
 from app.routes.public import public
 from flask_mail import Mail
 
@@ -15,8 +17,11 @@ app = create_app()#aplicacion
 #?Informacion acerca de los blueprint:https://juncotic.com/blueprints-en-flask/
 
 app.register_blueprint(auth) #mostrar informacion de usuario
-app.register_blueprint(user_functions) #funciones del usuario
-app.register_blueprint(public) #informacion/Funciones publicas
+app.register_blueprint(update_functions) #funciones para actualizar datos
+app.register_blueprint(create_functions) #funciones para crear datos
+app.register_blueprint(extra_functions) # funciones adicionales
+app.register_blueprint(public) #informacion/Funciones publicass
+#! subdomain
 
 mail = Mail(app) #objeto Mail para manejo de mensajes de correo
 

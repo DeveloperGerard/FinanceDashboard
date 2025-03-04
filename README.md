@@ -2,7 +2,9 @@
 
 ## PREVIO A INSTALACION
 1. Debes tener instalado xampp para el servido web local.
-2. Instalar visual studio code(editor de codigo).
+   https://www.apachefriends.org/es/download.html
+3. Instalar visual studio code(editor de codigo).
+   https://code.visualstudio.com/
 
 ## Instalación 
 1. Dirigirse a visual studio code 

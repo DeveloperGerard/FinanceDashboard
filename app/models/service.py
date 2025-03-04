@@ -13,7 +13,7 @@ class Service(db.Model):
 
     #columnas
     id               = db.Column(db.Integer,primary_key=True)
-    service_name     = db.Column(db.String(50),nullable=False)
+    service_name     = db.Column(db.String(60),nullable=False)
     description      = db.Column(db.String(160),nullable=True)
     date             = db.Column(db.Date(),nullable=False)
     category         = db.Column(db.String(30),nullable=False)

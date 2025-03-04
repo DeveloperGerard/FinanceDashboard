@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="{{url_for('static',filename='js/update/update_acount.js')}}" defer></script>
+</head>
+<body>
+    <form action="" method="POST">
+        {{form.hidden_tag()}}
+        {{form.nombre.label()}}
+        {{form.nombre(id="name")}}
+        {{form.tarjeta.label()}}
+        {{form.tarjeta(id="card")}}
+        <select name="account" id="account_object">
+            {% for account in accounts %}      
+                <option value="{{account.id}}">{{account.account_name}}</option>     
+            {% endfor %}
+        </select>
+        {% if accounts %}
+            {{form.submit()}}
+        {% else %}
+            <p>No ahy cuentas que actualizar</p>
+        {% endif %}
+    </form>
+</body>
+</html>

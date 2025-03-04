@@ -10,7 +10,7 @@
     <form action="" method="POST">
         {{login.hidden_tag()}}
         {{login.email.label(class="form-label")}}
-        {{login.email(class="form-control")}}
+        {{login.email(class="form-control")}}z
         {% for error in login.email.errors %}
             <span class="text-danger">{{ error }}</span>
         {% endfor %}

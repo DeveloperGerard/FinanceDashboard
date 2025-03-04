@@ -15,7 +15,7 @@ class Income(db.Model):
     id             = db.Column(db.Integer,primary_key=True)
     income_name    = db.Column(db.String(50),nullable=False)
     income_date    = db.Column(db.DateTime(),nullable=False)
-    description    = db.Column(db.String(150),nullable=False) 
+    description    = db.Column(db.String(150),nullable=True) 
     category       = db.Column(db.String(100),nullable=False)
     amount         = db.Column(db.Integer,nullable=False)
     user_id        = db.Column(db.Integer,db.ForeignKey("users.id",ondelete="CASCADE"))
@@ -93,7 +93,7 @@ class Income(db.Model):
 
 
         all_incomes = db.session.execute(db.select(Income)).scalars()
-        all_incomes_list ={'Sueldo':[],'Horas extras':[],"Venta":[],"Inversiones":[]}
+        all_incomes_list ={'Sueldo':[],'Horas extras':[],"Venta":[],"Inversiones":[],"Otro":[]}
         for income in all_incomes:
             if income.user_id ==id:
                 if income.category == 'Sueldo':
@@ -102,7 +102,23 @@ class Income(db.Model):
                     all_incomes_list['Horas extras'].append(income)
                 elif income.category == 'Venta':
                     all_incomes_list['Venta'].append(income)
+                elif income.category == 'Otro':
+                    all_incomes_list['Otro'].append(income)
                 else:
                     all_incomes_list['Inversiones'].append(income)
         return all_incomes_list
-    
+        
+    @staticmethod
+    def get_by_id(id):
+        """
+        Retorna el objeto del modelo `ingreso` que coincida con el `id` proporcionado. \n
+        :Ejemplo:
+        ```
+            return income_object_22
+        ```
+        :Parametros: id
+        :id: = identificador unico de ingreso
+        """
+
+        income = Income.query.filter_by(id=id).first()
+        return income
