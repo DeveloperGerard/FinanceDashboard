@@ -10,7 +10,15 @@ class FormularioCrearIngresoProgamado(FlaskForm):
     proximo_pago    = DateField("Proximo pago",validators=[DataRequired()])
     submit          = SubmitField('Crear ingreso')
 
-class FormularioActualizarIngresoProgramado(FlaskForm):
+class FormularioRecibirIngresoProgramado(FlaskForm):
     monto_recibido = IntegerField("Monto recibido",validators=[DataRequired()])
     proximo_pago    = DateField("Proximo pago",validators=[DataRequired()])
     submit          = SubmitField('Actualizar ingreso',validators=[DataRequired()])
+
+class FormularioActualizarIngresoProgramado(FlaskForm):
+    nombre          = StringField("Nombre",validators=[DataRequired(),Length(2,50)])
+    descripcion     = StringField("Descripcion",validators=[DataRequired(),Length(0,150)])
+    categoria       = RadioField("Categoria",validators=[DataRequired()],choices=['Sueldo','Horas extras','Venta','Inversiones'])
+    monto           = IntegerField("Monto que esperas recibir")
+    proximo_pago    = DateField("Proximo pago",validators=[DataRequired()])
+    submit          = SubmitField('Actualizar ingreso')

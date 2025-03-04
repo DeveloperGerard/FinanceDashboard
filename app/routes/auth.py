@@ -2,23 +2,12 @@
 Visualizacion de datos
 """
 
-from flask import Blueprint, render_template,redirect
+from flask import Blueprint, render_template
 from flask_login import login_required ,current_user
 from app.models.importaciones import Income,Service,User,Account,Loan,Loan_payment,Service_payment,Scheduled_income
 from ..extra_functions.email_decorator import email_validation
 auth= Blueprint('auth', __name__) 
 
-@auth.route('/') 
-@auth.route('/index') 
-def index(): 
-    if current_user.is_authenticated:
-        if current_user.email_conf is False:
-            return render_template("extra_functions/confirmation.html")
-        else:    
-            return redirect('/home')
-    else:
-        return redirect("/iniciar")
-                                       
 @auth.route("/home")
 @login_required
 @email_validation
@@ -48,7 +37,7 @@ def ver_ingresos():
 @email_validation
 def ver_ingresos_programados():
     incomes = Scheduled_income().get_all_by_category(current_user.id)
-    return render_template("auth/veringresos.html",incomes=incomes)
+    return render_template("auth/veringresosprogramados.html",incomes=incomes)
 
 
 @auth.route("/verservicios")

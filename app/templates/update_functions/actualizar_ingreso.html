@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="{{url_for('static',filename='js/update/update_income.js')}}" defer></script>
+</head>
+<body>
+    <form action="" method="POST">
+        {{form.hidden_tag()}}
+        {{form.nombre.label()}}
+        {{form.nombre(id="name")}}
+        {{form.fecha_pago.label()}}
+        {{form.fecha_pago(id="payment_date")}}
+        {{form.monto.label()}}
+        {{form.monto(id="amount")}}
+        {{form.descripcion.label()}}
+        {{form.descripcion(id="description")}}
+        {{form.categoria.label()}}
+        {{form.categoria(id="category",name="category")}}
+        <select name="income" id="income_object">
+            {% for income in incomes %}
+                <option value="{{income.id}}">{{income.income_name}}</option>
+            {% endfor %}
+        </select>
+        {% if incomes %}
+            {{form.submit()}}
+        {% else %}
+            <p>No ahy ingresos que actualizar</p>
+        {% endif %}
+    </form>
+</body>
+</html>
