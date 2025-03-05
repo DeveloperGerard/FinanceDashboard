@@ -28,6 +28,12 @@
         {% else %}
             <p>Para crear un servicio necesitas una cuenta</p>
         {% endif %}
+        {% for error in nombre.errors %}
+            {{ error }}
+        {% endfor %}
+        {% for error in precio.errors %}
+            {{error}}
+        {% endfor %}
     </form>
 </body>
 </html>

@@ -110,7 +110,9 @@ def crear_servicio():
             precio      = form.precio.data
             cuenta      = int(request.form.get("cuenta"))
             ServiceController().create_service(nombre,descripcion,fecha,categoria,current_user.id,precio,precio,cuenta,vencimiento)
-            return redirect("/index")
+            return redirect("/")
+        else:
+            return render_template("auth/verservicios.html",form=form)
 
 
 @create_functions.route("/crearprestamo",methods=["GET","POST"])

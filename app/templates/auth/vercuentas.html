@@ -113,7 +113,7 @@
 
     <!-- Account Form -->
     <div id="account-form-container" class="form-container">
-        <form action="/crearcuenta" method="POST">
+        <form action="{{ url_for('create_functions.crear_cuenta') }}" method="POST">
 
             {{form.hidden_tag()}}
             <div class="form-group">
@@ -129,7 +129,7 @@
                 {{form.saldo(id="balance") }}
             </div>
             <div class="form-group">
-                {{form.submit()}}
+                {{ form.submit() }}
             </div>
         </form>
     </div>
@@ -152,12 +152,7 @@
                             <td>{{ account.account_number }}</td>
                             <td>${{ account.balance }}</td>
                             <td>
-                                <!---
-                                <form action="{{ url_for('user_functions.eliminar_cuenta', account_id=account.id) }}" method="POST" onsubmit="return confirmarEliminacion(event, '{{ account.account_name }}')">
-                                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                                    <button type="submit" class="delete-account-btn">Eliminar</button>
-                                </form>
-                            --->
+                            
                             </td>
                         </tr>
                     {% endfor %}
