@@ -11,7 +11,7 @@ class Loan(db.Model):
     quota           = db.Column(db.Integer,nullable=True)
     tea             = db.Column(db.Integer,nullable=True)
     tea_mora        = db.Column(db.Integer,nullable=True)
-    reamining_price = db.Column(db.Integer,nullable=False)
+    reamining_price = db.Column(db.Integer,nullable=True)
     user_id         = db.Column(db.Integer,db.ForeignKey("users.id",ondelete="CASCADE"))
     account_id      = db.Column(db.Integer,db.ForeignKey("accounts.id",ondelete="CASCADE"))
     balance         = db.Column(db.Float, nullable=False)  # Add this attribute

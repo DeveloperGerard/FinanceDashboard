@@ -121,7 +121,9 @@ def crear_prestamo():
         price = float(request.form['price'])
         quota = request.form.get('quota', None)
         tea = float(request.form['tea'])
-        reamining_price = float(request.form['reamining_price'])
+
+        print(f"Received data: service_name={loan_name}, price={price}")
+
 
         new_loan = Loan(
             loan_name=loan_name,
@@ -129,7 +131,7 @@ def crear_prestamo():
             price=price,
             quota=quota,
             tea=tea,
-            reamining_price=reamining_price,
+            reamining_price=price,
             user_id=current_user.id
         )
         db.session.add(new_loan)
@@ -137,52 +139,56 @@ def crear_prestamo():
         flash('Préstamo creado exitosamente', 'success')
         return redirect(url_for('user.loans'))
     except Exception as e:
-        flash(f'Error al crear préstamo: {str(e)}', 'danger')
+        print(f'Error al crear préstamo: {str(e)}', 'danger')
         return redirect(url_for('user.loans'))
 
 
-@user_functions.route("/pagoprestamo",methods=["GET","POST"])
+@user_functions.route("/pagoprestamo", methods=["GET", "POST"])
 @login_required
 @email_validation
 def pago_prestamo():
-    if request.method =="GET":
-        form  = FormularioCrearPagoPrestamo()
-        loans = Loan().get_all_for_payment(current_user.id)#es para la relacion una a muchos entre(prestamos y prestamos pagados)
-        return render_template("user_functions/crear_pago_prestamo.html",form=form,loans=loans)
-    
-    if request.method =="POST":
+    if request.method == "GET":
         form = FormularioCrearPagoPrestamo()
-        if form.validate_on_submit:
-            #una vez validamos el formulario, evaluamos que el usuario tenga monto suficiente
+        loans = Loan().get_all_for_payment(current_user.id)  # Relación 1 a muchos (Préstamos y Pagos)
+        return render_template("user_functions/crear_pago_prestamo.html", form=form, loans=loans)
+
+    if request.method == "POST":
+        form = FormularioCrearPagoPrestamo()
+        if form.validate_on_submit():  
+            # Obtiene el usuario
             user = User().get_by_id(current_user.id)
+            
+            # Valida que tenga saldo suficiente
             if user.balance < form.monto.data:
-                flash("Monto insuficiente","error")
-                return redirect("/pagoprestamo")
-            else:
-                prestamo_id = int(request.form.get("prestamo"))
-                monto       = form.monto.data
-                prestamo = Loan().get_by_id(prestamo_id)
-                
-                #Evaluamos si el usuario pago mas de lo que cuesta 
-                if monto > prestamo.reamining_price:
-                    monto = prestamo.reamining_price
-                else:
-                    monto  = form.monto.data
+                flash("Monto insuficiente", "error")
+                return redirect(url_for("user_functions.pago_prestamo"))
 
-                fecha       = form.fecha.data
-                descrip     = form.descripcion.data
-                #creamos el objeto prestamo_pagado para bd
-                LoanPaymentController().create_loan_payment(monto,fecha,descrip,prestamo_id)
+            # Obtiene el préstamo
+            prestamo_id = int(request.form.get("prestamo"))
+            monto = form.monto.data
+            prestamo = Loan().get_by_id(prestamo_id)
 
-                #actualizamos el monto restante para pagar el prestamo
-                prestamo.reamining_price = prestamo.reamining_price -monto
-                LoanController().update_loan(prestamo)
-                #actualizamos el saldo de la cuenta de usuario
+            # Si el monto ingresado es mayor al saldo restante del préstamo, ajusta el monto
+            if monto > prestamo.reamining_price: 
+                monto = prestamo.reamining_price  # Ajusta al monto máximo disponible
 
-                user = User().get_by_id(current_user.id)
-                user.balance = user.balance -monto
-                UserController().update_user(user)
-                return redirect("/index")
+            fecha = form.fecha.data
+            descrip = form.descripcion.data
+
+            # Crea el pago del préstamo
+            LoanPaymentController().create_loan_payment(monto, fecha, descrip, prestamo_id)
+
+            # Actualiza el saldo restante del préstamo
+            prestamo.reamining_price -= monto
+            LoanController().update_loan(prestamo)
+
+            # Actualiza el saldo del usuario
+            user.balance -= monto
+            UserController().update_user(user)
+
+            flash("Pago de préstamo realizado con éxito", "success")
+            return redirect(url_for("user.index"))  
+
         else:
             return "error"
 
