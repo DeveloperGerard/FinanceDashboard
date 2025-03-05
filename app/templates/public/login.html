@@ -1,31 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Iniciar Sesión</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='public/css/login.css') }}">
+    <script src="{{ url_for('static', filename='public/js/ojo.js') }}" defer></script>
 </head>
 <body>
-    <p>Inicia sesion</p>
-    <form action="" method="POST">
-        {{login.hidden_tag()}}
-        {{login.email.label(class="form-label")}}
-        {{login.email(class="form-control")}}z
-        {% for error in login.email.errors %}
-            <span class="text-danger">{{ error }}</span>
-        {% endfor %}
-        
-        {{login.clave.label(class="form-label")}}
-        {{login.clave(class="form-control")}}
-        {% for error in login.clave.errors %}
-            <span class="text-danger">{{ error }}</span>
-        {% endfor %}
-        {{login.submit()}}
-    </form>
-    <p>No tienes cuenta registrate <a href="/registro">aqui</a></p>
-    {% for mesg in get_flashed_messages() %}
-    <h3 style="color:red;">{{ mesg }}</h3>
-    {% endfor %}
+    <header class="login-header">
+        <img src="{{ url_for('static', filename='public/images/logo.png') }}" alt="Logo" class="logo">
+        <h2>Bienvenido a Finance Dashboard</h2>
+    </header>
+    <div class="login-container">
+        <h1 class="login-title">Iniciar Sesión</h1>
 
+        {% if error %}
+        <div class="error-message">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form action="{{ url_for('public.inicio_sesion') }}" method="POST">
+            {{ login.hidden_tag() }}
+
+            <!-- Campo de correo electrónico -->
+            <div style="position: relative;">
+                <span class="input-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#7A7A7A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                </span>
+                {{ login.email.label(class_="input-label") }}
+                {{ login.email(class_="input-field") }}
+            </div>
+
+            <!-- Campo de contraseña -->
+            <div style="position: relative;">
+                <img src="{{ url_for('static', filename='public/icons/password-icon.svg') }}" class="input-icon" alt="Icono de contraseña">
+                {{ login.clave.label(class_="input-label") }}
+                {{ login.clave(class_="input-field") }}
+                <img src="{{ url_for('static', filename='public/icons/eye-icon.svg') }}" class="eye-icon" alt="Mostrar/Ocultar contraseña">
+            </div>
+
+            <!-- Botón de inicio de sesión -->
+            {{ login.submit(class_="login-button") }}
+        </form>
+
+        <!-- Enlace para registrarse -->
+        <p class="register-link">
+            ¿No tienes cuenta? <a href="/registro">Regístrate aquí</a>
+        </p>
+    </div>
 </body>
 </html>

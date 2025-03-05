@@ -1,27 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Registro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='public/css/register.css') }}">
+    <script src="{{ url_for('static', filename='public/js/ojo.js') }}" defer></script>
 </head>
 <body>
-    <p>Registrarse</p>
-    <form action="" method="POST">
-        {{registro.hidden_tag()}}
-        {{registro.nombre.label()}}
-        {{registro.nombre()}}
-        {{registro.email.label()}}
-        {{registro.email()}}
-        {{registro.clave.label()}}
-        {{registro.clave()}}
-        {{registro.confirmar_clave.label()}}
-        {{registro.confirmar_clave()}}
-        {{registro.submit()}}
-    </form>
-    {% for mesg in get_flashed_messages() %}
-       <h3 style="color:red;">{{ mesg }}</h3>
-    {% endfor %}
-    
+    <header class="register-header">
+        <img src="{{ url_for('static', filename='public/images/logo.png') }}" alt="Logo" class="logo">
+        <h2>Bienvenido a Finance Dashboard</h2>
+    </header>
+    <div class="rectangle-2">
+        <h1 class="paragraph-1-copy-2">Registrarse</h1>
+
+        {% if error %}
+        <div class="error-message">
+            {{ error }}
+        </div>
+        {% endif %}
+        
+        <form method="POST" action="">
+            {{ registro.hidden_tag() }}
+
+            <!-- Campo de nombre -->
+            <div style="position: relative;">
+                {{ registro.nombre.label(class_="correo-electronico") }}
+                {{ registro.nombre(class_="text-input-2") }}
+            </div>
+
+            <!-- Campo de correo electrónico -->
+            <div style="position: relative;">
+                {{ registro.email.label(class_="correo-electronico") }}
+                {{ registro.email(class_="text-input-2") }}
+            </div>
+            
+            <!-- Campo de contraseña -->
+            <div style="position: relative;">
+                {{ registro.clave.label(class_="contrase-a") }}
+                {{ registro.clave(class_="text-input-3") }}
+                <img src="{{ url_for('static', filename='public/icons/eye-icon.svg') }}" class="eye-icon" alt="Mostrar/Ocultar contraseña" tabindex="0">
+            </div>
+
+            <!-- Campo de confirmación de contraseña -->
+            <div style="position: relative;">
+                {{ registro.confirmar_clave.label(class_="contrase-a") }}
+                {{ registro.confirmar_clave(class_="text-input-3") }}
+                <img src="{{ url_for('static', filename='public/icons/eye-icon.svg') }}" class="eye-icon" alt="Mostrar/Ocultar contraseña">
+            </div>
+            
+            <!-- Botón de registro -->
+            {{ registro.submit(class_="button-14") }}
+        </form>
+        
+        <!-- Enlace para ir a login -->
+        <p class="-no-tienes-cuenta-registrate-aqui-">
+            ¿Ya tienes cuenta? <a href="/iniciar">Inicia sesión aquí</a>
+        </p>
+    </div>
 </body>
 </html>
