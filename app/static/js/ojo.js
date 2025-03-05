@@ -1,10 +1,14 @@
-document.querySelectorAll('.eye-icon').forEach(function(eyeIcon) {
-    eyeIcon.addEventListener('click', function () {
-        const passwordField = this.previousElementSibling;  // Encuentra el campo de contraseña
-        if (passwordField.type === 'password') {
-            passwordField.type = 'text'; // Muestra la contraseña
-        } else {
-            passwordField.type = 'password'; // Oculta la contraseña
-        }
-    });
+document.addEventListener("DOMContentLoaded", () => {
+  const togglePassword = document.querySelector(".toggle-password");
+  const passwordInput = document.getElementById("password");
+
+  togglePassword.addEventListener("click", function () {
+      const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+      passwordInput.setAttribute("type", type);
+
+      // Cambiar el icono
+      const eyeIcon = this.querySelector("i");
+      eyeIcon.classList.toggle("bi-eye");
+      eyeIcon.classList.toggle("bi-eye-slash");
+  });
 });

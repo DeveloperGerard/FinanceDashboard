@@ -14,64 +14,51 @@ Aqui van a estar las rutas a las que cualquiera persona
 puede acceder aunque no este registrada
 
 """
-@public.route('/registro',methods=["GET","POST"])
+@public.route('/registro', methods=["GET", "POST"])
 @no_enter
 def registro():
-    registro =   FormularioRegistro()
+    registro = FormularioRegistro()
 
-    if request.method =="GET":
-        return render_template("register.html",registro=registro)  
-    
-    elif request.method =="POST":
-        registro = FormularioRegistro()
+    if request.method == "POST":
         if registro.validate_on_submit():
-            email          = registro.email.data
-            name           = registro.username.data
-            usuario_email  = User().get_by_email(email)
-            usuario_nombre = User().get_by_name(name)
+            email = registro.email.data
+            name = registro.username.data
 
-            #Evitar que se dupliquen email y nombre.
-            #faltan añadir mensajes de respuesta
-            if usuario_email:
-                flash(f"Ese email ya esta registrado","error")
-                return redirect("/registro")
-            elif usuario_nombre:
-                flash(f"Ese nombre ya esta registrado usa otro","error")
-                return redirect("/registro")
+            # Verificar si el email o el nombre ya existen
+            if User().get_by_email(email):
+                flash("Ese email ya está registrado", "error")
+            elif User().get_by_name(name):
+                flash("Ese nombre ya está registrado, usa otro", "error")
             else:
-                #Si no ahy duplicados se crea usuario y se abre sesion
-                nombre = registro.username.data
-                email  = registro.email.data
-                clave  = registro.clave.data
-                UserController().create_user(nombre,email,clave)
+                # Si no hay duplicados, crear usuario y enviar correo
+                UserController().create_user(name, email, registro.clave.data)
                 user = User().get_by_email(email)
                 login_user(user)
                 send_gmail(email)
                 token = genera_token(user.email)
                 send_gmail_confirmation(token)
                 return redirect("/index")
-        else:
-            flash(f"La contraseña debe ser igual")
             return redirect("/registro")
+
+    return render_template("register.html", registro=registro)
+
         
-@public.route('/iniciar',methods=["GET","POST"])
+@public.route('/iniciar', methods=["GET", "POST"])
 @no_enter
 def inicio_sesion():
-    if request.method =="GET":
-        login = FormularioInicio()
-        return render_template("login.html",login=login)
-    elif request.method=="POST":
-        login_e = FormularioInicio()
-        email = login_e.email.data
-        if login_e.validate_on_submit():
-            user  = User().get_by_email(email)
-            if user is None:
-                flash(f"Ese usuario no esta registrado","error")
-                return redirect("/iniciar")
-            else:
-                if user.check_password(login_e.clave.data):
-                    login_user(user)
-                    return redirect("/home") 
-                else:  
-                    flash(f"Contraseña incorrecta","error")
-                    return redirect("/iniciar")
+    login = FormularioInicio()  # Instanciar el formulario correctamente
+
+    if login.validate_on_submit():  # Verifica que el formulario es válido y el CSRF token está correcto
+        email = login.email.data
+        user = User().get_by_email(email)
+
+        if user is None:
+            flash("Ese usuario no está registrado", "error")
+        elif user.check_password(login.clave.data):
+            login_user(user)
+            return redirect("/home")
+        else:
+            flash("Contraseña incorrecta", "error")
+
+    # Si hay errores o es un GET, vuelve a mostrar el formulario con los errores
+    return render_template("login.html", login=login)
