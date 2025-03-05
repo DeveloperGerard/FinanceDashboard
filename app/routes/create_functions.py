@@ -29,12 +29,15 @@ def crear_cuenta():
     if request.method == "POST":
         form = FormularioCrearCuenta()
         if form.validate_on_submit():
-
             #despues de validar creamos el objeto cuenta para bd
             nombre  = form.nombre.data
             tarjeta = form.tarjeta.data
-            AccountController().create_account(nombre,tarjeta,current_user.id)
+            saldo   = form.saldo.data
+            AccountController().create_account(nombre,tarjeta,current_user.id,saldo)
             return redirect("/index")
+        else:
+            return "false"
+    return "xd"
 
 @create_functions.route("/crearingreso",methods=["GET","POST"])
 @login_required

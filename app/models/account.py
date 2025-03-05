@@ -16,6 +16,7 @@ class Account(db.Model):
     account_name  = db.Column(db.String(50),nullable=False)
     card          = db.Column(db.String(50),nullable=False)
     user_id       = db.Column(db.Integer,db.ForeignKey("users.id",ondelete="CASCADE"))
+    balance       = db.Column(db.Float, nullable=False)  # Add this attribute
     #relaciones
     user          = db.relationship("User",back_populates="accounts")
     accounts_loan = db.relationship("Loan",back_populates="account")

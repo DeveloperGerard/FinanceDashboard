@@ -1,10 +1,11 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField,SubmitField
+from wtforms import StringField,SubmitField,IntegerField
 from wtforms.validators import DataRequired,Length
 
 class FormularioCrearCuenta(FlaskForm):
     nombre      = StringField('Nombre',validators=[DataRequired(),Length(2,50)])
     tarjeta     = StringField('Tarjeta',validators=[DataRequired(),Length(2,50)])
+    saldo       = IntegerField('Saldo',validators=[DataRequired()])
     submit      = SubmitField('Crear cuenta')
 class FormularioActualizarCuenta(FlaskForm):
     nombre      = StringField('Nombre',validators=[Length(2,50)])

@@ -4,30 +4,34 @@ Visualizacion de datos
 
 from flask import Blueprint, render_template
 from flask_login import login_required ,current_user
+from app.controllers.resumen import get_financial_summary
 from app.models.importaciones import Income,Service,User,Account,Loan,Loan_payment,Service_payment,Scheduled_income
+from app.forms.importaciones import FormularioCrearCuenta
 from ..extra_functions.email_decorator import email_validation
 auth= Blueprint('auth', __name__) 
 
 @auth.route("/home")
 @login_required
 @email_validation
-def saludo():
+def home():
+    summary = get_financial_summary(current_user.id)  # Obtener el resumen financiero
     user = User().get_by_id(current_user.id)
-    return render_template("auth/prueba.html",user=user)
+    return render_template("auth/index.html",user=user,summary=summary)
 
 @auth.route("/vercuentas")
 @login_required
 @email_validation
-def ver_cuentas():
+def accounts():
+    form = FormularioCrearCuenta()
     accounts = Account().get_all_by_userid(current_user.id)
-    return render_template("auth/vercuentas.html",accounts=accounts)
+    return render_template("auth/vercuentas.html",accounts=accounts,form=form)
 
 
 
 @auth.route("/veringresos")
 @login_required
 @email_validation
-def ver_ingresos():
+def incomes():
     incomes = Income().get_all_by_category(current_user.id)
     return render_template("auth/veringresos.html",incomes=incomes)
 
@@ -43,7 +47,7 @@ def ver_ingresos_programados():
 @auth.route("/verservicios")
 @login_required
 @email_validation
-def ver_servicios():
+def services():
     services = Service().get_all_by_userid(current_user.id)
     service_amount_all = Service().get_full_amount(current_user.id)
     return render_template("auth/verservicios.html",services=services,service_amount_all=service_amount_all)
@@ -51,7 +55,7 @@ def ver_servicios():
 @auth.route("/verprestamos")
 @login_required
 @email_validation
-def ver_prestamos():
+def loans():
     loans = Loan().get_all_by_userid(current_user.id)
     return  render_template("auth/verprestamos.html",loans=loans)
 
