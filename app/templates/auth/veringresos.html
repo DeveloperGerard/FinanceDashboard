@@ -161,8 +161,8 @@
                 {{form.monto(id="amount")}}
             </div>
             <div class="form-group">
-                {{form.monto.label(for="date")}}
-                {{form.monto(id="date")}}
+                {{form.descripcion.label(for="description")}}
+                {{form.descripcion(id="description")}}
             <div>
             <div class="form-group">
                 {{form.categoria.label(for="category")}}
@@ -186,6 +186,8 @@
                         <th>Nombre del Ingreso</th>
                         <th>Monto</th>
                         <th>Fecha</th>
+                        <th>Descripcion</th>
+                        <th>Categoria</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -194,7 +196,9 @@
                         <tr>
                             <td data-label="Nombre del Ingreso">{{ income.income_name }}</td>
                             <td data-label="Monto">${{ income.amount }}</td>
-                            <td data-label="Fecha">{{ income.date }}</td>
+                            <td data-label="Fecha">{{ income.income_date }}</td>
+                            <td data-label="Fecha">{{ income.description }}</td>
+                            <td data-label="Fecha">{{ income.category }}</td>
                             <td data-label="Acciones">
                 
                             </td>
