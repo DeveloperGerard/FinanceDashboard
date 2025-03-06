@@ -6,7 +6,7 @@ from flask import Blueprint, render_template
 from flask_login import login_required ,current_user
 from app.controllers.resumen import get_financial_summary
 from app.models.importaciones import Income,Service,User,Account,Loan,Loan_payment,Service_payment,Scheduled_income
-from app.forms.importaciones import FormularioCrearCuenta,FormularioCrearServicio,FormularioCrearIngreso
+from app.forms.importaciones import FormularioCrearCuenta,FormularioCrearServicio,FormularioCrearIngreso,FormularioCrearPrestamos
 from ..extra_functions.email_decorator import email_validation
 auth= Blueprint('auth', __name__) 
 
@@ -59,8 +59,10 @@ def services():
 @login_required
 @email_validation
 def loans():
+    accounts = Account().get_all_by_userid(current_user.id)
+    form = FormularioCrearPrestamos()
     loans = Loan().get_all_by_userid(current_user.id)
-    return  render_template("auth/verprestamos.html",loans=loans)
+    return  render_template("auth/verprestamos.html",loans=loans,form=form,accounts=accounts)
 
 
 
