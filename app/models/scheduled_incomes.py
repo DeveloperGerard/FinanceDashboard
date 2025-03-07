@@ -93,6 +93,26 @@ class Scheduled_income(db.Model):
         return amount
     
     @staticmethod
+    def get_all_by_userid(id:int):
+        """
+        Retorna todos los objetos del modelo Income en una lista, relacionados con el `usuario activo actualmente `\n
+        :Ejemplo:
+        ```
+            return [income_object_1,income_object_2]
+        ```
+        :Parametros: id
+        :id: = identificador unico de usuario
+        """
+
+
+        all_incomes = db.session.execute(db.select(Scheduled_income)).scalars()
+        all_incomes_list =[]
+        for income in all_incomes:
+            if income.user_id ==id:
+                all_incomes_list.append(income)
+        return all_incomes_list
+    
+    @staticmethod
     def get_all_by_category(id:int):
         """
         Retorna todos los objetos del modelo `Ingresos programados` en un diccionario dividido en categorias, relacionados con el `usuario activo actualmente` 

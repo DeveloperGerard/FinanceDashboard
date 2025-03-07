@@ -41,6 +41,9 @@
                     <li class="nav-item">
                         <a class="nav-link {% if request.endpoint == 'auth.accounts' %}active{% endif %}" href="{{ url_for('auth.accounts') }}">Mis Tarjetas</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'auth.scheduled_incomes' %}active{% endif %}" href="{{ url_for('auth.scheduled_incomes') }}">Ingresos programados</a>
+                    </li>
                 </ul>
     
                 <div class="d-flex align-items-center">

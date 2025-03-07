@@ -77,7 +77,6 @@ def crear_ingreso_programado():
     if request.method == "POST":
         form = FormularioCrearIngresoProgamado()
         if form.validate_on_submit():
-
             #despues de validar creamos el objeto ingreso programado para bd
             nombre          = form.nombre.data
             fecha           = datetime.now()
@@ -87,6 +86,7 @@ def crear_ingreso_programado():
             monto           = form.monto.data
             ScheduledIncomeController().create_income(nombre,fecha,monto,current_user.id,descripcion,categoria=categoria,next_income=proximo_pago,received_amount=0,pending_amount=monto)
             return redirect("/index")
+        
 
 @create_functions.route("/crearservicio",methods=["GET","POST"])
 @login_required

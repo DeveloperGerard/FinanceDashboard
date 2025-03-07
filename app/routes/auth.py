@@ -6,7 +6,7 @@ from flask import Blueprint, render_template
 from flask_login import login_required ,current_user
 from app.controllers.resumen import get_financial_summary
 from app.models.importaciones import Income,Service,User,Account,Loan,Loan_payment,Service_payment,Scheduled_income
-from app.forms.importaciones import FormularioCrearCuenta,FormularioCrearServicio,FormularioCrearIngreso,FormularioCrearPrestamos
+from app.forms.importaciones import FormularioCrearCuenta,FormularioCrearServicio,FormularioCrearIngreso,FormularioCrearPrestamos,FormularioCrearIngresoProgamado
 from ..extra_functions.email_decorator import email_validation
 auth= Blueprint('auth', __name__) 
 
@@ -40,9 +40,10 @@ def incomes():
 @auth.route("/veringresosprogramados")
 @login_required
 @email_validation
-def ver_ingresos_programados():
-    incomes = Scheduled_income().get_all_by_category(current_user.id)
-    return render_template("auth/veringresosprogramados.html",incomes=incomes)
+def scheduled_incomes():
+    form = FormularioCrearIngresoProgamado()
+    incomes = Scheduled_income().get_all_by_userid(current_user.id)
+    return render_template("auth/veringresosprogramados.html",incomes=incomes,form=form)
 
 
 @auth.route("/verservicios")
