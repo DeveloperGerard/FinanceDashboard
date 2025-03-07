@@ -48,13 +48,15 @@ def recibir_ingreso_programado():
             #estable el monto pendiente en 0 si el monto que recibimos es mayor al pendiente
             if form.monto_recibido.data >= scheduled_income.pending_amount:
                 scheduled_income.pending_amount = 0
+                print("Entro aqui 3 ")
             else:
             #establecemos el monto pendiente como la resta del monto final con el monto recibido
-                scheduled_income.pending_amount  = scheduled_income.amount - form.monto_recibido.data
+                print("Entro aqui 4 ")
+                scheduled_income.pending_amount  = scheduled_income.pending_amount - form.monto_recibido.data
 
             ScheduledIncomeController().update_income(scheduled_income)
             UserController().update_user(usuario)
-            return redirect("/index")
+            return redirect("/veringresosprogramados")
 
 @update_functions.route("/actualizaringresoprogramado",methods=["GET","POST"])
 @login_required

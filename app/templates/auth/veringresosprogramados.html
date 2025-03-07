@@ -125,6 +125,7 @@
     .form-group button:hover {
         background-color: #218838;
     }
+    
     @media screen and (max-width: 480px) {
         .add-income-btn {
             width: 100%;
@@ -203,7 +204,12 @@
                             <td data-label="Categoria">{{ income.category }}</td>
                             <td data-label="Monto recibido">{{ income.received_amount }}</td>
                             <td data-label="Monto pendiente">{{ income.pending_amount }}</td>
-                            <td data-label="Acciones">Registrar pago</td>
+                            {% if income.received_amount==income.amount %}
+                            <td data-label="Acciones">Pagos recibidos</td>
+                            {% else %}
+                                <td data-label="Acciones"><a href="{{url_for('update_functions.recibir_ingreso_programado')}}">Registrar pago</a></td>
+                            {% endif %}
+
                         </tr>
                     {% endfor %}
                 </tbody>
