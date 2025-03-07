@@ -57,16 +57,59 @@
 
     <!-- Contenido principal -->
     <main class="container">
-        <div class="summary">
-            <h3>Resumen Financiero</h3>
-            <p><strong>💰 Ingresos Totales:</strong> ${{ summary.total_income }}</p>
-            <p><strong>💸 Gastos en Servicios:</strong> ${{ summary.total_services }}</p>
-            <p><strong>🏦 Deuda en Préstamos:</strong> ${{ summary.total_loans }}</p>
-            <p><strong>💳 Saldo en Tarjetas/Cuentas:</strong> ${{ summary.total_balance }}</p>
-            <hr>
-            <h3><strong>📈 Balance Final:</strong> ${{ summary.final_balance }}</h3>
+        <div class="row justify-content-center">
+            <!-- Tarjeta de Resumen Financiero -->
+            <div class="col-md-6">
+                <div class="card shadow-lg p-4">
+                    <h3 class="text-center">📊 Resumen Financiero</h3>
+                    <hr>
+                    <p><strong>💰 Ingresos Totales:</strong> ${{ summary.total_income }}</p>
+                    <p><strong>💸 Gastos en Servicios:</strong> ${{ summary.total_services }}
+                        <span class="text-danger">({{ (summary.total_services / summary.total_income * 100) | round(2) }}%)</span>
+                    </p>
+                    <p><strong>🏦 Deuda en Préstamos:</strong> ${{ summary.total_loans }}
+                        <span class="text-warning">({{ (summary.total_loans / summary.total_income * 100) | round(2) }}%)</span>
+                    </p>
+                    <p><strong>💳 Saldo en Tarjetas/Cuentas:</strong> ${{ summary.total_balance }}</p>
+                    <hr>
+                    <h3 class="text-center {% if summary.final_balance >= 0 %}text-success{% else %}text-danger{% endif %}">
+                        📈 Balance Final: ${{ summary.final_balance }}
+                    </h3>
+                    
+                    <!-- Barra de progreso -->
+                    <div class="progress mt-3">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: {{ (summary.total_income / (summary.total_income + summary.total_services + summary.total_loans) * 100) | round(2) }}%">Ingresos</div>
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: {{ (summary.total_services / (summary.total_income + summary.total_services + summary.total_loans) * 100) | round(2) }}%">Servicios</div>
+                        <div class="progress-bar bg-warning" role="progressbar" style="width: {{ (summary.total_loans / (summary.total_income + summary.total_services + summary.total_loans) * 100) | round(2) }}%">Préstamos</div>
+                    </div>
+                    
+                </div>
+                
+            </div>
         </div>
         {% block content %}{% endblock %}
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card shadow-lg border-0">
+                    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">📜 Historial de Movimientos</h5>
+                        <span class="badge bg-primary fs-6">Total: {{ movements|length }}</span>
+                    </div>
+                    <div class="card-body" style="max-height: 300px; overflow-y: auto;">
+                        <ul class="list-group list-group-flush">
+                            {% for movement in movements %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span>{{ movement.description }}</span>
+                                <span class="{% if movement.amount >= 0 %}text-success{% else %}text-danger{% endif %}">
+                                    ${{ movement.amount }}
+                                </span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
      <hr>
      
@@ -95,7 +138,7 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ url_for('static', filename='js/ojo.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='js/navbar.js') }}" defer></script>
     <script>
         // Obtener datos desde Flask (inyectados en el template)
         var summary = {{ summary | tojson }};

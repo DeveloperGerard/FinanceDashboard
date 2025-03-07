@@ -33,10 +33,34 @@ def index():
 @login_required
 @email_validation
 def home():
+    incomes = Income.query.filter_by(user_id=current_user.id).all()
+    services = Service.query.filter_by(user_id=current_user.id).all()
+    loans = Loan.query.filter_by(user_id=current_user.id).all()
+
+    # Construir la lista de movimientos
+    movements = []
+
+    for income in incomes:
+        movements.append({
+            "description": f"Ingreso: {income.income_name}",
+            "amount": income.amount
+        })
+
+    for service in services:
+        movements.append({
+            "description": f"Gasto en Servicio: {service.service_name}",
+            "amount": -service.price  # Gasto es negativo
+        })
+
+    for loan in loans:
+        movements.append({
+            "description": f"Préstamo: {loan.loan_name}",
+            "amount": -loan.remaining_price  # Deuda es negativa
+        })
     summary = get_financial_summary(current_user.id)  # Obtener el resumen financiero
     user = User.query.get(current_user.id)  # Obtener el usuario con su ID
     print(current_user.username)  # Imprimir el nombre de usuario en la consola
-    return render_template("index.html", user=user, summary=summary)  # Pasar datos a la plantilla
+    return render_template("index.html", user=user, summary=summary, movements=movements)  # Pasar datos a la plantilla
 
 @user.route("/cerrar_sesion")
 @login_required
