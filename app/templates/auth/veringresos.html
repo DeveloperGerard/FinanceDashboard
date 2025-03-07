@@ -163,7 +163,7 @@
             <div class="form-group">
                 {{form.descripcion.label(for="description")}}
                 {{form.descripcion(id="description")}}
-            <div>
+            </div>
             <div class="form-group">
                 {{form.categoria.label(for="category")}}
                 {{form.categoria(id="category")}}
@@ -177,8 +177,8 @@
             </div>
         </form>
     </div>
-
-    {% if incomes %}
+    <div>
+        {% if incomes %}
         <div class="table-responsive">
             <table class="income-table">
                 <thead>
@@ -197,8 +197,8 @@
                             <td data-label="Nombre del Ingreso">{{ income.income_name }}</td>
                             <td data-label="Monto">${{ income.amount }}</td>
                             <td data-label="Fecha">{{ income.income_date }}</td>
-                            <td data-label="Fecha">{{ income.description }}</td>
-                            <td data-label="Fecha">{{ income.category }}</td>
+                            <td data-label="Descripcion ">{{ income.description }}</td>
+                            <td data-label="Categoria">{{ income.category }}</td>
                             <td data-label="Acciones">
                 
                             </td>
@@ -210,8 +210,9 @@
     {% else %}
         <p>No tienes ingresos registrados.</p>
     {% endif %}
-</div>
 
+    </div>
+</div>
 <script>
     function toggleIncomeForm() {
         var formContainer = document.getElementById('income-form-container');

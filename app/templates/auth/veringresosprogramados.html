@@ -163,7 +163,7 @@
             <div class="form-group">
                 {{form.descripcion.label(for="description")}}
                 {{form.descripcion(id="description")}}
-            <div>
+            </div>
             <div class="form-group">
                 {{form.categoria.label(for="category")}}
                 {{form.categoria(id="category")}}
@@ -198,16 +198,12 @@
                         <tr>
                             <td data-label="Nombre del Ingreso">{{ income.income_name }}</td>
                             <td data-label="Monto">${{ income.amount }}</td>
-                            <td data-label="Fecha">{{ income.next_income }}</td>
-                            <td data-label="Fecha">{{ income.description }}</td>
-                            <td data-label="Fecha">{{ income.category }}</td>
-                            <td data-label="Fecha">{{ income.received_amount }}</td>
-                            <td data-label="Fecha">{{ income.pending_amount }}</td>
-                            <td data-label="Fecha">{{ income.category }}</td>
-                            
-                            <td data-label="Acciones">
-                                <a href="">Registrar pago</a>
-                            </td>
+                            <td data-label="Siguiente ingreso">{{ income.next_income }}</td>
+                            <td data-label="Descripcion">{{ income.description }}</td>
+                            <td data-label="Categoria">{{ income.category }}</td>
+                            <td data-label="Monto recibido">{{ income.received_amount }}</td>
+                            <td data-label="Monto pendiente">{{ income.pending_amount }}</td>
+                            <td data-label="Acciones">Registrar pago</td>
                         </tr>
                     {% endfor %}
                 </tbody>
