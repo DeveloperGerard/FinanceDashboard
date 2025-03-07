@@ -190,7 +190,7 @@ def pago_prestamo():
                 user = User().get_by_id(current_user.id)
                 user.balance = user.balance -monto
                 UserController().update_user(user)
-                return redirect("/index")
+                return redirect("/verprestamos")
         else:
             return "error"
 
@@ -235,6 +235,6 @@ def pago_servicio():
                 user = User().get_by_id(current_user.id)
                 user.balance = user.balance -monto
                 UserController().update_user(user)
-                return redirect("/index")
+                return redirect("/verservicios")
         else:
             return "error"

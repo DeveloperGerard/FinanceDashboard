@@ -217,6 +217,11 @@
                             <td data-label="Categoría">{{ service.category }}</td>
                             <td data-label="Precio">${{ service.price }}</td>
                             <td data-label="Saldo Pendiente">${{ service.reamining_price }}</td>
+                            {% if service.reamining_price == 0 %}
+                                <td data-label="Accion">Pagado</td>
+                            {% else %}
+                                <td data-label="Accion"><a href="{{url_for('create_functions.pago_servicio')}}">Pagar</a></td>
+                            {% endif %}
                         </tr>
                     {% endfor %}
                 </tbody>
