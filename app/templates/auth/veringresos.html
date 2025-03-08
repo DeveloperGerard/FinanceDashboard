@@ -201,6 +201,7 @@
                 {{form.fecha_pago(id="date")}}
             </div>
             <div class="form-group">
+                <label for="">Cuenta asociada</label>
                 <select name="cuenta" class="custom-select">
                     {% for account in accounts %}
                         <option value="{{account.id}}">{{account.account_name}}</option>
@@ -216,9 +217,6 @@
                     </div> 
                 {% endif %}
 
-            </div>
-            <div class="form-group">
-                {{form.submit()}}
             </div>
         </form>
     </div>
