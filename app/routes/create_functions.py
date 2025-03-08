@@ -33,6 +33,11 @@ def crear_cuenta():
             nombre  = form.nombre.data
             tarjeta = form.tarjeta.data
             saldo   = form.saldo.data
+
+            #actualizamos saldo del usuario 
+            user = User().get_by_id(current_user.id)
+            user.balance = user.balance +saldo
+            
             AccountController().create_account(nombre,tarjeta,current_user.id,saldo)
             return redirect("/index")
         else:

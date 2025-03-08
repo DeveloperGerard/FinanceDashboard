@@ -28,22 +28,27 @@ def recibir_ingreso_programado():
     if request.method == "POST":
         form = FormularioRecibirIngresoProgramado()
         if form.validate_on_submit():
-            usuario         = User().get_by_id(current_user.id)
+            usuario         = User().get_by_id(current_user.id)         
 
             #despues de validar actualizamos la informacion del objeto ingreso_programado
             scheduled_income                 = Scheduled_income().get_by_id(request.form.get('ingreso_programado'))
             scheduled_income.next_income     = form.proximo_pago.data
-            #recibo 50000 y el monto recibiras es 30000
+
+            #obtenemos la cuenta para poder actualizar su saldo 
+            cuenta = Account().get_by_id(scheduled_income.account_id)
+
             if form.monto_recibido.data>scheduled_income.amount:
                 scheduled_income.received_amount = scheduled_income.amount
                 #actualizamos el saldo de la cuenta del usuario con el monto pendiente si el monto recibido es mayor al que esperamos
                 usuario.balance = usuario.balance + scheduled_income.pending_amount
+                cuenta.balance  = cuenta.balance  + scheduled_income.pending_amount
                 print("Entro a aqui 1")
             else:
                 print("Entro a aqui 2")
                 scheduled_income.received_amount = form.monto_recibido.data + scheduled_income.received_amount
                 #actualizamos el saldo de la cuenta del usuario con el monto recibido del form si es que no supera el monto limite establecido
                 usuario.balance = usuario.balance + form.monto_recibido.data
+                cuenta.balance  = cuenta.balance  + form.monto_recibido.data
             
             #estable el monto pendiente en 0 si el monto que recibimos es mayor al pendiente
             if form.monto_recibido.data >= scheduled_income.pending_amount:
