@@ -19,9 +19,11 @@ class Income(db.Model):
     category       = db.Column(db.String(100),nullable=False)
     amount         = db.Column(db.Integer,nullable=False)
     user_id        = db.Column(db.Integer,db.ForeignKey("users.id",ondelete="CASCADE"))
+    account_id     = db.Column(db.Integer,db.ForeignKey("accounts.id",ondelete="CASCADE"))
 
     #relaciones
     user          = db.relationship("User",back_populates="incomes")
+    account       = db.relationship("Account",back_populates="accounts_income")
 
     #Funciones para obtener datos del modelo ingreso
     @staticmethod

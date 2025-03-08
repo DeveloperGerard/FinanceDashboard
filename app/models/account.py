@@ -18,9 +18,10 @@ class Account(db.Model):
     user_id       = db.Column(db.Integer,db.ForeignKey("users.id",ondelete="CASCADE"))
     balance       = db.Column(db.Float, nullable=False)  # Add this attribute
     #relaciones
-    user          = db.relationship("User",back_populates="accounts")
-    accounts_loan = db.relationship("Loan",back_populates="account")
-    accounts_serv = db.relationship("Service",back_populates="account")
+    user            = db.relationship("User",back_populates="accounts")
+    accounts_loan   = db.relationship("Loan",back_populates="account")
+    accounts_serv   = db.relationship("Service",back_populates="account")
+    accounts_income = db.relationship("Income",back_populates="account")
 
     #Funciones para obtener datos del model 'pago de servicios'
     @staticmethod 
