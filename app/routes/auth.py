@@ -44,8 +44,8 @@ def incomes():
 def scheduled_incomes():
     form = FormularioCrearIngresoProgamado()
     incomes = Scheduled_income().get_all_by_userid(current_user.id)
-    return render_template("auth/veringresosprogramados.html",incomes=incomes,form=form)
-
+    accounts = Account().get_all_by_userid(current_user.id)
+    return render_template("auth/veringresosprogramados.html",incomes=incomes,form=form,accounts=accounts)
 
 @auth.route("/verservicios")
 @login_required

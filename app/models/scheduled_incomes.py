@@ -22,8 +22,9 @@ class Scheduled_income(db.Model):
     received_amount = db.Column(db.Integer,nullable=False)
     user_id         = db.Column(db.Integer,db.ForeignKey("users.id",ondelete="CASCADE"))
     pending_amount  = db.Column(db.Integer,nullable=False)
-
+    account_id     = db.Column(db.Integer,db.ForeignKey("accounts.id",ondelete="CASCADE"))
     #relaciones
+    account       = db.relationship("Account",back_populates="accounts_schedu")
     user          = db.relationship("User",back_populates="scheduled_incomes")
 
     #Funciones para obtener datos del modelo ingreso

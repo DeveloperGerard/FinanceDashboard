@@ -22,6 +22,7 @@ class Account(db.Model):
     accounts_loan   = db.relationship("Loan",back_populates="account")
     accounts_serv   = db.relationship("Service",back_populates="account")
     accounts_income = db.relationship("Income",back_populates="account")
+    accounts_schedu = db.relationship("Scheduled_income",back_popualtes="account")
 
     #Funciones para obtener datos del model 'pago de servicios'
     @staticmethod 

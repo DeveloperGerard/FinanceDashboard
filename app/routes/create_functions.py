@@ -89,7 +89,8 @@ def crear_ingreso_programado():
             categoria       = form.categoria.data
             proximo_pago    = form.proximo_pago.data
             monto           = form.monto.data
-            ScheduledIncomeController().create_income(nombre,fecha,monto,current_user.id,descripcion,categoria=categoria,next_income=proximo_pago,received_amount=0,pending_amount=monto)
+            account_id      = int(request.form.get("cuenta"))
+            ScheduledIncomeController().create_income(nombre,fecha,monto,current_user.id,descripcion,categoria=categoria,next_income=proximo_pago,received_amount=0,pending_amount=monto,account_id=account_id)
             return redirect("/index")
         
 

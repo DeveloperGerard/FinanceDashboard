@@ -174,6 +174,24 @@
                 {{form.proximo_pago(id="date")}}
             </div>
             <div class="form-group">
+                <label for="">Cuenta asociada</label>
+                <select name="cuenta" class="custom-select">
+                    {% for account in accounts %}
+                        <option value="{{account.id}}">{{account.account_name}}</option>
+                    {% endfor %}
+                </select>
+                {% if accounts %}
+                    <div class="form-group">
+                        {{ form.submit() }}
+                    </div> 
+                {% else %}
+                    <div class="form-group">
+                        <p>No tienes cuentas</p>
+                    </div> 
+                {% endif %}
+
+            </div>
+            <div class="form-group">
                 {{form.submit()}}
             </div>
         </form>
