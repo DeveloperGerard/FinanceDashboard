@@ -57,13 +57,18 @@ def crear_ingreso():
             descripcion     = form.descripcion.data
             categoria       = form.categoria.data
             monto           = form.monto.data
-            IncomeController().create_income(nombre,fecha,monto,current_user.id,descripcion,categoria)
+            account_id      = int(request.form.get("cuenta"))
+            IncomeController().create_income(nombre,fecha,monto,current_user.id,descripcion,categoria,account_id)
 
-            #actualizamos el saldo de la cuenta del usuario
+            #actualizamos el saldo total del usuario
             usuario         = User().get_by_id(current_user.id)
             usuario.balance = usuario.balance + monto
             UserController().update_user(usuario)
-            return redirect("/index")
+            #actualizamos el saldo de la cuenta 
+            account         = Account().get_by_id(account_id)
+            account.balance = account.balance + monto
+            AccountController().update_account(account)
+            return redirect("/veringresos")
 
 
 @create_functions.route("/crearingresoprogramado",methods=["GET","POST"])
