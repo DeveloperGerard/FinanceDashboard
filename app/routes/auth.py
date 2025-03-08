@@ -33,8 +33,9 @@ def accounts():
 @email_validation
 def incomes():
     form = FormularioCrearIngreso()
+    accounts = Account().get_all_by_userid(current_user.id)
     incomes = Income().get_all_by_userid(current_user.id)
-    return render_template("auth/veringresos.html",incomes=incomes,form=form)
+    return render_template("auth/veringresos.html",incomes=incomes,form=form,accounts=accounts)
 
 
 @auth.route("/veringresosprogramados")

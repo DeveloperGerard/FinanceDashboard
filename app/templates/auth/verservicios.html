@@ -125,6 +125,34 @@
     .form-group button:hover {
         background-color: #218838;
     }
+    .custom-select {
+        background-color: white;
+        border: 2px solid #4CAF50; /* Borde verde */
+        border-radius: 8px;
+        padding: 10px;
+        font-size: 16px;
+        color: #333;
+        width: 220px;
+        cursor: pointer;
+        outline: none;
+        transition: all 0.3s ease-in-out;
+    }
+
+    .custom-select:hover {
+        border-color: #008CBA; /* Celeste */
+        box-shadow: 0 0 8px rgba(0, 140, 186, 0.5);
+    }
+
+    .custom-select:focus {
+        border-color: #2E8B57; /* Verde más oscuro */
+        box-shadow: 0 0 10px rgba(46, 139, 87, 0.5);
+    }
+
+    option {
+        background: white;
+        color: #333;
+        padding: 10px;
+    }
     @media screen and (max-width: 480px) {
         .add-service-btn {
             width: 100%;
@@ -174,7 +202,7 @@
                 {{form.precio(id="price")}}
             </div>
             <div class="form-group">
-                <select name="cuenta">
+                <select name="cuenta" class="custom-select">
                     {% for account in accounts %}
                         <option value="{{account.id}}">{{account.account_name}}</option>
                     {% endfor %}
