@@ -1,232 +1,326 @@
 {% extends "base.html" %}
 
 {% block title %}Mis Servicios{% endblock %}
-
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 {% block head %}
 <meta name="csrf-token" content="{{ csrf_token }}">
 <style>
     .services-section {
-        padding: 15px;
-        margin-top: 50px;
+        background-color: #f8f9fa;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
-    .table-responsive {
-        width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-    .service-table {
-        width: 100%;
-        min-width: 800px;
-        border-collapse: separate;
-        border-spacing: 0;
-    }
-    .service-table thead {
-        background-color: #2c3e50;
-        color: white;
-    }
-    .service-table th, .service-table td {
-        padding: 12px 15px;
-        text-align: left;
-        border-bottom: 1px solid #e0e0e0;
-    }
-    @media screen and (max-width: 768px) {
-        .service-table, 
-        .service-table thead, 
-        .service-table tbody, 
-        .service-table th, 
-        .service-table td, 
-        .service-table tr { 
-            display: block; 
-        }
-        .service-table thead tr { 
-            position: absolute;
-            top: -9999px;
-            left: -9999px;
-        }
-        .service-table tr { 
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        .service-table td { 
-            border: none;
-            position: relative;
-            padding-left: 50%;
-            text-align: right;
-        }
-        .service-table td:before { 
-            content: attr(data-label);
-            position: absolute;
-            left: 6px;
-            width: 45%;
-            padding-right: 10px;
-            white-space: nowrap;
-            text-align: left;
-            font-weight: bold;
-        }
-    }
+    
     .add-service-btn {
-        display: inline-block;
-        background-color: #28a745;
+        display: inline-flex;
+        align-items: center;
+        background-color: #0d6efd;
         color: white;
         padding: 10px 20px;
-        border-radius: 5px;
-        text-decoration: none;
-        margin-bottom: 15px;
-        transition: background-color 0.3s ease;
+        border-radius: 50px;
         cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 6px rgba(13, 110, 253, 0.2);
     }
+    
     .add-service-btn:hover {
-        background-color: #218838;
+        background-color: #0b5ed7;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 8px rgba(13, 110, 253, 0.3);
     }
-    .delete-service-btn {
-        background-color: #dc3545;
-        color: white;
-        padding: 5px 10px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-    .delete-service-btn:hover {
-        background-color: #c82333;
-    }
+    
     .form-container {
-        display: none;
-        margin-top: 20px;
+        background-color: white;
+        border-radius: 10px;
         padding: 20px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        background-color: #f9f9f9;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+        border-left: 4px solid #6f42c1;
+        display: none;
     }
+    
     .form-group {
         margin-bottom: 15px;
     }
+    
     .form-group label {
-        display: block;
+        font-weight: 600;
         margin-bottom: 5px;
-        font-weight: bold;
+        color: #495057;
     }
+    
     .form-group input {
         width: 100%;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
+        padding: 10px 15px;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        transition: border-color 0.15s ease-in-out;
     }
+    
+    .form-group input:focus {
+        border-color: #6f42c1;
+        outline: none;
+        box-shadow: 0 0 0 0.25rem rgba(111, 66, 193, 0.25);
+    }
+    
     .form-group button {
-        background-color: #28a745;
+        background-color: #6f42c1;
         color: white;
-        padding: 10px 20px;
         border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+    
+    .form-group button:hover {
+        background-color: #5a32a3;
+    }
+    
+    .service-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+    }
+    
+    .service-table thead {
+        background-color: #343a40;
+        color: white;
+    }
+    
+    .service-table th {
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+    }
+    
+    .service-table td {
+        padding: 15px;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .service-table tbody tr {
+        background-color: white;
+        transition: background-color 0.2s;
+    }
+    
+    .service-table tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .service-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+    
+    .delete-service-btn {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 6px 12px;
         border-radius: 4px;
         cursor: pointer;
-        transition: background-color 0.3s ease;
+        transition: background-color 0.2s;
     }
-    .form-group button:hover {
-        background-color: #218838;
+    
+    .delete-service-btn:hover {
+        background-color: #bb2d3b;
     }
-    @media screen and (max-width: 480px) {
-        .add-service-btn {
+    
+    .category-badge {
+        display: inline-block;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        background-color: #e9ecef;
+        color: #495057;
+    }
+    
+    /* Responsive table */
+    @media (max-width: 991.98px) {
+        .service-table thead {
+            display: none;
+        }
+        
+        .service-table, .service-table tbody, .service-table tr, .service-table td {
+            display: block;
             width: 100%;
-            text-align: center;
         }
-        .service-table td:before {
-            font-size: 0.8em;
+        
+        .service-table tr {
+            margin-bottom: 15px;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            overflow: hidden;
         }
+        
         .service-table td {
-            font-size: 0.9em;
+            display: flex;
+            justify-content: space-between;
+            text-align: right;
+            padding: 12px 15px;
+        }
+        
+        .service-table td::before {
+            content: attr(data-label);
+            font-weight: 600;
+            text-align: left;
         }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="services-section">
-    <h1 class="mb-4">Mis Servicios</h1>
+<body>
+    <div class="container py-5">
+        <div class="services-section">
+            <h1 class="mb-4 text-primary">
+                <i class="fas fa-concierge-bell me-2"></i>
+                Mis Servicios
+            </h1>
 
-    <div class="add-service-btn" onclick="toggleServiceForm()">
-        <i class="fas fa-plus-circle mr-2"></i>Agregar Servicio
-    </div>
+            <div class="add-service-btn" onclick="toggleServiceForm()">
+                <i class="fas fa-plus-circle me-2"></i>Agregar Servicio
+            </div>
 
-    <!-- Service Form -->
-    <div id="service-form-container" class="form-container">
-        <form action="{{ url_for('user_functions.crear_servicio') }}" method="POST">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-            <div class="form-group">
-                <label for="service_name">Nombre del Servicio:</label>
-                <input type="text" id="service_name" name="service_name" required>
+            <!-- Service Form -->
+            <div id="service-form-container" class="form-container">
+                <form action="{{ url_for('user_functions.crear_servicio') }}" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-4 form-group">
+                            <label for="service_name">Nombre del Servicio:</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-tag"></i></span>
+                                <input type="text" id="service_name" name="service_name" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4 form-group">
+                            <label for="description">Descripción:</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-align-left"></i></span>
+                                <input type="text" id="description" name="description" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4 form-group">
+                            <label for="date">Fecha:</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                <input type="date" id="date" name="date" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4 form-group">
+                            <label for="category">Categoría:</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-folder"></i></span>
+                                <input type="text" id="category" name="category" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 col-lg-4 form-group">
+                            <label for="price">Precio:</label>
+                            <div class="input-group">
+                                <span class="input-group-text">$</span>
+                                <input type="number" id="price" name="price" class="form-control" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group mt-3">
+                        <button type="submit" class="btn" style="background-color: #6f42c1; color: white;">
+                            <i class="fas fa-save me-2"></i>Guardar
+                        </button>
+                        <button type="button" class="btn btn-secondary ms-2" onclick="toggleServiceForm()">
+                            <i class="fas fa-times me-2"></i>Cancelar
+                        </button>
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label for="description">Descripción:</label>
-                <input type="text" id="description" name="description" required>
-            </div>
-            <div class="form-group">
-                <label for="date">Fecha:</label>
-                <input type="date" id="date" name="date" required>
-            </div>
-            <div class="form-group">
-                <label for="category">Categoría:</label>
-                <input type="text" id="category" name="category" required>
-            </div>
-            <div class="form-group">
-                <label for="price">Precio:</label>
-                <input type="number" id="price" name="price" required>
-            </div>
-            <div class="form-group">
-                <button type="submit">Guardar</button>
-            </div>
-        </form>
-    </div>
 
-    {% if services %}
-        <div class="table-responsive">
-            <table class="service-table">
-                <thead>
-                    <tr>
-                        <th>Nombre del Servicio</th>
-                        <th>Descripción</th>
-                        <th>Fecha</th>
-                        <th>Categoría</th>
-                        <th>Precio</th>
-                        <th>Saldo Pendiente</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for service in services %}
-                        <tr>
-                            <td data-label="Nombre del Servicio">{{ service.service_name }}</td>
-                            <td data-label="Descripción">{{ service.description }}</td>
-                            <td data-label="Fecha">{{ service.date }}</td>
-                            <td data-label="Categoría">{{ service.category }}</td>
-                            <td data-label="Precio">${{ service.price }}</td>
-                            <td data-label="Saldo Pendiente">${{ service.reamining_price }}</td>
-                            <td data-label="Acciones">
-                                <form action="{{ url_for('user_functions.eliminar_servicio', service_id=service.id) }}" method="POST" onsubmit="return confirmarEliminacion(event, '{{ service.service_name }}')">
-                                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                                    <button type="submit" class="delete-service-btn">Eliminar</button>
-                                </form>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            {% if services %}
+                <div class="table-responsive">
+                    <table class="service-table">
+                        <thead>
+                            <tr>
+                                <th>Nombre del Servicio</th>
+                                <th>Descripción</th>
+                                <th>Fecha</th>
+                                <th>Categoría</th>
+                                <th>Precio</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for service in services %}
+                                <tr>
+                                    <td data-label="Nombre del Servicio">
+                                        <i class="fas fa-file-invoice me-2 text-primary"></i>
+                                        {{ service.service_name }}
+                                    </td>
+                                    <td data-label="Descripción">
+                                        <span class="text-muted">{{ service.description }}</span>
+                                    </td>
+                                    <td data-label="Fecha">
+                                        <i class="far fa-calendar-alt me-2 text-secondary"></i>
+                                        {{ service.date }}
+                                    </td>
+                                    <td data-label="Categoría">
+                                        <span class="category-badge" style="background-color: #e2e3e5;">
+                                            <i class="fas fa-folder me-1"></i>
+                                            {{ service.category }}
+                                        </span>
+                                    </td>
+                                    <td data-label="Precio" class="fw-bold text-dark">
+                                        ${{ service.price }}
+                                    </td>
+                                    <td data-label="Acciones">
+                                        <form action="{{ url_for('user_functions.eliminar_servicio', service_id=service.id) }}" method="POST" onsubmit="return confirmarEliminacion(event, '{{ service.service_name }}')">
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                            <button type="submit" class="delete-service-btn">
+                                                <i class="fas fa-trash-alt me-1"></i> Eliminar
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-info mt-4">
+                    <i class="fas fa-info-circle me-2"></i>
+                    No tienes servicios activos.
+                </div>
+            {% endif %}
         </div>
-    {% else %}
-        <p>No tienes servicios activos.</p>
-    {% endif %}
-</div>
+    </div>
 
-<script>
-    function toggleServiceForm() {
-        var formContainer = document.getElementById('service-form-container');
-        formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
-    }
-    function confirmarEliminacion(event, nombreServicio) {
-    event.preventDefault(); // Evita el envío inmediato del formulario
-    if (confirm(`¿Estás seguro de que quieres eliminar el servicio "${nombreServicio}"? Esta acción no se puede deshacer.`)) {
-        event.target.submit(); // Envía el formulario si el usuario confirma
-    }
-}
-</script>
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleServiceForm() {
+            var formContainer = document.getElementById('service-form-container');
+            if (formContainer.style.display === 'block') {
+                formContainer.style.display = 'none';
+            } else {
+                formContainer.style.display = 'block';
+                // Focus on first input when form is shown
+                document.getElementById('service_name').focus();
+            }
+        }
+        
+        function confirmarEliminacion(event, nombreServicio) {
+            event.preventDefault(); // Evita el envío inmediato del formulario
+            if (confirm(`¿Estás seguro de que quieres eliminar el servicio "${nombreServicio}"? Esta acción no se puede deshacer.`)) {
+                event.target.submit(); // Envía el formulario si el usuario confirma
+            }
+            return false;
+        }
+    </script>
 {% endblock %}

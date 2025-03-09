@@ -1,175 +1,281 @@
 {% extends "base.html" %}
 
 {% block title %}Mis Cuentas{% endblock %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
 {% block head %}
 <meta name="csrf-token" content="{{ csrf_token }}">
 <style>
     .accounts-section {
-        padding: 15px;
-        margin-top: 50px;
+        background-color: #f8f9fa;
+        border-radius: 12px;
+        padding: 25px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
-    .table-responsive {
-        width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-    .account-table {
-        width: 100%;
-        min-width: 800px;
-        border-collapse: separate;
-        border-spacing: 0;
-    }
-    .account-table thead {
-        background-color: #2c3e50;
-        color: white;
-    }
-    .account-table th, .account-table td {
-        padding: 12px 15px;
-        text-align: left;
-        border-bottom: 1px solid #e0e0e0;
-    }
+    
     .add-account-btn {
-        display: inline-block;
-        background-color: #28a745;
+        display: inline-flex;
+        align-items: center;
+        background-color: #0d6efd;
         color: white;
         padding: 10px 20px;
-        border-radius: 5px;
-        text-decoration: none;
-        margin-bottom: 15px;
-        transition: background-color 0.3s ease;
+        border-radius: 50px;
         cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 6px rgba(13, 110, 253, 0.2);
     }
+    
     .add-account-btn:hover {
-        background-color: #218838;
+        background-color: #0b5ed7;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 8px rgba(13, 110, 253, 0.3);
     }
-    .delete-account-btn {
-        background-color: #dc3545;
-        color: white;
-        padding: 5px 10px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-    .delete-account-btn:hover {
-        background-color: #c82333;
-    }
+    
     .form-container {
-        display: none;
-        margin-top: 20px;
+        background-color: white;
+        border-radius: 10px;
         padding: 20px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        background-color: #f9f9f9;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+        border-left: 4px solid #6610f2;
+        display: none;
     }
+    
     .form-group {
         margin-bottom: 15px;
     }
+    
     .form-group label {
-        display: block;
+        font-weight: 600;
         margin-bottom: 5px;
-        font-weight: bold;
+        color: #495057;
     }
+    
     .form-group input {
         width: 100%;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
+        padding: 10px 15px;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        transition: border-color 0.15s ease-in-out;
     }
+    
+    .form-group input:focus {
+        border-color: #6610f2;
+        outline: none;
+        box-shadow: 0 0 0 0.25rem rgba(102, 16, 242, 0.25);
+    }
+    
     .form-group button {
-        background-color: #28a745;
+        background-color: #6610f2;
         color: white;
-        padding: 10px 20px;
         border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.2s;
+    }
+    
+    .form-group button:hover {
+        background-color: #520dc2;
+    }
+    
+    .account-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+    }
+    
+    .account-table thead {
+        background-color: #343a40;
+        color: white;
+    }
+    
+    .account-table th {
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+    }
+    
+    .account-table td {
+        padding: 15px;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .account-table tbody tr {
+        background-color: white;
+        transition: background-color 0.2s;
+    }
+    
+    .account-table tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+    
+    .account-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+    
+    .delete-account-btn {
+        background-color: #dc3545;
+        color: white;
+        border: none;
+        padding: 6px 12px;
         border-radius: 4px;
         cursor: pointer;
-        transition: background-color 0.3s ease;
+        transition: background-color 0.2s;
     }
-    .form-group button:hover {
-        background-color: #218838;
+    
+    .delete-account-btn:hover {
+        background-color: #bb2d3b;
     }
-    @media screen and (max-width: 480px) {
-        .add-account-btn {
+    
+    /* Responsive table */
+    @media (max-width: 767.98px) {
+        .account-table thead {
+            display: none;
+        }
+        
+        .account-table, .account-table tbody, .account-table tr, .account-table td {
+            display: block;
             width: 100%;
-            text-align: center;
         }
-        .account-table td:before {
-            font-size: 0.8em;
+        
+        .account-table tr {
+            margin-bottom: 15px;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            overflow: hidden;
         }
+        
         .account-table td {
-            font-size: 0.9em;
+            display: flex;
+            justify-content: space-between;
+            text-align: right;
+            padding: 12px 15px;
+        }
+        
+        .account-table td::before {
+            content: attr(data-label);
+            font-weight: 600;
+            text-align: left;
         }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="accounts-section">
-    <h1 class="mb-4">Mis Cuentas</h1>
+<div class="container py-5">
+    <div class="accounts-section">
+        <h1 class="mb-4 text-primary">
+            <i class="fas fa-university me-2"></i>
+            Mis Cuentas
+        </h1>
 
-    <div class="add-account-btn" onclick="toggleAccountForm()">
-        <i class="fas fa-plus-circle mr-2"></i>Agregar Cuenta
-    </div>
-
-    <!-- Account Form -->
-    <div id="account-form-container" class="form-container">
-        <form action="{{ url_for('user_functions.crear_cuenta') }}" method="POST">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-            <div class="form-group">
-                <label for="account_name">Nombre de la Cuenta:</label>
-                <input type="text" id="account_name" name="account_name" required>
-            </div>
-            <div class="form-group">
-                <label for="card">Número de la Cuenta:</label>
-                <input type="text" id="card" name="card" maxlength="16" inputmode="numeric" required>
-            </div>
-            <div class="form-group">
-                <label for="balance">Saldo:</label>
-                <input type="number" id="balance" name="balance" required>
-            </div>
-            <div class="form-group">
-                <button type="submit">Guardar</button>
-            </div>
-        </form>
-    </div>
-
-    {% if accounts %}
-        <div class="table-responsive">
-            <table class="account-table">
-                <thead>
-                    <tr>
-                        <th>Nombre de la Cuenta</th>
-                        <th>Número de la Cuenta</th>
-                        <th>Saldo</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for account in accounts %}
-                        <tr>
-                            <td>{{ account.account_name }}</td>
-                            <td>{{ account.account_number }}</td>
-                            <td>${{ account.balance }}</td>
-                            <td>
-                                <form action="{{ url_for('user_functions.eliminar_cuenta', account_id=account.id) }}" method="POST" onsubmit="return confirmarEliminacion(event, '{{ account.account_name }}')">
-                                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                                    <button type="submit" class="delete-account-btn">Eliminar</button>
-                                </form>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div class="add-account-btn" onclick="toggleAccountForm()">
+            <i class="fas fa-plus-circle me-2"></i>Agregar Cuenta
         </div>
-    {% else %}
-        <p>No tienes cuentas registradas.</p>
-    {% endif %}
+
+        <!-- Account Form -->
+        <div id="account-form-container" class="form-container">
+            <form action="{{ url_for('user_functions.crear_cuenta') }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <div class="row">
+                    <div class="col-md-4 form-group">
+                        <label for="account_name">Nombre de la Cuenta:</label>
+                        <input type="text" id="account_name" name="account_name" class="form-control" required>
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label for="card">Número de la Cuenta:</label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-credit-card"></i></span>
+                            <input type="text" id="card" name="card" maxlength="16" inputmode="numeric" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4 form-group">
+                        <label for="balance">Saldo:</label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input type="number" id="balance" name="balance" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group mt-3">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Guardar
+                    </button>
+                    <button type="button" class="btn btn-secondary ms-2" onclick="toggleAccountForm()">
+                        <i class="fas fa-times me-2"></i>Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        {% if accounts %}
+            <div class="table-responsive">
+                <table class="account-table">
+                    <thead>
+                        <tr>
+                            <th>Nombre de la Cuenta</th>
+                            <th>Número de la Cuenta</th>
+                            <th>Saldo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for account in accounts %}
+                            <tr>
+                                <td data-label="Nombre de la Cuenta">
+                                    <i class="fas fa-landmark me-2 text-primary"></i>
+                                    {{ account.account_name }}
+                                </td>
+                                <td data-label="Número de la Cuenta">
+                                    <i class="fas fa-credit-card me-2 text-secondary"></i>
+                                    {{ account.account_number }}
+                                </td>
+                                <td data-label="Saldo" class="fw-bold {% if account.balance > 0 %}text-success{% else %}text-danger{% endif %}">
+                                    ${{ account.balance }}
+                                </td>
+                                <td data-label="Acciones">
+                                    <form action="{{ url_for('user_functions.eliminar_cuenta', account_id=account.id) }}" method="POST" onsubmit="return confirmarEliminacion(event, '{{ account.account_name }}')">
+                                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                        <button type="submit" class="delete-account-btn">
+                                            <i class="fas fa-trash-alt me-1"></i> Eliminar
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="alert alert-info mt-4">
+                <i class="fas fa-info-circle me-2"></i>
+                No tienes cuentas registradas.
+            </div>
+        {% endif %}
+    </div>
 </div>
 
+<!-- Bootstrap JS Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     function toggleAccountForm() {
         var formContainer = document.getElementById('account-form-container');
-        formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
+        if (formContainer.style.display === 'block') {
+            formContainer.style.display = 'none';
+        } else {
+            formContainer.style.display = 'block';
+            // Focus on first input when form is shown
+            document.getElementById('account_name').focus();
+        }
     }
     
     function confirmarEliminacion(event, nombreCuenta) {
@@ -177,6 +283,18 @@
         if (confirm(`¿Estás seguro de que quieres eliminar la cuenta "${nombreCuenta}"? Esta acción no se puede deshacer.`)) {
             event.target.submit(); // Envía el formulario si el usuario confirma
         }
+        return false;
     }
+    document.addEventListener('DOMContentLoaded', function() {
+        const accountNumberElements = document.querySelectorAll('.account-number');
+        accountNumberElements.forEach(function(element) {
+            const number = element.textContent.trim();
+            if (number.length > 4) {
+                const masked = number.slice(0, 4) + '*'.repeat(number.length - 4);
+                element.textContent = masked;
+            }
+        });
+    });
+
 </script>
 {% endblock %}

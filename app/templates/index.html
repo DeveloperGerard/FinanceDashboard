@@ -8,6 +8,7 @@
     <!-- Bootstrap CSS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
 
     {% block head %}{% endblock %}
@@ -15,7 +16,6 @@
 </head>
 <body>
 
-    <!-- Navbar Bootstrap 5 más grande -->
     <!-- Navbar Bootstrap 5 más grande -->
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
@@ -56,51 +56,105 @@
     
 
     <!-- Contenido principal -->
-    <main class="container">
-        <div class="row justify-content-center">
+    <main class="container py-4">
+        <div class="row">
             <!-- Tarjeta de Resumen Financiero -->
-            <div class="col-md-6">
-                <div class="card shadow-lg p-4">
-                    <h3 class="text-center">📊 Resumen Financiero</h3>
-                    <hr>
-                    <p><strong>💰 Ingresos Totales:</strong> ${{ summary.total_income }}</p>
-                    <p><strong>💸 Gastos en Servicios:</strong> ${{ summary.total_services }}
-                        <span class="text-danger">({{ (summary.total_services / summary.total_income * 100) | round(2) }}%)</span>
-                    </p>
-                    <p><strong>🏦 Deuda en Préstamos:</strong> ${{ summary.total_loans }}
-                        <span class="text-warning">({{ (summary.total_loans / summary.total_income * 100) | round(2) }}%)</span>
-                    </p>
-                    <p><strong>💳 Saldo en Tarjetas/Cuentas:</strong> ${{ summary.total_balance }}</p>
-                    <hr>
-                    <h3 class="text-center {% if summary.final_balance >= 0 %}text-success{% else %}text-danger{% endif %}">
-                        📈 Balance Final: ${{ summary.final_balance }}
-                    </h3>
-                    
-                    <!-- Barra de progreso -->
-                    <div class="progress mt-3">
-                        <div class="progress-bar bg-primary" role="progressbar" style="width: {{ (summary.total_income / (summary.total_income + summary.total_services + summary.total_loans) * 100) | round(2) }}%">Ingresos</div>
-                        <div class="progress-bar bg-danger" role="progressbar" style="width: {{ (summary.total_services / (summary.total_income + summary.total_services + summary.total_loans) * 100) | round(2) }}%">Servicios</div>
-                        <div class="progress-bar bg-warning" role="progressbar" style="width: {{ (summary.total_loans / (summary.total_income + summary.total_services + summary.total_loans) * 100) | round(2) }}%">Préstamos</div>
+            <div class="col-12 col-md-6 mb-4">
+                <div class="card shadow financial-summary-card h-100">
+                    <div class="card-header bg-white border-bottom-0">
+                        <h3 class="text-center mb-0">
+                            <i class="bi bi-pie-chart-fill me-2"></i>
+                            Resumen Financiero
+                        </h3>
                     </div>
-                    
+                    <div class="card-body">
+                        <div class="mb-3 pb-3 border-bottom">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="icon-container income-icon">
+                                        <i class="bi bi-cash"></i>
+                                    </span>
+                                    <strong>Ingresos Totales:</strong>
+                                </div>
+                                <span class="fw-bold fs-5">${{ summary.total_income }}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3 pb-3 border-bottom">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="icon-container services-icon">
+                                        <i class="bi bi-arrow-down-circle"></i>
+                                    </span>
+                                    <strong>Gastos en Servicios:</strong>
+                                </div>
+                                <div>
+                                    <span class="fw-bold">${{ summary.total_services }}</span>
+                                    <span class="text-danger ms-2">
+                                        ({{ (summary.total_services / summary.total_income * 100) | round(2) }}%)
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3 pb-3 border-bottom">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="icon-container loans-icon">
+                                        <i class="bi bi-bank"></i>
+                                    </span>
+                                    <strong>Deuda en Préstamos:</strong>
+                                </div>
+                                <div>
+                                    <span class="fw-bold">${{ summary.total_loans }}</span>
+                                    <span class="text-warning ms-2">
+                                        ({{ (summary.total_loans / summary.total_income * 100) | round(2) }}%)
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3 pb-3 border-bottom">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="icon-container balance-icon">
+                                        <i class="bi bi-credit-card"></i>
+                                    </span>
+                                    <strong>Saldo en Tarjetas/Cuentas:</strong>
+                                </div>
+                                <span class="fw-bold">${{ summary.total_balance }}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <h3 class="{% if summary.final_balance >= 0 %}text-success{% else %}text-danger{% endif %}">
+                                <i class="bi bi-graph-up-arrow me-2"></i>
+                                Balance Final: ${{ summary.final_balance }}
+                            </h3>
+                        </div>
+                    </div>
                 </div>
-                
             </div>
-        </div>
-        {% block content %}{% endblock %}
-        <div class="row mt-4">
-            <div class="col-12">
-                <div class="card shadow-lg border-0">
+
+            <!-- Tarjeta de Historial de Movimientos -->
+            <div class="col-12 col-md-6 mb-4">
+                <div class="card shadow movements-card h-100">
                     <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
-                        <h5 class="mb-0">📜 Historial de Movimientos</h5>
+                        <h5 class="mb-0">
+                            <i class="bi bi-list-ul me-2"></i>
+                            Historial de Movimientos
+                        </h5>
                         <span class="badge bg-primary fs-6">Total: {{ movements|length }}</span>
                     </div>
-                    <div class="card-body" style="max-height: 300px; overflow-y: auto;">
-                        <ul class="list-group list-group-flush">
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush movements-list">
                             {% for movement in movements %}
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span>{{ movement.description }}</span>
-                                <span class="{% if movement.amount >= 0 %}text-success{% else %}text-danger{% endif %}">
+                                <span>
+                                    <i class="bi {% if movement.amount >= 0 %}bi-arrow-up-circle text-success{% else %}bi-arrow-down-circle text-danger{% endif %} me-2"></i>
+                                    {{ movement.description }}
+                                </span>
+                                <span class="{% if movement.amount >= 0 %}text-success{% else %}text-danger{% endif %} fw-bold">
                                     ${{ movement.amount }}
                                 </span>
                             </li>
@@ -111,9 +165,10 @@
             </div>
         </div>
     </main>
+    
      <hr>
      
-     <div class="container mt-5">
+     <div class="container mt-5 mb-5">
         <h2>Resumen Financiero</h2>
         
         <!-- Mostrar Balance Final fuera del gráfico -->
@@ -131,12 +186,6 @@
         </div>
     </div>
 
-    <!-- Footer
-    <footer class="bg-light text-center py-4 mt-4">
-        <p style="font-size: 1.2rem;">&copy; 2025 FinanceDashboard</p>
-    </footer>   -->
-
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{ url_for('static', filename='js/navbar.js') }}" defer></script>
     <script>
