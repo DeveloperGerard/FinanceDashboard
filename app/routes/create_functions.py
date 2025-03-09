@@ -37,7 +37,7 @@ def crear_cuenta():
             #actualizamos saldo del usuario 
             user = User().get_by_id(current_user.id)
             user.balance = user.balance +saldo
-            
+
             AccountController().create_account(nombre,tarjeta,current_user.id,saldo)
             return redirect("/index")
         else:
@@ -165,10 +165,10 @@ def pago_prestamo():
     if request.method =="POST":
         form = FormularioCrearPagoPrestamo()
         if form.validate_on_submit:
-            
+            loan = Loan().get_by_id(request.form.get("prestamo"))
             #una vez validamos el formulario, evaluamos que el usuario tenga monto suficiente
-            user = User().get_by_id(current_user.id)
-            if user.balance < form.monto.data:
+            account = Account().get_by_id(loan.account_id)
+            if account.balance < form.monto.data:
                 flash("Monto insuficiente","error")
                 return redirect("/pagoprestamo")
             else:
@@ -179,15 +179,17 @@ def pago_prestamo():
                 #Evaluamos si el usuario pago mas de lo que cuesta 
                 if monto > prestamo.reamining_price:
                     monto = prestamo.reamining_price
+                    account.balance = account.balance - monto
                 else:
                     monto  = form.monto.data
+                    account.balance = account.balance - monto
 
                 fecha_pago =form.fecha.data  
                 tea = prestamo.tea
                 if tea >0:
                     if fecha_pago > prestamo.expiration_date:
                         monto =monto+calcular_tem(prestamo.tea,prestamo.quota)*monto 
-                        
+                        account.balance = account.balance - monto
                 descrip = form.descripcion.data
                 user_id = current_user.id
                 #creamos el objeto prestamo_pagado para bd

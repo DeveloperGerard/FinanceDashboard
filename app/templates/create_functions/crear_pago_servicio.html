@@ -186,6 +186,13 @@
                 {{form.fecha.label()}}
                 {{form.fecha()}}
             </div>
+            <div class="form-group" style="text-align: center;">
+                {% for message in get_flashed_messages() %}
+                    {% if message == "Monto insuficiente" %}
+                        <p>{{message}}</p>
+                    {% endif %}
+                {% endfor %}
+            </div>
             <div class="form-group">
                 <select name="servicio" class="custom-select">
                     {% for service in services %}
