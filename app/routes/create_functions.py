@@ -145,10 +145,11 @@ def crear_prestamo():
             precio      = form.precio.data
             cuota       = form.cuota.data
             tea         = form.tea.data
+            descripcion = form.descripcion.data
             fecha       = datetime.now()
             vencimiento = form.fecha_vencimiento.data
             cuenta      = int(request.form.get("cuenta"))
-            LoanController().create_loan(nombre,titular,precio,cuota,current_user.id,cuenta,precio,fecha,vencimiento,tea)
+            LoanController().create_loan(nombre,titular,precio,cuota,current_user.id,cuenta,precio,fecha,vencimiento,descripcion,tea)
             return redirect("/index")
         else:
             return render_template("create_functions/crear_prestamo.html",form=form)

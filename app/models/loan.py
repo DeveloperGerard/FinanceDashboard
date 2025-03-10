@@ -16,6 +16,7 @@ class Loan(db.Model):
     loan_name       = db.Column(db.String(50),nullable=False)
     holder          = db.Column(db.String(50),nullable=False)
     price           = db.Column(db.Integer,nullable=False)
+    description    = db.Column(db.String(160),nullable=True)
     date            = db.Column(db.Date(),nullable=False)
     quota           = db.Column(db.Integer,nullable=True)
     tea             = db.Column(db.Integer,nullable=True)

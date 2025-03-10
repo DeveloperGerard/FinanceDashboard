@@ -9,7 +9,7 @@ class LoanController:
     """
 
     @staticmethod
-    def create_loan(name,holder,price,quota,user_id,account_id,reamingin_price,date,expiration_date,tea=0):
+    def create_loan(name,holder,price,quota,user_id,account_id,reamingin_price,date,expiration_date,description,tea=0):
         loan                 = Loan()
         loan.loan_name       = name
         loan.holder          = holder
@@ -20,6 +20,7 @@ class LoanController:
         loan.account_id      = account_id
         loan.reamining_price = reamingin_price
         loan.date            = date
+        loan.description     = description
         loan.expiration_date = expiration_date
         db.session.add(loan)
         db.session.commit()
