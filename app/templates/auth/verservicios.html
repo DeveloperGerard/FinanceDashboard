@@ -34,7 +34,13 @@
             </div>
             <div class="form-group">
                 {{form.categoria.label(for="category")}}
-                {{form.categoria(id="category")}}
+                <div class="radio-group">
+                    {% for subfield in form.categoria %}
+                        <label for="{{ subfield.id }}">
+                            {{ subfield() }} {{ subfield.label.text }}
+                        </label>
+                    {% endfor %}
+                </div>
             </div>
             <div class="form-group">
                 {{form.precio.label(for="price")}}
