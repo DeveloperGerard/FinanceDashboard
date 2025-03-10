@@ -169,6 +169,7 @@ option {
     height: 16px;
     accent-color: #007bff; /* Cambia el color del radio button */
 }
+
 .form-group-message{
     color: red;
     font-weight: bold;
