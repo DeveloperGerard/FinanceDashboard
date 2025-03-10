@@ -25,17 +25,10 @@ def registro():
         registro = FormularioRegistro()
         if registro.validate_on_submit():
             email          = registro.email.data
-            name           = registro.nombre.data
             usuario_email  = User().get_by_email(email)
-            usuario_nombre = User().get_by_name(name)
-
-            #Evitar que se dupliquen email y nombre.
-            #faltan añadir mensajes de respuesta
+            #Evitar que se dupliquen emaie
             if usuario_email:
                 flash(f"Ese correo ya esta registrado","error")
-                return redirect("/registro")
-            elif usuario_nombre:
-                flash(f"Ese nombre ya esta registrado usa otro","error")
                 return redirect("/registro")
             else:
                 #Si no ahy duplicados se crea usuario y se abre sesion
