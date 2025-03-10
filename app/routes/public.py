@@ -32,7 +32,7 @@ def registro():
             #Evitar que se dupliquen email y nombre.
             #faltan añadir mensajes de respuesta
             if usuario_email:
-                flash(f"Ese email ya esta registrado","error")
+                flash(f"Ese correo ya esta registrado","error")
                 return redirect("/registro")
             elif usuario_nombre:
                 flash(f"Ese nombre ya esta registrado usa otro","error")
@@ -50,7 +50,7 @@ def registro():
                 send_gmail_confirmation(token)
                 return redirect("/index")
         else:
-            flash(f"La contraseña debe ser igual")
+            flash(f"Las claves deben ser iguales")
             return redirect("/registro")
         
         
@@ -66,13 +66,13 @@ def inicio_sesion():
         if login_e.validate_on_submit():
             user  = User().get_by_email(email)
             if user is None:
-                flash(f"Ese usuario no esta registrado","error")
+                flash(f"Usuario no registrado","error")
                 return redirect("/iniciar")
             else:
                 if user.check_password(login_e.clave.data):
                     login_user(user)
                     return redirect("/home") 
                 else:  
-                    flash(f"Contraseña incorrecta","error")
+                    flash(f"Clave incorrecta","error")
                     return redirect("/iniciar")
 

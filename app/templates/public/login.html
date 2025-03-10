@@ -58,7 +58,14 @@
                                     </button>
                                 </div>
                             </div>
-                        
+                            <!--error message-->
+                            <div class="d-grid gap-2 mb-4">
+                                {% for message in get_flashed_messages() %}
+                                    {% if message == "Usuario no registrado" or message == "Clave incorrecta" %}
+                                        <p class="error-message">{{message}}</p>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
                             <!-- Submit Button -->
                             <div class="d-grid gap-2 mb-4">
                                 {{ login.submit(class_="login-button") }}

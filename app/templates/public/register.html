@@ -80,6 +80,14 @@
                                     {{ registro.confirmar_clave(class_="input-field", id="confirm_password") }}
                                 </div>
                             </div>
+                            <!--error message-->
+                            <div class="d-grid gap-2 mb-4">
+                                {% for message in get_flashed_messages() %}
+                                    {% if message == "Las claves deben ser iguales" or message == "Ese correo ya esta registrado" or message == "Ese nombre ya esta registrado usa otro" %}
+                                        <p class="error-message">{{message}}</p>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
                         
                             <!-- Submit Button -->
                             <div class="d-grid gap-2 mb-4">
@@ -89,7 +97,7 @@
                              <!-- Login Link -->
                              <div class="text-center">
                                 <p class="mb-0">
-                                    ¿Ya tienes cuenta? <a href="/login" class="text-primary fw-medium">Inicia sesión aquí</a>
+                                    ¿Ya tienes cuenta? <a href="{{url_for('public.inicio_sesion')}}" class="text-primary fw-medium">Inicia sesión aquí</a>
                                 </p>
                             </div>
                         </form>
