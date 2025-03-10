@@ -152,7 +152,7 @@
                             <td>{{ account.card }}</td>
                             <td>${{ account.balance }}</td>
                             <td>
-                            
+                                <form action="{{url_for('extra_functions.borrar_cuenta',id = account.id)}}" method="POST"> <button type="submit" >Borrar</button></form>
                             </td>
                         </tr>
                     {% endfor %}

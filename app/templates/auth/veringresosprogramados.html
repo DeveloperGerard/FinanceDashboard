@@ -94,7 +94,10 @@
                             {% if income.received_amount==income.amount %}
                             <td data-label="Acciones">Pagos recibidos</td>
                             {% else %}
-                                <td data-label="Acciones"><a href="{{url_for('update_functions.recibir_ingreso_programado')}}">Registrar pago</a></td>
+                                <td data-label="Acciones">
+                                    <a href="{{url_for('update_functions.recibir_ingreso_programado')}}">Registrar pago</a>
+                                    <form action="{{url_for('extra_functions.borrar_ingresoprogramado',id = income.id)}}" method="POST"> <button type="submit" >Borrar</button></form>
+                                </td>
                             {% endif %}
 
                         </tr>

@@ -244,7 +244,7 @@ def borrar_servicio(id:int):
         else:
             return "No es tuyo"
 
-@extra_functions.route("/borrar_cuenta/<int:id>")
+@extra_functions.route("/borrar_cuenta/<int:id>",methods=["POST"])
 @login_required
 @email_validation
 def borrar_cuenta(id:int):
@@ -258,7 +258,7 @@ def borrar_cuenta(id:int):
         else:
             return "No es tuyo"
         
-@extra_functions.route("/ingreso/<int:id>")
+@extra_functions.route("/ingreso/<int:id>",methods=["POST"])
 @login_required
 @email_validation
 def borrar_ingreso(id:int):
