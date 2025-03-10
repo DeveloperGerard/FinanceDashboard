@@ -92,9 +92,15 @@
                             <td data-label="Precio">${{ service.price }}</td>
                             <td data-label="Saldo Pendiente">${{ service.reamining_price }}</td>
                             {% if service.reamining_price == 0 %}
-                                <td data-label="Accion">Pagado</td>
+                                <td data-label="Accion">
+                                    <p>Pagado</p>
+                                    <form action="{{url_for('extra_functions.borrar_servicio',id = service.id)}}" method="POST"> <button type="submit" >Borrar</button></form>
+                                </td>
                             {% else %}
-                                <td data-label="Accion"><a href="{{url_for('create_functions.pago_servicio')}}">Pagar</a></td>
+                                <td data-label="Accion">
+                                    <a href="{{url_for('create_functions.pago_servicio')}}">Pagar</a>
+                                    <form action="{{url_for('extra_functions.borrar_servicio',id = service.id)}}" method="POST"> <button type="submit" >Borrar</button></form>
+                                </td>
                             {% endif %}
                         </tr>
                     {% endfor %}

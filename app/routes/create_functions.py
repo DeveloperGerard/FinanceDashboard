@@ -130,15 +130,10 @@ def crear_servicio():
 @login_required
 @email_validation
 def crear_prestamo():
-    if request.method == "GET":
-        form     = FormularioCrearPrestamos()
-        accounts = Account().get_all_by_userid(current_user.id)#es para la relacion una a muchos entre(cuenta y prestamos)
-        return render_template("create_functions/crear_prestamo.html",form=form,accounts=accounts)
-    
     if request.method == "POST":
         form = FormularioCrearPrestamos()
+        print(f'nombre:{form.nombre.data},titular:{form.titular.data},precio:{form.precio.data},cuota:{form.cuota.data},tea:{form.tea.data},descripcion:{form.descripcion.data},vencimiento:{form.fecha_vencimiento.data}')
         if form.validate_on_submit():
-
             #despues de validar creamos el objeto prestamo para bd
             nombre      = form.nombre.data
             titular     = form.titular.data 
@@ -152,6 +147,7 @@ def crear_prestamo():
             LoanController().create_loan(nombre,titular,precio,cuota,current_user.id,cuenta,precio,fecha,vencimiento,descripcion,tea)
             return redirect("/index")
         else:
+            print("error")
             return render_template("create_functions/crear_prestamo.html",form=form)
         
 @create_functions.route("/pagoprestamo",methods=["GET","POST"])
