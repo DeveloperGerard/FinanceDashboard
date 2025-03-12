@@ -91,22 +91,41 @@
                             <td data-label="Categoría">{{ service.category }}</td>
                             <td data-label="Precio">${{ service.price }}</td>
                             <td data-label="Saldo Pendiente">${{ service.reamining_price }}</td>
-                            {% if service.reamining_price == 0 %}
-                                <td data-label="Accion">
-                                    <div class="payment-btn">
-                                        Pagado
-                                    </div>
-                                    <form action="{{url_for('extra_functions.borrar_servicio',id = service.id)}}" method="POST"> <button type="submit"class="action-btn" >Borrar</button></form>
-                                    <form action="{{url_for('auth.obtener_pago_servicios',id = service.id)}}" method="POST"> <button type="submit" class="action-btn">Pagos</button></form>
-                                </td>
-                            {% else %}
-                                <td data-label="Accion">
-                                    <button class="action-btn"><a href="{{url_for('create_functions.pago_servicio')}}">Pagar</a></button>
-                                    <form  action="{{url_for('extra_functions.borrar_servicio',id = service.id)}}" method="POST"> <button type="submit" class="action-btn" >Borrar</button></form>
-                                    <form  action="{{url_for('auth.obtener_pago_servicios',id = service.id)}}" method="POST"> <button type="submit" class="action-btn" >Pagos</button></form>
-                                    
-                                </td>
-                            {% endif %}
+                            <td data-label="Acción">
+                                {% if service.remaining_price == 0 %}
+                                    <div class="badge bg-success text-white">Pagado</div>
+                                {% endif %}
+                            
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        ⋮
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        {% if service.reamining_price > 0 %}
+                                            <li>
+                                                <a class="dropdown-item" href="{{ url_for('create_functions.pago_servicio') }}">
+                                                    <i class="fas fa-money-bill-wave"></i> Pagar
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        <li>
+                                            <form action="{{ url_for('extra_functions.borrar_servicio', id=service.id) }}" method="POST">
+                                                <button type="submit" class="dropdown-item text-danger">
+                                                    <i class="fas fa-trash-alt"></i> Borrar
+                                                </button>
+                                            </form>
+                                        </li>
+                                        <li>
+                                            <form action="{{ url_for('auth.obtener_pago_servicios', id=service.id) }}" method="POST">
+                                                <button type="submit" class="dropdown-item">
+                                                    <i class="fas fa-list"></i> Pagos
+                                                </button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                            
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -116,6 +135,7 @@
         <p>No tienes servicios activos.</p>
     {% endif %}
 </div>
+
 
 <script>
     function toggleServiceForm() {

@@ -104,8 +104,18 @@
                                 </span>
                             </td>
                             <td data-label="Acciones">
-                                <a href="{{url_for('create_functions.pago_prestamo')}}">Pagar</a>
-                                <form action="{{url_for('extra_functions.borrar_prestamo',id = loan.id)}}" method="POST"> <button type="submit" >Borrar</button></form>
+                                <div class="d-flex gap-2">
+                                    <a href="{{ url_for('create_functions.pago_prestamo') }}" class="btn btn-success">
+                                        <i class="fas fa-money-bill-wave"></i> Pagar
+                                    </a>
+                                
+                                    <form action="{{ url_for('extra_functions.borrar_prestamo', id=loan.id) }}" method="POST">
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class="fas fa-trash-alt"></i> Borrar
+                                        </button>
+                                    </form>
+                                </div>
+                                
                             </td>
                         </tr>
                     {% endfor %}

@@ -153,7 +153,11 @@
                             <td>{{ account.card }}</td>
                             <td>${{ account.balance }}</td>
                             <td>
-                                <form action="{{url_for('extra_functions.borrar_cuenta',id = account.id)}}" method="POST"> <button type="submit" >Borrar</button></form>
+                                <form action="{{ url_for('extra_functions.borrar_cuenta', id=account.id) }}" method="POST">
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fas fa-trash-alt"></i> Borrar
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     {% endfor %}

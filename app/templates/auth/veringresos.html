@@ -87,8 +87,12 @@
                             <td data-label="Fecha">{{ income.income_date }}</td>
                             <td data-label="Descripcion ">{{ income.description }}</td>
                             <td data-label="Categoria">{{ income.category }}</td>
-                            <td data-label="Acciones">
-                                <form action="{{url_for('extra_functions.borrar_ingreso',id = income.id)}}" method="POST"> <button type="submit" >Borrar</button></form>
+                            <td>
+                                <form action="{{ url_for('extra_functions.borrar_ingreso', id=income.id) }}" method="POST">
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fas fa-trash-alt"></i> Borrar
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                     {% endfor %}

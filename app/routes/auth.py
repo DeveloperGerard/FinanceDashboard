@@ -36,7 +36,7 @@ def home():
     for loan in loans:
         movements.append({
              "description": f"Préstamo: {loan.loan_name}",
-             "amount": -loan.remaining_price  # Deuda es negativa
+             "amount": -loan.reamining_price  # Deuda es negativa
         })
     summary = get_financial_summary(current_user.id)  # Obtener el resumen financiero
     user = User().get_by_id(current_user.id)
