@@ -93,13 +93,18 @@
                             <td data-label="Saldo Pendiente">${{ service.reamining_price }}</td>
                             {% if service.reamining_price == 0 %}
                                 <td data-label="Accion">
-                                    <p>Pagado</p>
-                                    <form action="{{url_for('extra_functions.borrar_servicio',id = service.id)}}" method="POST"> <button type="submit" >Borrar</button></form>
+                                    <div class="payment-btn">
+                                        Pagado
+                                    </div>
+                                    <form action="{{url_for('extra_functions.borrar_servicio',id = service.id)}}" method="POST"> <button type="submit"class="action-btn" >Borrar</button></form>
+                                    <form action="{{url_for('auth.obtener_pago_servicios',id = service.id)}}" method="POST"> <button type="submit" class="action-btn">Pagos</button></form>
                                 </td>
                             {% else %}
                                 <td data-label="Accion">
-                                    <a href="{{url_for('create_functions.pago_servicio')}}">Pagar</a>
-                                    <form action="{{url_for('extra_functions.borrar_servicio',id = service.id)}}" method="POST"> <button type="submit" >Borrar</button></form>
+                                    <button class="action-btn"><a href="{{url_for('create_functions.pago_servicio')}}">Pagar</a></button>
+                                    <form  action="{{url_for('extra_functions.borrar_servicio',id = service.id)}}" method="POST"> <button type="submit" class="action-btn" >Borrar</button></form>
+                                    <form  action="{{url_for('auth.obtener_pago_servicios',id = service.id)}}" method="POST"> <button type="submit" class="action-btn" >Pagos</button></form>
+                                    
                                 </td>
                             {% endif %}
                         </tr>

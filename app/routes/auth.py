@@ -101,3 +101,18 @@ def resumen_financiero():
                             services_payments=services_payments,
                             pres=price_service_accounts,prep=price_service_loans
                             ,sum=sum,loan_ms=loan_month_summary,service_ms=service_month_summary)
+
+@auth.route("/pagos_servicio/<int:id>",methods=["POST"])
+@login_required
+@email_validation
+def obtener_pago_servicios(id:int):
+    service = Service().get_by_id(id)
+    if service is None:
+        return render_template("extra_functions/error-message/no_exist_error.html",objeto="servicio")
+    else:
+        if service.user_id == current_user.id:
+            payments = Service_payment().get_all_by_userid(current_user.id)
+            return render_template("auth/verpagosservicios.html",payments=payments)
+        else:
+            return render_template("extra_functions/error-message/dont_access_error.html",objeto="servicio")
+        
