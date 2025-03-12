@@ -121,9 +121,10 @@
                 {{form.nombre(id="account_name")}}
             </div>
             <div class="form-group">
-                {{form.tarjeta.label(for="card")}}
-                {{form.tarjeta(id="card")}}
+                {{ form.tarjeta.label(for="card") }}
+                {{ form.tarjeta(id="card", class="form-control", oninput="formatCardNumber(this)", maxlength="19") }}
             </div>
+            
             <div class="form-group">
                 {{form.saldo.label(for="balance") }}
                 {{form.saldo(id="balance") }}
@@ -175,6 +176,11 @@
         if (confirm(`¿Estás seguro de que quieres eliminar la cuenta "${nombreCuenta}"? Esta acción no se puede deshacer.`)) {
             event.target.submit(); // Envía el formulario si el usuario confirma
         }
+    }
+    function formatCardNumber(input) {
+    let value = input.value.replace(/\D/g, ''); // Elimina caracteres no numéricos
+    value = value.replace(/(.{4})/g, '$1 ').trim(); // Agrega un espacio cada 4 dígitos
+    input.value = value;
     }
 </script>
 {% endblock %}
