@@ -91,14 +91,32 @@
                             <td data-label="Categoria">{{ income.category }}</td>
                             <td data-label="Monto recibido">{{ income.received_amount }}</td>
                             <td data-label="Monto pendiente">{{ income.pending_amount }}</td>
-                            {% if income.received_amount==income.amount %}
-                            <td data-label="Acciones">Pagos recibidos</td>
-                            {% else %}
-                                <td data-label="Acciones">
-                                    <a href="{{url_for('update_functions.recibir_ingreso_programado')}}">Registrar pago</a>
-                                    <form action="{{url_for('extra_functions.borrar_ingresoprogramado',id = income.id)}}" method="POST"> <button type="submit" >Borrar</button></form>
-                                </td>
-                            {% endif %}
+                            <td data-label="Acciones">
+                                {% if income.received_amount == income.amount %}
+                                    <div class="badge bg-success text-white">Pagos recibidos</div>
+                                {% else %}
+                                    <div class="dropdown">
+                                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            ⋮
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="dropdown-item" href="{{ url_for('update_functions.recibir_ingreso_programado') }}">
+                                                    <i class="fas fa-check-circle"></i> Registrar pago
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <form action="{{ url_for('extra_functions.borrar_ingresoprogramado', id=income.id) }}" method="POST">
+                                                    <button type="submit" class="dropdown-item text-danger">
+                                                        <i class="fas fa-trash-alt"></i> Borrar
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                            </td>
+                            
 
                         </tr>
                     {% endfor %}

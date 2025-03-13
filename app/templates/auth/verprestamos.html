@@ -113,6 +113,25 @@
                                     <form  action="{{url_for('auth.obtener_pago_prestamos',id = loan.id)}}" method="POST"> <button type="submit" class="action-btn" >Pagos</button></form>
                                 </td>
                             {% endif %}
+                            <td data-label="Estado">
+                                <span class="loan-status {{ 'status-active' if loan.reamining_price > 0 else 'status-pending' }}">
+                                    {{ 'Activo' if loan.reamining_price > 0 else 'Finalizado' }}
+                                </span>
+                            </td>
+                            <td data-label="Acciones">
+                                <div class="d-flex gap-2">
+                                    <a href="{{ url_for('create_functions.pago_prestamo') }}" class="btn btn-success">
+                                        <i class="fas fa-money-bill-wave"></i> Pagar
+                                    </a>
+                                
+                                    <form action="{{ url_for('extra_functions.borrar_prestamo', id=loan.id) }}" method="POST">
+                                        <button type="submit" class="btn btn-danger">
+                                            <i class="fas fa-trash-alt"></i> Borrar
+                                        </button>
+                                    </form>
+                                </div>
+                                
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>
