@@ -85,7 +85,6 @@
                         <th>Cuotas</th>
                         <th>Tasa de Interés</th>
                         <th>Saldo Pendiente</th>
-                        <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -98,15 +97,22 @@
                             <td data-label="Cuotas">{{ loan.quota or 'N/A' }}</td>
                             <td data-label="Tasa de Interés">{{ loan.tea }}%</td>
                             <td data-label="Saldo Pendiente">${{ loan.reamining_price }}</td>
-                            <td data-label="Estado">
-                                <span class="loan-status {{ 'status-active' if loan.reamining_price > 0 else 'status-pending' }}">
-                                    {{ 'Activo' if loan.reamining_price > 0 else 'Finalizado' }}
-                                </span>
-                            </td>
-                            <td data-label="Acciones">
-                                <a href="{{url_for('create_functions.pago_prestamo')}}">Pagar</a>
-                                <form action="{{url_for('extra_functions.borrar_prestamo',id = loan.id)}}" method="POST"> <button type="submit" >Borrar</button></form>
-                            </td>
+                            {% if loan.reamining_price==0 %}
+                                <td data-label="Acciones">
+                                    <div class="payment-btn">
+                                        Pagado
+                                    </div>
+                                    <form action="{{url_for('extra_functions.borrar_prestamo',id = loan.id)}}" method="POST"> <button type="submit" class="action-btn" >Borrar</button></form>
+                                    <form  action="{{url_for('auth.obtener_pago_prestamos',id = loan.id)}}" method="POST"> <button type="submit" class="action-btn" >Pagos</button></form>
+                                </td>
+
+                            {% else %}
+                                <td data-label="Acciones">
+                                    <button class="action-btn"><a href="{{url_for('create_functions.pago_prestamo')}}">Pagar</a></button>
+                                    <form action="{{url_for('extra_functions.borrar_prestamo',id = loan.id)}}" method="POST"> <button type="submit" class="action-btn" >Borrar</button></form>
+                                    <form  action="{{url_for('auth.obtener_pago_prestamos',id = loan.id)}}" method="POST"> <button type="submit" class="action-btn" >Pagos</button></form>
+                                </td>
+                            {% endif %}
                         </tr>
                     {% endfor %}
                 </tbody>

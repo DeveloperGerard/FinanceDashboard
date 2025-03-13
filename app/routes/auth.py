@@ -111,8 +111,22 @@ def obtener_pago_servicios(id:int):
         return render_template("extra_functions/error-message/no_exist_error.html",objeto="servicio")
     else:
         if service.user_id == current_user.id:
-            payments = Service_payment().get_all_by_userid(current_user.id)
+            payments = Service_payment().get_all_by_service_id(service.id)
             return render_template("auth/verpagosservicios.html",payments=payments)
+        else:
+            return render_template("extra_functions/error-message/dont_access_error.html",objeto="servicio")
+        
+@auth.route("/pagos_prestamo/<int:id>",methods=["POST"])
+@login_required
+@email_validation
+def obtener_pago_prestamos(id:int):
+    loan = Loan().get_by_id(id)
+    if loan is None:
+        return render_template("extra_functions/error-message/no_exist_error.html",objeto="prestamo")
+    else:
+        if loan.user_id == current_user.id:
+            payments = Loan_payment().get_all_by_userid(current_user.id)
+            return render_template("auth/verpagosprestamos.html",payments=payments)
         else:
             return render_template("extra_functions/error-message/dont_access_error.html",objeto="servicio")
         

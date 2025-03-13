@@ -4,15 +4,15 @@
 
 {% block head %}
 <meta name="csrf-token" content="{{ csrf_token }}">
-<link rel="stylesheet" href="{{url_for('static',filename='auth/css/viewservices.css')}}">
+<link rel="stylesheet" href="{{url_for('static',filename='auth/css/viewloans.css')}}">
 {% endblock %}
 
 {% block content %}
-<div class="services-section">
-    <h1 class="mb-4">Pagos del servicio</h1>
+<div class="loans-section">
+    <h1 class="mb-4">Pagos del prestamo</h1>
     {% if payments %}
         <div class="table-responsive">
-            <table class="service-table">
+            <table class="loan-table">
                 <thead>
                     <tr>
                         <th>Monto</th>
@@ -30,7 +30,6 @@
                             {% else %}
                                 <td data-label="Descripción">{{ payment.description }}</td>
                             {% endif %}
-
                         </tr>
                     {% endfor %}
                 </tbody>
