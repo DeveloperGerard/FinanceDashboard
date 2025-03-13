@@ -32,7 +32,7 @@
     transform: scale(1.05);
     transition: transform 0.3s ease;
   }
-  
+  h2
   
   .card-body {
     padding: 2rem;
@@ -70,6 +70,7 @@
     background-color: var(--primary-color);
     border-color: var(--primary-color);
     transition: var(--transition);
+    color: white;
   }
   
   .login-button:hover {
@@ -91,7 +92,7 @@
     border: 4px solid #dc3545;
   }
   .input-field {
-    width: 80%; /* Para que el contenedor del input ocupe todo el espacio disponible */
+    width: 78%; /* Para que el contenedor del input ocupe todo el espacio disponible */
     border: 1px solid #dee2e6;
     background-color: #f8f9fa;
     color: #6c757d;
