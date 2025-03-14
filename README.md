@@ -170,5 +170,3 @@ Si deseas aprovechar estas funcionalidades, descarga e instala [Visual Studio Co
 ## Personalización
 - **Favicon:**  
   El ícono de la pestaña del navegador se encuentra en el archivo `favicon.ico`. Puedes reemplazarlo con tu propio ícono para personalizar la aplicación.
-
-```
