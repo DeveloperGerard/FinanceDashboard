@@ -96,11 +96,13 @@
                                     <div class="badge bg-success text-white">Pagado</div>
                                 {% endif %}
                             
-                                <div class="dropdown">
-                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        ⋮
+                                <div class="dropdown position-relative">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" 
+                                        data-bs-toggle="dropdown" aria-expanded="false"
+                                        data-bs-boundary="viewport">
+                                         ⋮
                                     </button>
-                                    <ul class="dropdown-menu">
+                                    <ul class="dropdown-menu dropdown-menu-end position-absolute">
                                         {% if service.reamining_price > 0 %}
                                             <li>
                                                 <a class="dropdown-item" href="{{ url_for('create_functions.pago_servicio') }}">

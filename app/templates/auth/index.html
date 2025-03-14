@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Mi Aplicación{% endblock %}</title>
+    <title>{% block title %}Resumen Financiero{% endblock %}</title>
 
     <!-- Bootstrap CSS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -92,10 +92,11 @@
                                     <strong>Gastos en Servicios:</strong>
                                 </div>
                                 <div>
-                                    <span class="fw-bold">${{ summary.total_services }}</span>
                                     <span class="text-danger ms-2">
                                         {{ (summary.total_services / summary.total_income * 100) | round(2) if summary.total_income else 0 }}%
                                     </span>
+                                    <span class="fw-bold fs-5">${{ summary.total_services }}</span>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -109,10 +110,10 @@
                                     <strong>Deuda en Préstamos:</strong>
                                 </div>
                                 <div>
-                                    <span class="fw-bold">${{ summary.total_loans }}</span>
                                     <span class="text-warning ms-2">
                                         {{ (summary.total_loans / summary.total_income * 100) | round(2) if summary.total_income else 0 }}%
                                     </span>
+                                    <span class="fw-bold fs-5">${{ summary.total_loans }}</span>
                                 </div>
                             </div>
                         </div>
@@ -125,7 +126,7 @@
                                     </span>
                                     <strong>Saldo en Tarjetas/Cuentas:</strong>
                                 </div>
-                                <span class="fw-bold">${{ summary.total_balance }}</span>
+                                <span class="fw-bold fs-5">${{ summary.total_balance }}</span>
                             </div>
                         </div>
                         
@@ -170,78 +171,128 @@
     </main>
      <hr>
      
-     <div class="container mt-5">
+    <div class="container mt-5">
         <h2>Resumen Financiero</h2>
-        
+    
         <!-- Mostrar Balance Final fuera del gráfico -->
         <div class="row">
             <div class="col-12 text-center">
-                <h3>Balance Final: ${{ summary.final_balance | round(2) }}</h3> <!-- Mostramos el balance final -->
+                <h3>Balance Final: ${{ summary.final_balance | round(2) }}</h3>
             </div>
         </div>
     
-        <!-- Gráfico de Pie con solo Ingresos, Servicios y Préstamos -->
+        <!-- Gráfico de Pie -->
         <div class="row">
             <div class="col-12">
-                <canvas id="financialChart" style="max-width: 400px; margin: 0 auto;margin-bottom: 40px;"></canvas>
+                <canvas id="financialChart" style="max-width: 400px; margin: 0 auto; margin-bottom: 40px;"></canvas>
+            </div>
+        </div>
+    
+        <!-- Tabla de porcentajes -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <h4>Distribución Financiera</h4>
+                <table class="table table-striped table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Monto ($)</th>
+                            <th>Porcentaje (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Ingresos</td>
+                            <td id="incomeValue"></td>
+                            <td id="incomePercentage"></td>
+                        </tr>
+                        <tr>
+                            <td>Servicios</td>
+                            <td id="servicesValue"></td>
+                            <td id="servicesPercentage"></td>
+                        </tr>
+                        <tr>
+                            <td>Préstamos</td>
+                            <td id="loansValue"></td>
+                            <td id="loansPercentage"></td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
-    <!-- Footer
-    <footer class="bg-light text-center py-4 mt-4">
-        <p style="font-size: 1.2rem;">&copy; 2025 FinanceDashboard</p>
-    </footer>   -->
-
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ url_for('static', filename='public/js/ojo.js') }}" defer></script>
-    <script>
-        // Obtener datos desde Flask (inyectados en el template)
-        var summary = {{ summary | tojson }};
-    
-        var ctx = document.getElementById('financialChart').getContext('2d');
-        var financialChart = new Chart(ctx, {
-            type: 'pie',  // Gráfico de tipo "pie"
-            data: {
-                labels: ['Ingresos', 'Servicios', 'Préstamos'],  // Eliminamos el Balance Total
-                datasets: [{
-                    label: 'Resumen Financiero',
-                    data: [
-                        summary.total_income,
-                        summary.total_services,
-                        summary.total_loans
-                    ],
-                    backgroundColor: [
-                        'rgba(54, 162, 235, 0.6)',  // Ingresos
-                        'rgba(255, 99, 132, 0.6)',  // Servicios
-                        'rgba(255, 206, 86, 0.6)'   // Préstamos
-                    ],
-                    borderColor: [
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(255, 206, 86, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(tooltipItem) {
-                                return tooltipItem.label + ': ' + tooltipItem.raw.toFixed(2);  // Formatear las etiquetas con 2 decimales
-                            }
+    <!-- Agregar la librería Chart.js y el plugin para mostrar los porcentajes -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+<script>
+    // Obtener datos desde Flask
+    var summary = {{ summary | tojson }};
+    var total = summary.total_income + summary.total_services + summary.total_loans;
+
+    // Calcular porcentajes
+    function calculatePercentage(value) {
+        return total > 0 ? ((value / total) * 100).toFixed(2) + '%' : '0%';
+    }
+
+    // Insertar valores en la tabla
+    document.getElementById('incomeValue').innerText = `$${summary.total_income.toFixed(2)}`;
+    document.getElementById('incomePercentage').innerText = calculatePercentage(summary.total_income);
+
+    document.getElementById('servicesValue').innerText = `$${summary.total_services.toFixed(2)}`;
+    document.getElementById('servicesPercentage').innerText = calculatePercentage(summary.total_services);
+
+    document.getElementById('loansValue').innerText = `$${summary.total_loans.toFixed(2)}`;
+    document.getElementById('loansPercentage').innerText = calculatePercentage(summary.total_loans);
+
+    // Configurar el gráfico de pie
+    var ctx = document.getElementById('financialChart').getContext('2d');
+    var financialChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Ingresos', 'Servicios', 'Préstamos'],
+            datasets: [{
+                label: 'Resumen Financiero',
+                data: [
+                    summary.total_income,
+                    summary.total_services,
+                    summary.total_loans
+                ],
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.6)',  // Ingresos
+                    'rgba(255, 99, 132, 0.6)',  // Servicios
+                    'rgba(255, 206, 86, 0.6)'   // Préstamos
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(255, 206, 86, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            let value = tooltipItem.raw;
+                            let percentage = calculatePercentage(value);
+                            return `${tooltipItem.label}: $${value.toFixed(2)} (${percentage})`;
                         }
                     }
                 }
             }
-        });
-    </script>
+        }
+    });
+</script>
+
 
 </body>
 </html>
