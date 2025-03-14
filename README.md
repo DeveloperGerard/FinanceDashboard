@@ -20,4 +20,4 @@
 9. Despues has click en `admin de mysql`
 10. Crea una nueva base de datos llamada finance
 11. Dirigete a la terminal de visual studio code y ejecuta estos comandos en este orden con el entorno vitual prendido `flask db init,flask db migrate ,flask db upgrade`
-12. Ejecutar `server.py`
+12. Ejecutar `python server.py`
