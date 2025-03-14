@@ -1,4 +1,3 @@
-```markdown
 # Finance Dashboard
 
 ## Descripción
