@@ -16,7 +16,6 @@
 <body>
 
     <!-- Navbar Bootstrap 5 más grande -->
-    <!-- Navbar Bootstrap 5 más grande -->
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
             <a class="navbar-brand" href="{{ url_for('auth.home') }}">FinanceDashboard</a>
@@ -48,7 +47,7 @@
     
                 <div class="d-flex align-items-center">
                     <span class="text-black">{{ current_user.username }}</span>
-                    <a href="{{ url_for('extra_functions.cerrar') }}" class="logout-btn">Logout</a>
+                    <a href="{{ url_for('extra_functions.cerrar') }}" class="logout-btn">Cerrar sesión</a>
                 </div>
                 
                 
@@ -79,10 +78,12 @@
                                     </span>
                                     <strong>Ingresos Totales:</strong>
                                 </div>
-                                <span class="fw-bold fs-5">${{ summary.total_income }}</span>
+                                <span class="fw-bold fs-5">
+                                    ${{ "%.2f"|format(summary.total_income|default(0)) }}
+                                </span>
                             </div>
                         </div>
-                        
+            
                         <div class="mb-3 pb-3 border-bottom">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
@@ -93,14 +94,15 @@
                                 </div>
                                 <div>
                                     <span class="text-danger ms-2">
-                                        {{ (summary.total_services / summary.total_income * 100) | round(2) if summary.total_income else 0 }}%
+                                        {{ "%.2f"|format((summary.total_services / summary.total_income * 100) if summary.total_income else 0) }}%
                                     </span>
-                                    <span class="fw-bold fs-5">${{ summary.total_services }}</span>
-                                    
+                                    <span class="fw-bold fs-5">
+                                        ${{ "%.2f"|format(summary.total_services|default(0)) }}
+                                    </span>
                                 </div>
                             </div>
                         </div>
-                        
+            
                         <div class="mb-3 pb-3 border-bottom">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
@@ -111,13 +113,15 @@
                                 </div>
                                 <div>
                                     <span class="text-warning ms-2">
-                                        {{ (summary.total_loans / summary.total_income * 100) | round(2) if summary.total_income else 0 }}%
+                                        {{ "%.2f"|format((summary.total_loans / summary.total_income * 100) if summary.total_income else 0) }}%
                                     </span>
-                                    <span class="fw-bold fs-5">${{ summary.total_loans }}</span>
+                                    <span class="fw-bold fs-5">
+                                        ${{ "%.2f"|format(summary.total_loans|default(0)) }}
+                                    </span>
                                 </div>
                             </div>
                         </div>
-                        
+            
                         <div class="mb-3 pb-3 border-bottom">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
@@ -126,19 +130,22 @@
                                     </span>
                                     <strong>Saldo en Tarjetas/Cuentas:</strong>
                                 </div>
-                                <span class="fw-bold fs-5">${{ summary.total_balance }}</span>
+                                <span class="fw-bold fs-5">
+                                    ${{ "%.2f"|format(summary.total_balance|default(0)) }}
+                                </span>
                             </div>
                         </div>
-                        
+            
                         <div class="text-center mt-4">
                             <h3 class="{% if summary.final_balance >= 0 %}text-success{% else %}text-danger{% endif %}">
                                 <i class="bi bi-graph-up-arrow me-2"></i>
-                                Balance Final: ${{ summary.final_balance }}
+                                Balance Final: ${{ "%.2f"|format(summary.final_balance|default(0)) }}
                             </h3>
                         </div>
                     </div>
                 </div>
             </div>
+            
 
             <!-- Tarjeta de Historial de Movimientos -->
             <div class="col-12 col-md-6 mb-4">
@@ -172,7 +179,7 @@
      <hr>
      
     <div class="container mt-5">
-        <h2>Grafica Financiera  </h2>
+        <h2>Gráfica Financiera  </h2>
     
         <!-- Mostrar Balance Final fuera del gráfico -->
         <div class="row">
