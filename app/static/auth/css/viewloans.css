@@ -209,6 +209,14 @@ option {
     color: red;
     font-weight: bold;
 }
+.dropdown-menu {
+    position: fixed !important;
+    z-index: 1000;
+}
+
+.table-responsive {
+    overflow: visible !important;
+}
 @media screen and (max-width: 480px) {
     .add-loan-btn {
         width: 100%;
