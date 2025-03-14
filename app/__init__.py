@@ -3,19 +3,26 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager 
 from config import Config 
- 
+from sqlalchemy import create_engine
+
 db = SQLAlchemy() 
 login_manager = LoginManager() 
- 
+
+# Crear la base de datos si no existe
+db_uri = 'mysql+pymysql://usuario:contraseña@localhost/'
+engine = create_engine(db_uri)
+engine.execute("CREATE DATABASE IF NOT EXISTS finance")
+
 def create_app(): 
     app = Flask(__name__) 
-    app.config.from_object(Config) 
-    db.init_app(app) 
-    login_manager.init_app(app) 
-    login_manager.login_view = 'auth' 
+    app.config.from_object(Config)
+    
+    db.init_app(app)
+    Migrate(app, db)
+    login_manager.init_app(app)
+    login_manager.login_view = 'public.login'
     
     #-----Importando los modelos para la migracion
-    Migrate(app,db)
     from app.models import user,account,income,loan,service,service_payment,loan_payment,scheduled_incomes,emailmessage
 
     #-----Inicializando el manejo de sesiones(inicio,cierre)
@@ -34,4 +41,4 @@ def create_app():
 
         #retornamos la respuesta con las cabezeras establecidas
         return response
-    return app 
+    return app
