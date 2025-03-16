@@ -184,7 +184,9 @@ def pago_prestamo():
                 fecha_pago =form.fecha.data  
                 tea = prestamo.tea
                 if tea >0:
+                    print("tiene tea")
                     if fecha_pago > prestamo.expiration_date:
+                        print("es tarde para pagar")
                         monto =monto+calcular_tem(prestamo.tea,prestamo.quota)*monto 
                         account.balance = account.balance - monto
                 descrip = form.descripcion.data
