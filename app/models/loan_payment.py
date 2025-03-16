@@ -68,6 +68,26 @@ class Loan_payment(db.Model):
             if payment.user_id== id and payment.date>start_date and payment.date<=end_date:
                 all_loanpayments_list.append(payment)
         return all_loanpayments_list
+    
+    @staticmethod 
+    def get_all_by_loan(id:int):
+        """
+        Retorna todos los objetos del modelo Loan_payment en una lista, relacionados con el `usuario activo actualmente `\n
+        :Ejemplo:
+        ```
+            return [loan_payment_object_1,loan_payment_object_2]
+        ```
+        :Parametros: id
+        :id: = identificador unico de usuario
+        """
+
+        all_loanpayments = db.session.execute(db.select(Loan_payment)).scalars()
+        all_loanpayments_list =[]
+        for payment in all_loanpayments:
+            if payment.loan_id== id:
+                all_loanpayments_list.append(payment)
+        return all_loanpayments_list
+
 
     @staticmethod
     def get_all_amount_for_account(id:int,loans_accounts:list):
