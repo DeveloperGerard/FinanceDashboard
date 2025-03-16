@@ -11,7 +11,7 @@ from datetime import datetime
 #modulos propios
 from app.forms.importaciones              import FormularioCrearPrestamos,FormularioCrearPagoServicio,FormularioCrearPagoPrestamo,FormularioCrearServicio,FormularioCrearCuenta,FormularioCrearIngresoProgamado,FormularioCrearIngreso
 from app.controllers.importaciones        import AccountController,IncomeController,UserController,ServiceController,LoanController,LoanPaymentController,ServicePaymentController,ScheduledIncomeController
-from app.models.importaciones             import Account,User,Service,Loan
+from app.models.importaciones             import Account,User,Service,Loan,Loan_payment
 from ..extra_functions.email_decorator    import email_validation
 from ..extra_functions.calcular_tem       import calcular_tem
 
@@ -180,15 +180,22 @@ def pago_prestamo():
                 else:
                     monto  = form.monto.data
                     account.balance = account.balance - monto
-
+                
+                ultimos_pagos = Loan_payment().get_all_by_loan(prestamo.id)
+                ultimo_pago = monto
+                if len(ultimos_pagos)>0:
+                    ultimo_pago = ultimos_pagos[-1].amount
+                    print("entro len")
                 fecha_pago =form.fecha.data  
-                tea = prestamo.tea
+                tea = float(prestamo.tea)
                 if tea >0:
                     print("tiene tea")
                     if fecha_pago > prestamo.expiration_date:
                         print("es tarde para pagar")
-                        monto =monto+calcular_tem(prestamo.tea,prestamo.quota)*monto 
+                        monto =float(monto+calcular_tem(prestamo.tea,prestamo.quota)*ultimo_pago) 
                         account.balance = account.balance - monto
+                        print(ultimo_pago)
+                print(f"monto:{monto}")
                 descrip = form.descripcion.data
                 user_id = current_user.id
                 #creamos el objeto prestamo_pagado para bd
