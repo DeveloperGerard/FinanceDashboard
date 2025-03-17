@@ -22,8 +22,9 @@ class Scheduled_income(db.Model):
     received_amount = db.Column(db.Integer,nullable=False)
     user_id         = db.Column(db.Integer,db.ForeignKey("users.id",ondelete="CASCADE"))
     pending_amount  = db.Column(db.Integer,nullable=False)
-
+    account_id     = db.Column(db.Integer,db.ForeignKey("accounts.id",ondelete="CASCADE"))
     #relaciones
+    account       = db.relationship("Account",back_populates="accounts_schedu")
     user          = db.relationship("User",back_populates="scheduled_incomes")
 
     #Funciones para obtener datos del modelo ingreso
@@ -91,6 +92,26 @@ class Scheduled_income(db.Model):
         for income in all_incomes:
             amount += income.reamining_price
         return amount
+    
+    @staticmethod
+    def get_all_by_userid(id:int):
+        """
+        Retorna todos los objetos del modelo Income en una lista, relacionados con el `usuario activo actualmente `\n
+        :Ejemplo:
+        ```
+            return [income_object_1,income_object_2]
+        ```
+        :Parametros: id
+        :id: = identificador unico de usuario
+        """
+
+
+        all_incomes = db.session.execute(db.select(Scheduled_income)).scalars()
+        all_incomes_list =[]
+        for income in all_incomes:
+            if income.user_id ==id:
+                all_incomes_list.append(income)
+        return all_incomes_list
     
     @staticmethod
     def get_all_by_category(id:int):

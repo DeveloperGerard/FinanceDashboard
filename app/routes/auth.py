@@ -4,56 +4,91 @@ Visualizacion de datos
 
 from flask import Blueprint, render_template
 from flask_login import login_required ,current_user
+from app.controllers.resumen import get_financial_summary
 from app.models.importaciones import Income,Service,User,Account,Loan,Loan_payment,Service_payment,Scheduled_income
+from app.forms.importaciones import FormularioCrearCuenta,FormularioCrearServicio,FormularioCrearIngreso,FormularioCrearPrestamos,FormularioCrearIngresoProgamado
 from ..extra_functions.email_decorator import email_validation
 auth= Blueprint('auth', __name__) 
 
 @auth.route("/home")
 @login_required
 @email_validation
-def saludo():
+def home():
+    incomes = Income.query.filter_by(user_id=current_user.id).all()
+    services = Service.query.filter_by(user_id=current_user.id).all()
+    loans = Loan.query.filter_by(user_id=current_user.id).all()
+ 
+     # Construir la lista de movimientos
+    movements = []
+ 
+    for income in incomes:
+        movements.append({
+             "description": f"Ingreso: {income.income_name}",
+             "amount": income.amount
+        })
+ 
+    for service in services:
+        movements.append({
+             "description": f"Gasto en Servicio: {service.service_name}",
+             "amount": -service.price  # Gasto es negativo
+        })
+ 
+    for loan in loans:
+        movements.append({
+             "description": f"Préstamo: {loan.loan_name}",
+             "amount": -loan.reamining_price  # Deuda es negativa
+        })
+    summary = get_financial_summary(current_user.id)  # Obtener el resumen financiero
     user = User().get_by_id(current_user.id)
-    return render_template("auth/prueba.html",user=user)
+    return render_template("auth/index.html",user=user,summary=summary,movements=movements)
 
 @auth.route("/vercuentas")
 @login_required
 @email_validation
-def ver_cuentas():
+def accounts():
+    form = FormularioCrearCuenta()
     accounts = Account().get_all_by_userid(current_user.id)
-    return render_template("auth/vercuentas.html",accounts=accounts)
+    return render_template("auth/vercuentas.html",accounts=accounts,form=form)
 
 
 
 @auth.route("/veringresos")
 @login_required
 @email_validation
-def ver_ingresos():
-    incomes = Income().get_all_by_category(current_user.id)
-    return render_template("auth/veringresos.html",incomes=incomes)
+def incomes():
+    form = FormularioCrearIngreso()
+    accounts = Account().get_all_by_userid(current_user.id)
+    incomes = Income().get_all_by_userid(current_user.id)
+    return render_template("auth/veringresos.html",incomes=incomes,form=form,accounts=accounts)
 
 
 @auth.route("/veringresosprogramados")
 @login_required
 @email_validation
-def ver_ingresos_programados():
-    incomes = Scheduled_income().get_all_by_category(current_user.id)
-    return render_template("auth/veringresosprogramados.html",incomes=incomes)
-
+def scheduled_incomes():
+    form = FormularioCrearIngresoProgamado()
+    incomes = Scheduled_income().get_all_by_userid(current_user.id)
+    accounts = Account().get_all_by_userid(current_user.id)
+    return render_template("auth/veringresosprogramados.html",incomes=incomes,form=form,accounts=accounts)
 
 @auth.route("/verservicios")
 @login_required
 @email_validation
-def ver_servicios():
+def services():
+    form = FormularioCrearServicio()
     services = Service().get_all_by_userid(current_user.id)
+    accounts = Account().get_all_by_userid(current_user.id)
     service_amount_all = Service().get_full_amount(current_user.id)
-    return render_template("auth/verservicios.html",services=services,service_amount_all=service_amount_all)
+    return render_template("auth/verservicios.html",services=services,service_amount_all=service_amount_all,form=form,accounts=accounts)
 
 @auth.route("/verprestamos")
 @login_required
 @email_validation
-def ver_prestamos():
+def loans():
+    accounts = Account().get_all_by_userid(current_user.id)
+    form = FormularioCrearPrestamos()
     loans = Loan().get_all_by_userid(current_user.id)
-    return  render_template("auth/verprestamos.html",loans=loans)
+    return  render_template("auth/verprestamos.html",loans=loans,form=form,accounts=accounts)
 
 
 
@@ -90,3 +125,32 @@ def resumen_financiero():
                             services_payments=services_payments,
                             pres=price_service_accounts,prep=price_service_loans
                             ,sum=sum,loan_ms=loan_month_summary,service_ms=service_month_summary)
+
+@auth.route("/pagos_servicio/<int:id>",methods=["POST"])
+@login_required
+@email_validation
+def obtener_pago_servicios(id:int):
+    service = Service().get_by_id(id)
+    if service is None:
+        return render_template("extra_functions/error-message/no_exist_error.html",objeto="servicio")
+    else:
+        if service.user_id == current_user.id:
+            payments = Service_payment().get_all_by_service_id(service.id)
+            return render_template("auth/verpagosservicios.html",payments=payments)
+        else:
+            return render_template("extra_functions/error-message/dont_access_error.html",objeto="servicio")
+        
+@auth.route("/pagos_prestamo/<int:id>",methods=["POST"])
+@login_required
+@email_validation
+def obtener_pago_prestamos(id:int):
+    loan = Loan().get_by_id(id)
+    if loan is None:
+        return render_template("extra_functions/error-message/no_exist_error.html",objeto="prestamo")
+    else:
+        if loan.user_id == current_user.id:
+            payments = Loan_payment().get_all_by_userid(current_user.id)
+            return render_template("auth/verpagosprestamos.html",payments=payments)
+        else:
+            return render_template("extra_functions/error-message/dont_access_error.html",objeto="servicio")
+        

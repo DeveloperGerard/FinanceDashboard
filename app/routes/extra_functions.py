@@ -13,7 +13,7 @@ from ..extra_functions.token              import confirm_token,genera_token
 from ..extra_functions.notification_funct import send_gmail_confirmation,send_changepassword_request,send_changeemail_request
 from ..extra_functions.email_decorator    import email_validation
 from ..models.importaciones               import User,Account,Income,Loan,Service,Scheduled_income
-from ..controllers.importaciones          import UserController
+from ..controllers.importaciones          import UserController,LoanController,ServiceController,AccountController,IncomeController,ScheduledIncomeController
 from app.forms.importaciones              import FormularioCambiarContraseña,FormularioCambiarGmail
 extra_functions = Blueprint("extra_functions",__name__)
 
@@ -215,3 +215,73 @@ def cambiar_email(token):
     else:
         return "Error"
     
+#-------------Funciones de eliminacion-----------
+
+@extra_functions.route("/borrar_prestamo/<int:id>",methods=["POST"])
+@login_required
+@email_validation
+def borrar_prestamo(id:int):
+    loan = Loan().get_by_id(id)
+    if loan is None:
+        return render_template("extra_functions/error-message/no_exist_error.html",objeto="prestamo")
+    else:
+        if loan.user_id == current_user.id:
+            LoanController().delete_loan(loan)
+            return redirect("/verprestamos")
+        else:
+            return render_template("extra_functions/error-message/eliminated_error.html",objeto="prestamo")
+@extra_functions.route("/borrar_servicio/<int:id>",methods=["POST"])
+@login_required
+@email_validation
+def borrar_servicio(id:int):
+    service = Service().get_by_id(id)
+    if service is None:
+        return render_template("extra_functions/error-message/no_exist_error.html",objeto="servicio")
+    else:
+        if service.user_id == current_user.id:
+            ServiceController().delete_service(service)
+            return redirect("/verservicios")
+        else:
+            return render_template("extra_functions/error-message/eliminated_error.html",objeto="servicio")
+
+@extra_functions.route("/borrar_cuenta/<int:id>",methods=["POST"])
+@login_required
+@email_validation
+def borrar_cuenta(id:int):
+    account = Account().get_by_id(id)
+    if account is None:
+        return render_template("extra_functions/error-message/no_exist_error.html",objeto="cuenta")
+    else:
+        if account.user_id == current_user.id:
+            AccountController().delete_account(account)
+            return redirect("/vercuentas")
+        else:
+            return render_template("extra_functions/error-message/eliminated_error.html",objeto="cuenta")
+        
+@extra_functions.route("/ingreso/<int:id>",methods=["POST"])
+@login_required
+@email_validation
+def borrar_ingreso(id:int):
+    income = Income().get_by_id(id)
+    if income is None:
+        return render_template("extra_functions/error-message/no_exist_error.html",objeto="ingreso")
+    else:
+        if income.user_id == current_user.id:
+            IncomeController().delete_income(income)
+            return redirect("/veringresos")
+        else:
+            return render_template("extra_functions/error-message/eliminated_error.html",objeto="ingreso")
+        
+@extra_functions.route("/ingresoprogramado/<int:id>",methods=["POST"])
+@login_required
+@email_validation
+def borrar_ingresoprogramado(id:int):
+    income = Scheduled_income().get_by_id(id)
+    if income is None:
+        return render_template("extra_functions/error-message/no_exist_error.html",objeto="ingreso programado")
+    else:
+        if income.user_id == current_user.id:
+            ScheduledIncomeController().delete_income(income)
+            return redirect("/veringresosprogramados")
+        else:
+            return render_template("extra_functions/error-message/eliminated_error.html",objeto="ingreso programado")

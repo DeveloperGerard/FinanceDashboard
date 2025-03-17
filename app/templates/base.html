@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Mi Aplicación{% endblock %}</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='base/css/base.css') }}">
+
+    {% block head %}{% endblock %}
+
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('auth.home') }}">FinanceDashboard</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'auth.home' %}active{% endif %}" href="{{ url_for('auth.home') }}">Resumen</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'auth.services' %}active{% endif %}" href="{{ url_for('auth.services') }}">Servicios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'auth.loans' %}active{% endif %}" href="{{ url_for('auth.loans') }}">Mis Préstamos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'auth.incomes' %}active{% endif %}" href="{{ url_for('auth.incomes') }}">Ingresos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'auth.accounts' %}active{% endif %}" href="{{ url_for('auth.accounts') }}">Mis Tarjetas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'auth.scheduled_incomes' %}active{% endif %}" href="{{ url_for('auth.scheduled_incomes') }}">Ingresos programados</a>
+                    </li>
+                </ul>
+    
+                <div class="d-flex align-items-center">
+                    <span class="text-black">{{ current_user.username }}</span>
+                    <a href="{{ url_for('extra_functions.cerrar') }}" class="logout-btn">Cerrar sesión</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    
+
+    <!-- Contenido principal -->
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='public/js/ojo.js') }}" defer></script>
+</body>
+</html>
+

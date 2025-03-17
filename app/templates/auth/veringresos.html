@@ -1,24 +1,114 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    {% for income,category in incomes.items() %}
-        <h1>{{income}}</h1>
-        {% for incom in category %}
-            {% if incom %}
-            <div style="border: 1px solid black;">
-                <p>Nombre:{{incom.income_name}}</p>
-                <p>Descripcion:{{incom.description}}</p>
-                <p>Fecha:{{incom.income_date}}</p>
-                <p>Monto:${{incom.amount}}</p>
+{% extends "base.html" %}
+
+{% block title %}Mis Ingresos{% endblock %}
+
+{% block head %}
+<meta name="csrf-token" content="{{ csrf_token }}">
+<link rel="stylesheet" href="{{url_for('static',filename='auth/css/viewincomes.css')}}">
+{% endblock %}
+
+{% block content %}
+<div class="incomes-section">
+    <h1 class="mb-4">Mis Ingresos</h1>
+
+    <div class="add-income-btn" onclick="toggleIncomeForm()">
+        <i class="fas fa-plus-circle mr-2"></i>Agregar Ingreso
+    </div>
+
+    <!-- Income Form -->
+    <div id="income-form-container" class="form-container">
+        <form action="{{ url_for('create_functions.crear_ingreso') }}" method="POST">
+            {{form.hidden_tag()}}
+            <div class="form-group">
+                {{form.nombre.label(for="income_name")}}
+                {{form.nombre(id="income_name")}}
             </div>
-                
-            {% endif %}
-        {% endfor %}
-    {% endfor %}  
-</body>
-</html>
+            <div class="form-group">
+                {{form.monto.label(for="amount")}}
+                {{form.monto(id="amount")}}
+            </div>
+            <div class="form-group">
+                {{form.descripcion.label(for="description")}}
+                {{form.descripcion(id="description")}}
+            </div>
+            <div class="form-group">
+                {{form.categoria.label(for="category")}}
+                <div class="radio-group">
+                    {% for subfield in form.categoria %}
+                        <label for="{{ subfield.id }}">
+                            {{ subfield() }} {{ subfield.label.text }}
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="form-group">
+                {{form.fecha_pago.label(for="date")}}
+                {{form.fecha_pago(id="date")}}
+            </div>
+            <div class="form-group">
+                <label for="">Cuenta asociada</label>
+                <select name="cuenta" class="custom-select mb-4">
+                    {% for account in accounts %}
+                        <option value="{{account.id}}">{{account.account_name}}</option>
+                    {% endfor %}
+                </select>
+                {% if accounts %}
+                    <div class="form-group">
+                        {{ form.submit() }}
+                    </div> 
+                {% else %}
+                    <div class="form-group-message">
+                        <p>Necesitas una cuenta para registrar un ingreso</p>
+                    </div> 
+                {% endif %}
+
+            </div>
+        </form>
+    </div>
+    <div>
+        {% if incomes %}
+        <div class="table-responsive">
+            <table class="income-table">
+                <thead>
+                    <tr>
+                        <th>Nombre del Ingreso</th>
+                        <th>Monto</th>
+                        <th>Fecha</th>
+                        <th>Descripcion</th>
+                        <th>Categoria</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for income in incomes %}
+                        <tr>
+                            <td data-label="Nombre del Ingreso">{{ income.income_name }}</td>
+                            <td data-label="Monto">${{ income.amount }}</td>
+                            <td data-label="Fecha">{{ income.income_date }}</td>
+                            <td data-label="Descripcion ">{{ income.description }}</td>
+                            <td data-label="Categoria">{{ income.category }}</td>
+                            <td>
+                                <form action="{{ url_for('extra_functions.borrar_ingreso', id=income.id) }}" method="POST">
+                                    <button type="submit" class="btn btn-danger">
+                                        <i class="fas fa-trash-alt"></i> Borrar
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>No tienes ingresos registrados.</p>
+    {% endif %}
+
+    </div>
+</div>
+<script>
+    function toggleIncomeForm() {
+        var formContainer = document.getElementById('income-form-container');
+        formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
+    }
+</script>
+{% endblock %}

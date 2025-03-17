@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Mis Servicios{% endblock %}
+
+{% block head %}
+<meta name="csrf-token" content="{{ csrf_token }}">
+<link rel="stylesheet" href="{{url_for('static',filename='auth/css/viewloans.css')}}">
+{% endblock %}
+
+{% block content %}
+<div class="loans-section">
+    <h1 class="mb-4">Pagos del prestamo</h1>
+    {% if payments %}
+        <div class="table-responsive">
+            <table class="loan-table">
+                <thead>
+                    <tr>
+                        <th>Monto</th>
+                        <th>Fecha</th>
+                        <th>Descripcion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for payment in payments %}
+                        <tr>
+                            <td data-label="Monto">{{ payment.amount }}</td>
+                            <td data-label="Fecha">{{ payment.date }}</td>
+                            {% if payment.description == None %}
+                                <td data-label="Descripcion"></td>
+                            {% else %}
+                                <td data-label="Descripción">{{ payment.description }}</td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>No tienes pagos registrados.</p>
+    {% endif %}
+
+</div>
+
+<script>
+    function toggleServiceForm() {
+        var formContainer = document.getElementById('service-form-container');
+        formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
+    }
+    function confirmarEliminacion(event, nombreServicio) {
+    event.preventDefault(); // Evita el envío inmediato del formulario
+    if (confirm(`¿Estás seguro de que quieres eliminar el servicio "${nombreServicio}"? Esta acción no se puede deshacer.`)) {
+        event.target.submit(); // Envía el formulario si el usuario confirma
+    }
+}
+</script>
+{% endblock %}

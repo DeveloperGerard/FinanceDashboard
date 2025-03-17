@@ -3,10 +3,19 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager 
 from config import Config 
- 
+from sqlalchemy import create_engine,text
+
 db = SQLAlchemy() 
 login_manager = LoginManager() 
  
+# Crear la base de datos si no existe
+db_uri = 'mysql+pymysql://usuario:contraseña@localhost/'
+
+
+engine = create_engine(db_uri)
+with engine.connect() as connection:
+    connection.execute(text("CREATE DATABASE IF NOT EXISTS finance"))
+
 def create_app(): 
     app = Flask(__name__) 
     app.config.from_object(Config) 

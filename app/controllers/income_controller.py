@@ -9,7 +9,7 @@ class IncomeController:
     """
 
     @staticmethod
-    def create_income(name,date,amount,user_id,description,categoria):
+    def create_income(name,date,amount,user_id,description,categoria,account_id):
         income                = Income()
         income.income_name    = name
         income.income_date    = date
@@ -17,6 +17,7 @@ class IncomeController:
         income.description    = description
         income.category       = categoria
         income.user_id        = user_id
+        income.account_id     = account_id
         db.session.add(income)
         db.session.commit()
         return income

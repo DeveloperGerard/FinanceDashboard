@@ -9,7 +9,7 @@ class ScheduledIncomeController:
     """
 
     @staticmethod
-    def create_income(name,date,amount,user_id,description,next_income,categoria,received_amount:0,pending_amount:0):
+    def create_income(name,date,amount,user_id,description,next_income,categoria,account_id,received_amount:0,pending_amount:0):
         income                = Scheduled_income()
         income.income_name    = name
         income.income_date    = date
@@ -20,6 +20,7 @@ class ScheduledIncomeController:
         income.received_amount= received_amount
         income.category       = categoria
         income.user_id        = user_id
+        income.account_id     = account_id
         db.session.add(income)
         db.session.commit()
         return income

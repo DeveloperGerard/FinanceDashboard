@@ -45,6 +45,25 @@ class Service_payment(db.Model):
         return all_servicepayments_list
 
     @staticmethod 
+    def get_all_by_service_id(id:int):
+        """
+        Retorna todos los objetos del modelo Service_payment en una lista, relacionados con el `usuario activo actualmente `\n
+        :Ejemplo:
+        ```
+            return [service_payment_object_1,service_payment_object_2]
+        ```
+        :Parametros: id
+        :id: = identificador unico de usuario
+        """
+
+        all_servicepayments = db.session.execute(db.select(Service_payment)).scalars()
+        all_servicepayments_list =[]
+        for payment in all_servicepayments:
+            if payment.service_id== id:
+                all_servicepayments_list.append(payment)
+        return all_servicepayments_list
+
+    @staticmethod 
     def get_all_by_userid_forsummary(id:int):
         """
         Retorna todos los objetos del modelo Service_payment en una lista, relacionados con el `usuario activo actualmente` para el resumen.\n

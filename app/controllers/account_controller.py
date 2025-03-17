@@ -9,11 +9,12 @@ class AccountController:
     """
     
     @staticmethod
-    def create_account(name,card,user_id):
+    def create_account(name,card,user_id,saldo):
         account              = Account()
         account.account_name = name
         account.card         = card
         account.user_id      = user_id
+        account.balance      = saldo
         db.session.add(account)
         db.session.commit()
         return account

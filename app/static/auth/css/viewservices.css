@@ -1,0 +1,242 @@
+.services-section {
+    padding: 15px;
+    margin-top: 50px;
+}
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.service-table {
+    width: 100%;
+    min-width: 800px;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+.service-table thead {
+    background-color: #2c3e50;
+    color: white;
+}
+.service-table th, .service-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+}
+@media screen and (max-width: 768px) {
+    .service-table, 
+    .service-table thead, 
+    .service-table tbody, 
+    .service-table th, 
+    .service-table td, 
+    .service-table tr { 
+        display: block; 
+    }
+    .service-table thead tr { 
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    }
+    .service-table tr { 
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+    .service-table td { 
+        border: none;
+        position: relative;
+        padding-left: 50%;
+        text-align: right;
+    }
+    .service-table td:before { 
+        content: attr(data-label);
+        position: absolute;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: bold;
+    }
+}
+.add-service-btn {
+    display: inline-block;
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    margin-bottom: 15px;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+.add-service-btn:hover {
+    background-color: #218838;
+}
+.delete-service-btn {
+    background-color: #dc3545;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.delete-service-btn:hover {
+    background-color: #c82333;
+}
+.form-container {
+    display: none;
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+.form-group {
+    margin-bottom: 15px;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.form-group button {
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+.action-btn {
+    background: linear-gradient(135deg, #4CAF50, #2E7D32); /* Verde degradado */
+    color: white; /* Texto blanco */
+    border: 2px solid #B0BEC5; /* Borde gris plomo */
+    padding: 12px 20px;
+    font-size: 16px;
+    width: 80%;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+.payment-btn{  
+    background: linear-gradient(135deg, #cc240a, #c80101); /* Verde degradado */
+    color: white; /* Texto blanco */
+    border: 2px solid #B0BEC5; /* Borde gris plomo */
+    padding: 12px 20px;
+    font-size: 16px;
+    width: 80%;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    margin-top: 1%;
+    margin-bottom: 1%;
+    text-align: center;
+    
+    
+}
+.action-btn:hover {
+    background: #388E3C; /* Verde más oscuro en hover */
+    border-color: #78909C; /* Borde gris plomo más oscuro */
+    transform: scale(1.05);
+}
+
+.action-btn:active {
+    background: #1B5E20; /* Verde más oscuro en clic */
+    transform: scale(0.98);
+}
+.action-btn a{
+    text-decoration: none;
+    color: white;
+}
+.form-group button:hover {
+    background-color: #218838;
+}
+.custom-select {
+    background-color: white;
+    border: 2px solid #4CAF50; /* Borde verde */
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 16px;
+    color: #333;
+    width: 220px;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease-in-out;
+}
+
+.custom-select:hover {
+    border-color: #008CBA; /* Celeste */
+    box-shadow: 0 0 8px rgba(0, 140, 186, 0.5);
+}
+
+.custom-select:focus {
+    border-color: #2E8B57; /* Verde más oscuro */
+    box-shadow: 0 0 10px rgba(46, 139, 87, 0.5);
+}
+
+option {
+    background: white;
+    color: #333;
+    padding: 10px;
+}
+.form-group {
+    margin-bottom: 15px;
+}
+
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.radio-group input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #007bff; /* Cambia el color del radio button */
+}
+
+.form-group-message{
+    color: red;
+    font-weight: bold;
+}
+.dropdown-menu {
+    position: fixed !important;
+    z-index: 1000;
+}
+
+.table-responsive {
+    overflow: visible !important;
+}
+@media screen and (max-width: 480px) {
+    .add-service-btn {
+        width: 100%;
+        text-align: center;
+    }
+    .service-table td:before {
+        font-size: 0.8em;
+    }
+    .service-table td {
+        font-size: 0.9em;
+    }
+}

@@ -15,7 +15,7 @@ class User(UserMixin, db.Model):
 
     #columnas
     id             = db.Column(db.Integer, primary_key=True) 
-    username       = db.Column(db.String(64), unique=True, nullable=False) 
+    username       = db.Column(db.String(64), unique=False, nullable=False) 
     email          = db.Column(db.String(320), unique=True, nullable=False) 
     password_hash  = db.Column(db.String(255)) 
     balance        = db.Column(db.Integer)

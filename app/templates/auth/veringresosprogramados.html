@@ -1,26 +1,137 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    {% for income,category in incomes.items() %}
-        <h1>{{income}}</h1>
-        {% for elemento in category %}
-            {% if elemento %}
-            <div style="border: 1px solid black;">
-                <p>Nombre:{{elemento.income_name}}</p>
-                <p>Descripcion:{{elemento.description}}</p>
-                <p>Fecha:{{elemento.income_date}}</p>
-                <p>Monto que recibiras:${{elemento.amount}}</p>
-                <p>Monto recibido:${{elemento.received_amount}}</p>
-                <p>Monto pendiente:${{elemento.pending_amount}}</p>
+{% extends "base.html" %}
+
+{% block title %}Mis Ingresos{% endblock %}
+
+{% block head %}
+<meta name="csrf-token" content="{{ csrf_token }}">
+<link rel="stylesheet" href="{{url_for('static',filename='auth/css/viewscheduledincomes.css')}}">
+{% endblock %}
+
+{% block content %}
+<div class="incomes-section">
+    <h1 class="mb-4">Mis Ingresos programados</h1>
+
+    <div class="add-income-btn" onclick="toggleIncomeForm()">
+        <i class="fas fa-plus-circle mr-2"></i>Agregar Ingreso
+    </div>
+
+    <!-- Income Form -->
+    <div id="income-form-containers" class="form-container">
+        <form action="{{ url_for('create_functions.crear_ingreso_programado') }}" method="POST">
+            {{form.hidden_tag()}}
+            <div class="form-group">
+                {{form.nombre.label(for="income_name")}}
+                {{form.nombre(id="income_name")}}
             </div>
-                
-            {% endif %}
-        {% endfor %}
-    {% endfor %}  
-</body>
-</html>
+            <div class="form-group">
+                {{form.monto.label(for="amount")}}
+                {{form.monto(id="amount")}}
+            </div>
+            <div class="form-group">
+                {{form.descripcion.label(for="description")}}
+                {{form.descripcion(id="description")}}
+            </div>
+            <div class="form-group">
+                {{form.categoria.label(for="category")}}
+                <div class="radio-group">
+                    {% for subfield in form.categoria %}
+                        <label for="{{ subfield.id }}">
+                            {{ subfield() }} {{ subfield.label.text }}
+                        </label>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="form-group">
+                {{form.proximo_pago.label(for="date")}}
+                {{form.proximo_pago(id="date")}}
+            </div>
+            <div class="form-group">
+                <label for="">Cuenta asociada</label>
+                <select name="cuenta" class="custom-select">
+                    {% for account in accounts %}
+                        <option value="{{account.id}}">{{account.account_name}}</option>
+                    {% endfor %}
+                </select>
+                {% if accounts %}
+                    <div class="form-group">
+                        {{ form.submit() }}
+                    </div> 
+                {% else %}
+                    <div class="form-group-message">
+                        <p>Necesitas una cuenta para crear un ingreso programado</p>
+                    </div> 
+                {% endif %}
+
+            </div>
+        </form>
+    </div>
+
+    {% if incomes %}
+        <div class="table-responsive">
+            <table class="income-table">
+                <thead>
+                    <tr>
+                        <th>Nombre del Ingreso</th>
+                        <th>Monto</th>
+                        <th>Siguiente ingreso</th>
+                        <th>Descripcion</th>
+                        <th>Categoria</th>
+                        <th>Monto recibido</th>
+                        <th>Monto pendiente</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for income in incomes %}
+                        <tr>
+                            <td data-label="Nombre del Ingreso">{{ income.income_name }}</td>
+                            <td data-label="Monto">${{ income.amount }}</td>
+                            <td data-label="Siguiente ingreso">{{ income.next_income }}</td>
+                            <td data-label="Descripcion">{{ income.description }}</td>
+                            <td data-label="Categoria">{{ income.category }}</td>
+                            <td data-label="Monto recibido">{{ income.received_amount }}</td>
+                            <td data-label="Monto pendiente">{{ income.pending_amount }}</td>
+                            <td data-label="Acciones">
+                                {% if income.received_amount == income.amount %}
+                                    <div class="badge bg-success text-white">Pagos recibidos</div>
+                                {% else %}
+                                    <div class="dropdown">
+                                        <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            ⋮
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li>
+                                                <a class="dropdown-item" href="{{ url_for('update_functions.recibir_ingreso_programado') }}">
+                                                    <i class="fas fa-check-circle"></i> Registrar pago
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <form action="{{ url_for('extra_functions.borrar_ingresoprogramado', id=income.id) }}" method="POST">
+                                                    <button type="submit" class="dropdown-item text-danger">
+                                                        <i class="fas fa-trash-alt"></i> Borrar
+                                                    </button>
+                                                </form>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                {% endif %}
+                            </td>
+                            
+
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>No tienes ingresos registrados.</p>
+    {% endif %}
+</div>
+
+<script>
+    function toggleIncomeForm() {
+        var formContainer = document.getElementById('income-form-containers');
+        formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
+    }
+</script>
+{% endblock %}

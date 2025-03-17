@@ -1,20 +1,305 @@
-<!DOCTYPE html> 
-<html lang="es"> 
-<head> 
-    <meta charset="UTF-8"> 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
-    <title>{}{} - Finance Dashboard</title> 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"> 
-</head> 
-<body> 
-    <nav> 
-        <div class="nav-wrapper"> 
-            <a href="{{ url_for('main.index') }}" class="brand-logo">Finance Dashboard</a> 
-        </div> 
-    </nav> 
-    <main> 
-        {}{} 
-    </main> 
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script> 
-</body> 
-</html> 
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Resumen Financiero{% endblock %}</title>
+
+    <!-- Bootstrap CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='auth/css/index.css') }}">
+
+    {% block head %}{% endblock %}
+
+</head>
+<body>
+
+    <!-- Navbar Bootstrap 5 más grande -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('auth.home') }}">FinanceDashboard</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'auth.home' %}active{% endif %}" href="{{ url_for('auth.home') }}">Resumen</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'auth.services' %}active{% endif %}" href="{{ url_for('auth.services') }}">Servicios</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'auth.loans' %}active{% endif %}" href="{{ url_for('auth.loans') }}">Mis Préstamos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'auth.incomes' %}active{% endif %}" href="{{ url_for('auth.incomes') }}">Ingresos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'auth.accounts' %}active{% endif %}" href="{{ url_for('auth.accounts') }}">Mis Tarjetas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'auth.scheduled_incomes' %}active{% endif %}" href="{{ url_for('auth.scheduled_incomes') }}">Ingresos programados</a>
+                    </li>
+                </ul>
+    
+                <div class="d-flex align-items-center">
+                    <span class="text-black">{{ current_user.username }}</span>
+                    <a href="{{ url_for('extra_functions.cerrar') }}" class="logout-btn">Cerrar sesión</a>
+                </div>
+                
+                
+            </div>
+        </div>
+    </nav>
+    
+    
+
+    <!-- Contenido principal -->
+    <main class="container py-4">
+        <div class="row">
+            <!-- Tarjeta de Resumen Financiero -->
+            <div class="col-12 col-md-6 mb-4">
+                <div class="card shadow financial-summary-card h-100">
+                    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="bi bi-list-ul me-2"></i>
+                            Resumen Financiero
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3 pb-3 border-bottom">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="icon-container income-icon">
+                                        <i class="bi bi-cash"></i>
+                                    </span>
+                                    <strong>Ingresos Totales:</strong>
+                                </div>
+                                <span class="fw-bold fs-5">
+                                    ${{ "%.2f"|format(summary.total_income|default(0)) }}
+                                </span>
+                            </div>
+                        </div>
+            
+                        <div class="mb-3 pb-3 border-bottom">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="icon-container services-icon">
+                                        <i class="bi bi-arrow-down-circle"></i>
+                                    </span>
+                                    <strong>Gastos en Servicios:</strong>
+                                </div>
+                                <div>
+                                    <span class="text-danger ms-2">
+                                        {{ "%.2f"|format((summary.total_services / summary.total_income * 100) if summary.total_income else 0) }}%
+                                    </span>
+                                    <span class="fw-bold fs-5">
+                                        ${{ "%.2f"|format(summary.total_services|default(0)) }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="mb-3 pb-3 border-bottom">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="icon-container loans-icon">
+                                        <i class="bi bi-bank"></i>
+                                    </span>
+                                    <strong>Deuda en Préstamos:</strong>
+                                </div>
+                                <div>
+                                    <span class="text-warning ms-2">
+                                        {{ "%.2f"|format((summary.total_loans / summary.total_income * 100) if summary.total_income else 0) }}%
+                                    </span>
+                                    <span class="fw-bold fs-5">
+                                        ${{ "%.2f"|format(summary.total_loans|default(0)) }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+            
+                        <div class="mb-3 pb-3 border-bottom">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="icon-container balance-icon">
+                                        <i class="bi bi-credit-card"></i>
+                                    </span>
+                                    <strong>Saldo en Tarjetas/Cuentas:</strong>
+                                </div>
+                                <span class="fw-bold fs-5">
+                                    ${{ "%.2f"|format(summary.total_balance|default(0)) }}
+                                </span>
+                            </div>
+                        </div>
+            
+                        <div class="text-center mt-4">
+                            <h3 class="{% if summary.final_balance >= 0 %}text-success{% else %}text-danger{% endif %}">
+                                <i class="bi bi-graph-up-arrow me-2"></i>
+                                Balance Final: ${{ "%.2f"|format(summary.final_balance|default(0)) }}
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+
+            <!-- Tarjeta de Historial de Movimientos -->
+            <div class="col-12 col-md-6 mb-4">
+                <div class="card shadow movements-card h-100">
+                    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">
+                            <i class="bi bi-list-ul me-2"></i>
+                            Historial de Movimientos
+                        </h5>
+                        <span class="badge bg-primary fs-6">Total: {{ movements|length }}</span>
+                    </div>
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush movements-list">
+                            {% for movement in movements %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span>
+                                    <i class="bi {% if movement.amount >= 0 %}bi-arrow-up-circle text-success{% else %}bi-arrow-down-circle text-danger{% endif %} me-2"></i>
+                                    {{ movement.description }}
+                                </span>
+                                <span class="{% if movement.amount >= 0 %}text-success{% else %}text-danger{% endif %} fw-bold">
+                                    ${{ movement.amount }}
+                                </span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+     <hr>
+     
+    <div class="container mt-5">
+        <h2>Gráfica Financiera  </h2>
+    
+        <!-- Mostrar Balance Final fuera del gráfico -->
+        <div class="row">
+            <div class="col-12 text-center">
+                <h3>Balance Final: ${{ summary.final_balance | round(2) }}</h3>
+            </div>
+        </div>
+    
+        <!-- Gráfico de Pie -->
+        <div class="row">
+            <div class="col-12">
+                <canvas id="financialChart" style="max-width: 400px; margin: 0 auto; margin-bottom: 40px;"></canvas>
+            </div>
+        </div>
+    
+        <!-- Tabla de porcentajes -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <h4>Distribución Financiera</h4>
+                <table class="table table-striped table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Monto ($)</th>
+                            <th>Porcentaje (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Ingresos</td>
+                            <td id="incomeValue"></td>
+                            <td id="incomePercentage"></td>
+                        </tr>
+                        <tr>
+                            <td>Servicios</td>
+                            <td id="servicesValue"></td>
+                            <td id="servicesPercentage"></td>
+                        </tr>
+                        <tr>
+                            <td>Préstamos</td>
+                            <td id="loansValue"></td>
+                            <td id="loansPercentage"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Agregar la librería Chart.js y el plugin para mostrar los porcentajes -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+<script>
+    // Obtener datos desde Flask
+    var summary = {{ summary | tojson }};
+    var total = summary.total_income + summary.total_services + summary.total_loans;
+
+    // Calcular porcentajes
+    function calculatePercentage(value) {
+        return total > 0 ? ((value / total) * 100).toFixed(2) + '%' : '0%';
+    }
+
+    // Insertar valores en la tabla
+    document.getElementById('incomeValue').innerText = `$${summary.total_income.toFixed(2)}`;
+    document.getElementById('incomePercentage').innerText = calculatePercentage(summary.total_income);
+
+    document.getElementById('servicesValue').innerText = `$${summary.total_services.toFixed(2)}`;
+    document.getElementById('servicesPercentage').innerText = calculatePercentage(summary.total_services);
+
+    document.getElementById('loansValue').innerText = `$${summary.total_loans.toFixed(2)}`;
+    document.getElementById('loansPercentage').innerText = calculatePercentage(summary.total_loans);
+
+    // Configurar el gráfico de pie
+    var ctx = document.getElementById('financialChart').getContext('2d');
+    var financialChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Ingresos', 'Servicios', 'Préstamos'],
+            datasets: [{
+                label: 'Resumen Financiero',
+                data: [
+                    summary.total_income,
+                    summary.total_services,
+                    summary.total_loans
+                ],
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.6)',  // Ingresos
+                    'rgba(255, 99, 132, 0.6)',  // Servicios
+                    'rgba(255, 206, 86, 0.6)'   // Préstamos
+                ],
+                borderColor: [
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(255, 206, 86, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            let value = tooltipItem.raw;
+                            let percentage = calculatePercentage(value);
+                            return `${tooltipItem.label}: $${value.toFixed(2)} (${percentage})`;
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+
+
+</body>
+</html>

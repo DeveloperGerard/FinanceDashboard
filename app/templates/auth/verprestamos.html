@@ -1,16 +1,152 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Mis Prestamos</title>
 </head>
-<body>
-    {% for loan in loans %}
-        <h1>{{loan.loan_name}}</h1>
-        <h3>{{loan.holder}}</h3>
-        <p>{{loan.price}}</p>
-        <p>{{loan.reamining_price}}</p>
-    {% endfor %}  
-</body>
-</html>
+</html>{% extends "base.html" %}
+
+{% block title %}Mis Préstamos{% endblock %}
+
+{% block head %}
+<meta name="csrf-token" content="{{ csrf_token }}">
+<link rel="stylesheet" href="{{url_for('static',filename='auth/css/viewloans.css')}}">
+{% endblock %}
+
+{% block content %}
+<div class="loans-section">
+    <h1 class="mb-4">Mis Préstamos</h1>
+
+    <div class="add-loan-btn" onclick="toggleLoanForm()">
+        <i class="fas fa-plus-circle mr-2"></i>Agregar Préstamo
+    </div>
+
+    <!-- Loan Form -->
+    <div id="loan-form-container" class="form-container">
+        <form action="{{ url_for('create_functions.crear_prestamo') }}" method="POST">
+            {{form.hidden_tag()}}
+            <div class="form-group">
+                {{form.nombre.label(for="loan_name")}}
+                {{form.nombre(id="loan_name")}}
+            </div>
+            <div class="form-group">
+                {{form.titular.label(for="holder")}}
+                {{form.titular(id="holder")}}
+            </div>
+            <div class="form-group">
+                {{form.descripcion.label(for="description")}}
+                {{form.descripcion(id="description")}}
+            </div>
+            <div class="form-group">
+                {{form.precio.label(for="price")}}
+                {{form.precio(id="price")}}
+            </div>
+            <div class="form-group">
+                {{form.cuota.label(for="quota")}}
+                {{form.cuota(id="quota")}}
+            </div>
+            <div class="form-group">
+                {{form.tea.label(for="tea")}}
+                {{form.tea(id="tea")}}
+            </div>
+            <div class="form-group">
+                {{form.fecha_vencimiento.label(for="expiration_date")}}
+                {{form.fecha_vencimiento(id="expiration_date")}}
+            </div>
+            <div class="form-group">
+                <label for="">Cuenta asociada</label>
+                <select name="cuenta" class="custom-select mb-4">
+                    {% for account in accounts %}
+                        <option value="{{account.id}}">{{account.account_name}}</option>
+                    {% endfor %}
+                </select>
+                {% if accounts %}
+                    <div class="form-group">
+                        {{ form.submit() }}
+                    </div> 
+                {% else %}
+                    <div class="form-group-message">
+                        <p>Necesitas una cuenta para crear un prestamo</p>
+                    </div> 
+                {% endif %}
+            </div>
+        </form>
+    </div>
+
+    {% if loans %}
+        <div class="table-responsive">
+            <table class="loan-table">
+                <thead>
+                    <tr>
+                        <th>Nombre del Préstamo</th>
+                        <th>Titular</th>
+                        <th>Monto</th>
+                        <th>Cuotas</th>
+                        <th>Tasa de Interés</th>
+                        <th>Saldo Pendiente</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for loan in loans %}
+                        <tr>
+                            <td data-label="Nombre del Préstamo">{{ loan.loan_name }}</td>
+                            <td data-label="Titular">{{ loan.holder }}</td>
+                            <td data-label="Monto">${{ loan.price }}</td>
+                            <td data-label="Cuotas">{{ loan.quota or 'N/A' }}</td>
+                            <td data-label="Tasa de Interés">{{ loan.tea }}%</td>
+                            <td data-label="Saldo Pendiente">${{ loan.reamining_price }}</td>
+                            </td>
+
+                            <td data-label="Acción">
+                                {% if loan.remaining_price == 0 %}
+                                    <div class="badge bg-success text-white">Pagado</div>
+                                {% endif %}
+                            
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        ⋮
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        {% if loan.reamining_price > 0 %}
+                                            <li>
+                                                <a class="dropdown-item" href="{{ url_for('create_functions.pago_prestamo') }}">
+                                                    <i class="fas fa-money-bill-wave"></i> Pagar
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        <li>
+                                            <form action="{{ url_for('extra_functions.borrar_prestamo', id=loan.id) }}" method="POST">
+                                                <button type="submit" class="dropdown-item text-danger">
+                                                    <i class="fas fa-trash-alt"></i> Borrar
+                                                </button>
+                                            </form>
+                                        </li>
+                                        <li>
+                                            <form action="{{ url_for('auth.obtener_pago_prestamos', id=loan.id) }}" method="POST">
+                                                <button type="submit" class="dropdown-item">
+                                                    <i class="fas fa-list"></i> Pagos
+                                                </button>
+                                            </form>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>No tienes préstamos activos.</p>
+    {% endif %}
+</div>
+
+<script>
+    function toggleLoanForm() {
+        var formContainer = document.getElementById('loan-form-container');
+        formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
+    }
+</script>
+{% endblock %}

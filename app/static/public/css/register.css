@@ -1,0 +1,132 @@
+/* Custom Styles */
+:root {
+    --primary-color: #4361ee;
+    --primary-hover: #3a56d4;
+    --secondary-color: #7209b7;
+    --light-bg: #f8f9fa;
+    --border-radius: 10px;
+    --box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+  
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f7ff;
+}
+  
+.login-bg {
+    background: linear-gradient(135deg, #f5f7ff 0%, #e8eeff 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+  
+.login-card {
+    border: none;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    overflow: hidden;
+    transition: var(--transition);
+}
+  
+.login-card:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+}
+  
+.card-body {
+    padding: 2rem;
+}
+  
+.form-label {
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+  
+.form-control {
+    border: 1px solid #dee2e6;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+    transition: var(--transition);
+}
+  
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.15);
+}
+  
+.input-group-text {
+    border: 1px solid #dee2e6;
+    background-color: #f8f9fa;
+    color: #6c757d;
+}
+  
+.login-button {
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    border-radius: 0.5rem;
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    transition: var(--transition);
+    color: white;
+}
+  
+.login-button:hover {
+    background-color: var(--primary-hover);
+    border-color: var(--primary-hover);
+    transform: translateY(-2px);
+}
+  
+.toggle-password {
+    cursor: pointer;
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+  
+.error-message {
+    text-align: center;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    border: 4px solid #dc3545;
+}
+
+.input-field {
+    width: 78%; /* Para que el contenedor del input ocupe todo el espacio disponible */
+    border: 1px solid #dee2e6;
+    background-color: #f8f9fa;
+    color: #6c757d;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    .card-body {
+        padding: 1.5rem;
+    }
+}
+
+/* Animation for form elements */
+.card-body > * {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Custom text-primary color override */
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+a.text-primary:hover {
+    color: var(--primary-hover) !important;
+    text-decoration: underline;
+}

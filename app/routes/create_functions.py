@@ -11,7 +11,7 @@ from datetime import datetime
 #modulos propios
 from app.forms.importaciones              import FormularioCrearPrestamos,FormularioCrearPagoServicio,FormularioCrearPagoPrestamo,FormularioCrearServicio,FormularioCrearCuenta,FormularioCrearIngresoProgamado,FormularioCrearIngreso
 from app.controllers.importaciones        import AccountController,IncomeController,UserController,ServiceController,LoanController,LoanPaymentController,ServicePaymentController,ScheduledIncomeController
-from app.models.importaciones             import Account,User,Service,Loan
+from app.models.importaciones             import Account,User,Service,Loan,Loan_payment
 from ..extra_functions.email_decorator    import email_validation
 from ..extra_functions.calcular_tem       import calcular_tem
 
@@ -29,12 +29,20 @@ def crear_cuenta():
     if request.method == "POST":
         form = FormularioCrearCuenta()
         if form.validate_on_submit():
-
             #despues de validar creamos el objeto cuenta para bd
             nombre  = form.nombre.data
             tarjeta = form.tarjeta.data
-            AccountController().create_account(nombre,tarjeta,current_user.id)
+            saldo   = form.saldo.data
+
+            #actualizamos saldo del usuario 
+            user = User().get_by_id(current_user.id)
+            user.balance = user.balance +saldo
+
+            AccountController().create_account(nombre,tarjeta,current_user.id,saldo)
             return redirect("/index")
+        else:
+            return "false"
+    return "xd"
 
 @create_functions.route("/crearingreso",methods=["GET","POST"])
 @login_required
@@ -54,13 +62,18 @@ def crear_ingreso():
             descripcion     = form.descripcion.data
             categoria       = form.categoria.data
             monto           = form.monto.data
-            IncomeController().create_income(nombre,fecha,monto,current_user.id,descripcion,categoria)
+            account_id      = int(request.form.get("cuenta"))
+            IncomeController().create_income(nombre,fecha,monto,current_user.id,descripcion,categoria,account_id)
 
-            #actualizamos el saldo de la cuenta del usuario
+            #actualizamos el saldo total del usuario
             usuario         = User().get_by_id(current_user.id)
             usuario.balance = usuario.balance + monto
             UserController().update_user(usuario)
-            return redirect("/index")
+            #actualizamos el saldo de la cuenta 
+            account         = Account().get_by_id(account_id)
+            account.balance = account.balance + monto
+            AccountController().update_account(account)
+            return redirect("/veringresos")
 
 
 @create_functions.route("/crearingresoprogramado",methods=["GET","POST"])
@@ -74,7 +87,6 @@ def crear_ingreso_programado():
     if request.method == "POST":
         form = FormularioCrearIngresoProgamado()
         if form.validate_on_submit():
-
             #despues de validar creamos el objeto ingreso programado para bd
             nombre          = form.nombre.data
             fecha           = datetime.now()
@@ -82,8 +94,10 @@ def crear_ingreso_programado():
             categoria       = form.categoria.data
             proximo_pago    = form.proximo_pago.data
             monto           = form.monto.data
-            ScheduledIncomeController().create_income(nombre,fecha,monto,current_user.id,descripcion,categoria=categoria,next_income=proximo_pago,received_amount=0,pending_amount=monto)
+            account_id      = int(request.form.get("cuenta"))
+            ScheduledIncomeController().create_income(nombre,fecha,monto,current_user.id,descripcion,categoria=categoria,next_income=proximo_pago,received_amount=0,pending_amount=monto,account_id=account_id)
             return redirect("/index")
+        
 
 @create_functions.route("/crearservicio",methods=["GET","POST"])
 @login_required
@@ -107,34 +121,33 @@ def crear_servicio():
             precio      = form.precio.data
             cuenta      = int(request.form.get("cuenta"))
             ServiceController().create_service(nombre,descripcion,fecha,categoria,current_user.id,precio,precio,cuenta,vencimiento)
-            return redirect("/index")
+            return redirect("/")
+        else:
+            return render_template("auth/verservicios.html",form=form)
 
 
 @create_functions.route("/crearprestamo",methods=["GET","POST"])
 @login_required
 @email_validation
 def crear_prestamo():
-    if request.method == "GET":
-        form     = FormularioCrearPrestamos()
-        accounts = Account().get_all_by_userid(current_user.id)#es para la relacion una a muchos entre(cuenta y prestamos)
-        return render_template("create_functions/crear_prestamo.html",form=form,accounts=accounts)
-    
     if request.method == "POST":
         form = FormularioCrearPrestamos()
+        print(f'nombre:{form.nombre.data},titular:{form.titular.data},precio:{form.precio.data},cuota:{form.cuota.data},tea:{form.tea.data},descripcion:{form.descripcion.data},vencimiento:{form.fecha_vencimiento.data}')
         if form.validate_on_submit():
-
             #despues de validar creamos el objeto prestamo para bd
             nombre      = form.nombre.data
             titular     = form.titular.data 
             precio      = form.precio.data
             cuota       = form.cuota.data
             tea         = form.tea.data
+            descripcion = form.descripcion.data
             fecha       = datetime.now()
             vencimiento = form.fecha_vencimiento.data
             cuenta      = int(request.form.get("cuenta"))
-            LoanController().create_loan(nombre,titular,precio,cuota,current_user.id,cuenta,precio,fecha,vencimiento,tea)
+            LoanController().create_loan(nombre,titular,precio,cuota,current_user.id,cuenta,precio,fecha,vencimiento,descripcion,tea)
             return redirect("/index")
         else:
+            print("error")
             return render_template("create_functions/crear_prestamo.html",form=form)
         
 @create_functions.route("/pagoprestamo",methods=["GET","POST"])
@@ -149,10 +162,10 @@ def pago_prestamo():
     if request.method =="POST":
         form = FormularioCrearPagoPrestamo()
         if form.validate_on_submit:
-            
+            loan = Loan().get_by_id(request.form.get("prestamo"))
             #una vez validamos el formulario, evaluamos que el usuario tenga monto suficiente
-            user = User().get_by_id(current_user.id)
-            if user.balance < form.monto.data:
+            account = Account().get_by_id(loan.account_id)
+            if account.balance < form.monto.data:
                 flash("Monto insuficiente","error")
                 return redirect("/pagoprestamo")
             else:
@@ -163,15 +176,26 @@ def pago_prestamo():
                 #Evaluamos si el usuario pago mas de lo que cuesta 
                 if monto > prestamo.reamining_price:
                     monto = prestamo.reamining_price
+                    account.balance = account.balance - monto
                 else:
                     monto  = form.monto.data
-
+                    account.balance = account.balance - monto
+                
+                ultimos_pagos = Loan_payment().get_all_by_loan(prestamo.id)
+                ultimo_pago = monto
+                if len(ultimos_pagos)>0:
+                    ultimo_pago = ultimos_pagos[-1].amount
+                    print("entro len")
                 fecha_pago =form.fecha.data  
-                tea = prestamo.tea
+                tea = float(prestamo.tea)
                 if tea >0:
+                    print("tiene tea")
                     if fecha_pago > prestamo.expiration_date:
-                        monto =monto+calcular_tem(prestamo.tea,prestamo.quota)*monto 
-                        
+                        print("es tarde para pagar")
+                        monto =float(monto+calcular_tem(prestamo.tea,prestamo.quota)*ultimo_pago) 
+                        account.balance = account.balance - monto
+                        print(ultimo_pago)
+                print(f"monto:{monto}")
                 descrip = form.descripcion.data
                 user_id = current_user.id
                 #creamos el objeto prestamo_pagado para bd
@@ -185,7 +209,7 @@ def pago_prestamo():
                 user = User().get_by_id(current_user.id)
                 user.balance = user.balance -monto
                 UserController().update_user(user)
-                return redirect("/index")
+                return redirect("/verprestamos")
         else:
             return "error"
 
@@ -230,6 +254,6 @@ def pago_servicio():
                 user = User().get_by_id(current_user.id)
                 user.balance = user.balance -monto
                 UserController().update_user(user)
-                return redirect("/index")
+                return redirect("/verservicios")
         else:
             return "error"
