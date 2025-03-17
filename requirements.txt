@@ -30,3 +30,4 @@ flask_mail
 flask_apscheduler
 mysqlclient
 flask_wtf
+pymysql
